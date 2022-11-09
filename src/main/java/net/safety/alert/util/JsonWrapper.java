@@ -1,4 +1,4 @@
-package net.safety.alert.service;
+package net.safety.alert.util;
 
 import java.util.List;
 

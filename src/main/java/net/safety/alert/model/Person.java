@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 
 @Data
@@ -25,4 +27,39 @@ public class Person {
 	private String zip;
 	private String phone;
 	private String email;
+
+	@JsonIgnore
+	public PersonId getPersonId() {
+		return new PersonId(this.firstName, this.lastName);
+	}
+
+	public void patchBy(Person person) {
+		if (person != null) {
+			// Address
+			String address = person.getAddress();
+			if (address != null && !address.isEmpty()) {
+				this.setAddress(address);
+			}
+			// City
+			String city = person.getCity();
+			if (city != null && !city.isEmpty()) {
+				this.setCity(city);
+			}
+			// Email
+			String email = person.getEmail();
+			if (email != null && !email.isEmpty()) {
+				this.setEmail(email);
+			}
+			// Phone
+			String phone = person.getPhone();
+			if (phone != null && !phone.isEmpty()) {
+				this.setPhone(phone);
+			}
+			// Zip
+			String zip = person.getZip();
+			if (zip != null && !zip.isEmpty()) {
+				this.setZip(zip);
+			}
+		}
+	}
 }

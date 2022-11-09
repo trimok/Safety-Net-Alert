@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 
 @Data
@@ -15,4 +17,9 @@ public class Firestation {
 
 	@Id
 	private String station;
+
+	@JsonIgnore
+	public FirestationId getFireStationId() {
+		return new FirestationId(this.address, this.station);
+	}
 }

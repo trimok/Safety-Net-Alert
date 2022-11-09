@@ -8,12 +8,14 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import net.safety.alert.constants.FilenameConstants;
 import net.safety.alert.repository.FirestationRepository;
 import net.safety.alert.repository.MedicalrecordRepository;
 import net.safety.alert.repository.PersonRepository;
 import net.safety.alert.util.FileUtil;
+import net.safety.alert.util.JsonWrapper;
 
 @Service
 public class JsonService {
@@ -30,6 +32,7 @@ public class JsonService {
 	public void initDatabase(Object context) {
 
 		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.registerModule(new JavaTimeModule());
 		InputStream is = null;
 
 		// Read json data
@@ -51,5 +54,4 @@ public class JsonService {
 			e.printStackTrace();
 		}
 	}
-
 }

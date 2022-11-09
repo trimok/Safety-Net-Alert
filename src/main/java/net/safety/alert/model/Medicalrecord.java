@@ -1,9 +1,11 @@
 package net.safety.alert.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -13,10 +15,9 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.MapKeyColumn;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 
@@ -33,9 +34,8 @@ public class Medicalrecord {
 	@Column(name = "last_name")
 	private String lastName;
 
-	@Temporal(TemporalType.DATE)
-	@JsonFormat(pattern = "MM/dd/YYYY")
-	private Date birthdate;
+	@JsonFormat(pattern = "MM/dd/yyyy")
+	private LocalDate birthdate;
 
 	@ElementCollection
 	@CollectionTable(name = "medication", joinColumns = {
@@ -50,11 +50,37 @@ public class Medicalrecord {
 	@CollectionTable(name = "allergie", joinColumns = {
 			@JoinColumn(name = "first_name", referencedColumnName = "first_name"),
 			@JoinColumn(name = "last_name", referencedColumnName = "last_name")})
-	private List<String> allergies;
+	private Set<String> allergies = new HashSet<>();
 
 	public void setMedications(final List<Medication> medications) {
 		for (Medication medication : medications) {
 			this.medications.put(medication.getName(), medication.getQuantity());
+		}
+	}
+
+	@JsonIgnore
+	public MedicalrecordId getMedicalRecordId() {
+		return new MedicalrecordId(this.firstName, this.lastName);
+	}
+
+	public void patchBy(Medicalrecord medicalRecord) {
+		if (medicalRecord != null) {
+
+			LocalDate birthdate = medicalRecord.getBirthdate();
+			if (birthdate != null) {
+				this.setBirthdate(birthdate);
+			}
+			// Allergies
+			Set<String> allergies = medicalRecord.getAllergies();
+			if (allergies != null && !allergies.isEmpty()) {
+				this.allergies.addAll(allergies);
+			}
+
+			// Medication
+			Map<String, String> medications = medicalRecord.getMedications();
+			if (medications != null && !medications.isEmpty()) {
+				this.medications.putAll(medications);
+			}
 		}
 	}
 }
