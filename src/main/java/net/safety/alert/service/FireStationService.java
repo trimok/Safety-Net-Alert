@@ -16,12 +16,12 @@ import net.safety.alert.exception.FireStationAlreadyCreatedException;
 import net.safety.alert.exception.FireStationNotFoundException;
 import net.safety.alert.exception.PersonNotValidException;
 import net.safety.alert.model.FireStation;
-import net.safety.alert.repository.FirestationRepository;;
+import net.safety.alert.repository.FireStationRepository;;
 
 @Service
-public class FirestationService implements IFirestationService {
+public class FireStationService implements IFireStationService {
 	@Autowired
-	FirestationRepository fireStationRepository;
+	FireStationRepository fireStationRepository;
 
 	@Override
 	public FireStation createFirestation(FireStation fireStation) {

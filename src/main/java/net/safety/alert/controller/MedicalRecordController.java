@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.safety.alert.model.MedicalRecord;
-import net.safety.alert.service.IMedicalrecordService;
+import net.safety.alert.service.IMedicalRecordService;
 
 @RestController
-public class MedicalrecordController {
+public class MedicalRecordController {
 	@Autowired
-	IMedicalrecordService medicalRecordService;
+	IMedicalRecordService medicalRecordService;
 
 	@PostMapping("/medicalRecord")
 	public MedicalRecord createMedicalRecord(@RequestBody MedicalRecord medicalRecord) {

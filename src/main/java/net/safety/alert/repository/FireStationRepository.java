@@ -7,5 +7,6 @@ import net.safety.alert.model.FireStation;
 import net.safety.alert.model.FireStationId;
 
 @Repository
-public interface FirestationRepository extends CrudRepository<FireStation, FireStationId> {
+public interface FireStationRepository extends CrudRepository<FireStation, FireStationId> {
+
 }

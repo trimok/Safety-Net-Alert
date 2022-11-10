@@ -16,5 +16,4 @@ public interface IPersonService {
 	Person createPerson(Person person);
 
 	Person patchPerson(Person person);
-
 }

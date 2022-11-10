@@ -11,8 +11,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import net.safety.alert.constants.FilenameConstants;
-import net.safety.alert.repository.FirestationRepository;
-import net.safety.alert.repository.MedicalrecordRepository;
+import net.safety.alert.repository.FireStationRepository;
+import net.safety.alert.repository.MedicalRecordRepository;
 import net.safety.alert.repository.PersonRepository;
 import net.safety.alert.util.FileUtil;
 import net.safety.alert.util.JsonWrapper;
@@ -24,10 +24,10 @@ public class JsonService {
 	private PersonRepository personRepository;
 
 	@Autowired
-	private FirestationRepository firestationRepository;
+	private FireStationRepository fireStationRepository;
 
 	@Autowired
-	private MedicalrecordRepository medicalrecordRepository;
+	private MedicalRecordRepository medicalRecordRepository;
 
 	public void initDatabase(Object context) {
 
@@ -43,8 +43,8 @@ public class JsonService {
 			});
 
 			personRepository.saveAll(wrapper.getPersons());
-			firestationRepository.saveAll(wrapper.getFirestations());
-			medicalrecordRepository.saveAll(wrapper.getMedicalrecords());
+			fireStationRepository.saveAll(wrapper.getFirestations());
+			medicalRecordRepository.saveAll(wrapper.getMedicalrecords());
 
 			System.out.println("Persons saved : " + wrapper.getPersons().size());
 			System.out.println("FireStation saved : " + wrapper.getFirestations().size());

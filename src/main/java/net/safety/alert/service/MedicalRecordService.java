@@ -17,12 +17,12 @@ import net.safety.alert.exception.MedicalRecordAlreadyCreatedException;
 import net.safety.alert.exception.MedicalRecordNotFoundException;
 import net.safety.alert.exception.PersonNotValidException;
 import net.safety.alert.model.MedicalRecord;
-import net.safety.alert.repository.MedicalrecordRepository;
+import net.safety.alert.repository.MedicalRecordRepository;
 
 @Service
-public class MedicalrecordService implements IMedicalrecordService {
+public class MedicalRecordService implements IMedicalRecordService {
 	@Autowired
-	MedicalrecordRepository medicalRecordRepository;
+	MedicalRecordRepository medicalRecordRepository;
 
 	@Override
 	public MedicalRecord createMedicalRecord(MedicalRecord medicalRecord) {

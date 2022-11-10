@@ -2,7 +2,7 @@ package net.safety.alert.service;
 
 import net.safety.alert.model.FireStation;
 
-public interface IFirestationService {
+public interface IFireStationService {
 
 	FireStation createFirestation(FireStation fireStation);
 

@@ -7,5 +7,5 @@ import net.safety.alert.model.MedicalRecord;
 import net.safety.alert.model.MedicalRecordId;
 
 @Repository
-public interface MedicalrecordRepository extends CrudRepository<MedicalRecord, MedicalRecordId> {
+public interface MedicalRecordRepository extends CrudRepository<MedicalRecord, MedicalRecordId> {
 }

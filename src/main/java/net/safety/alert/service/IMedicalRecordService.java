@@ -2,7 +2,7 @@ package net.safety.alert.service;
 
 import net.safety.alert.model.MedicalRecord;
 
-public interface IMedicalrecordService {
+public interface IMedicalRecordService {
 
 	MedicalRecord createMedicalRecord(MedicalRecord medicalRecord);
 
