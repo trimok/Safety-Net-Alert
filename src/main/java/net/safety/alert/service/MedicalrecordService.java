@@ -4,6 +4,7 @@ import static net.safety.alert.constants.HttpMessageConstants.CREATE_MEDICAL_REC
 import static net.safety.alert.constants.HttpMessageConstants.DELETE_MEDICAL_RECORD;
 import static net.safety.alert.constants.HttpMessageConstants.MEDICAL_RECORD_ALREADY_CREATED;
 import static net.safety.alert.constants.HttpMessageConstants.MEDICAL_RECORD_NOT_FOUND;
+import static net.safety.alert.constants.HttpMessageConstants.MEDICAL_RECORD_NOT_VALID;
 import static net.safety.alert.constants.HttpMessageConstants.PATCH_MEDICAL_RECORD;
 import static net.safety.alert.constants.HttpMessageConstants.UPDATE_MEDICAL_RECORD;
 
@@ -14,7 +15,8 @@ import org.springframework.stereotype.Service;
 
 import net.safety.alert.exception.MedicalRecordAlreadyCreatedException;
 import net.safety.alert.exception.MedicalRecordNotFoundException;
-import net.safety.alert.model.Medicalrecord;
+import net.safety.alert.exception.PersonNotValidException;
+import net.safety.alert.model.MedicalRecord;
 import net.safety.alert.repository.MedicalrecordRepository;
 
 @Service
@@ -23,8 +25,12 @@ public class MedicalrecordService implements IMedicalrecordService {
 	MedicalrecordRepository medicalRecordRepository;
 
 	@Override
-	public Medicalrecord createMedicalRecord(Medicalrecord medicalRecord) {
-		Medicalrecord medicalRecordDatabase = getPersistent(medicalRecord);
+	public MedicalRecord createMedicalRecord(MedicalRecord medicalRecord) {
+		if (!medicalRecord.isValid()) {
+			throw new PersonNotValidException(CREATE_MEDICAL_RECORD, MEDICAL_RECORD_NOT_VALID, medicalRecord);
+		}
+
+		MedicalRecord medicalRecordDatabase = getPersistent(medicalRecord);
 
 		if (medicalRecordDatabase == null) {
 			return medicalRecordRepository.save(medicalRecord);
@@ -35,8 +41,13 @@ public class MedicalrecordService implements IMedicalrecordService {
 	}
 
 	@Override
-	public Medicalrecord updateMedicalRecord(Medicalrecord medicalRecord) {
-		Medicalrecord medicalRecordDatabase = getPersistent(medicalRecord);
+	public MedicalRecord updateMedicalRecord(MedicalRecord medicalRecord) {
+
+		if (!medicalRecord.isValid()) {
+			throw new PersonNotValidException(UPDATE_MEDICAL_RECORD, MEDICAL_RECORD_NOT_VALID, medicalRecord);
+		}
+
+		MedicalRecord medicalRecordDatabase = getPersistent(medicalRecord);
 
 		if (medicalRecordDatabase != null) {
 			return medicalRecordRepository.save(medicalRecord);
@@ -46,8 +57,12 @@ public class MedicalrecordService implements IMedicalrecordService {
 	}
 
 	@Override
-	public Medicalrecord patchMedicalRecord(Medicalrecord medicalRecord) {
-		Medicalrecord medicalRecordDatabase = getPersistent(medicalRecord);
+	public MedicalRecord patchMedicalRecord(MedicalRecord medicalRecord) {
+		if (!medicalRecord.isValid()) {
+			throw new PersonNotValidException(PATCH_MEDICAL_RECORD, MEDICAL_RECORD_NOT_VALID, medicalRecord);
+		}
+
+		MedicalRecord medicalRecordDatabase = getPersistent(medicalRecord);
 
 		if (medicalRecordDatabase != null) {
 			medicalRecordDatabase.patchBy(medicalRecord);
@@ -58,8 +73,12 @@ public class MedicalrecordService implements IMedicalrecordService {
 	}
 
 	@Override
-	public void deleteMedicalRecord(Medicalrecord medicalRecord) {
-		Medicalrecord medicalRecordDatabase = getPersistent(medicalRecord);
+	public void deleteMedicalRecord(MedicalRecord medicalRecord) {
+		if (!medicalRecord.isValid()) {
+			throw new PersonNotValidException(DELETE_MEDICAL_RECORD, MEDICAL_RECORD_NOT_VALID, medicalRecord);
+		}
+
+		MedicalRecord medicalRecordDatabase = getPersistent(medicalRecord);
 
 		if (medicalRecordDatabase != null) {
 			medicalRecordRepository.delete(medicalRecordDatabase);
@@ -69,8 +88,8 @@ public class MedicalrecordService implements IMedicalrecordService {
 	}
 
 	@Override
-	public Medicalrecord getPersistent(Medicalrecord medicalRecord) {
-		Optional<Medicalrecord> medicalRecordOptional = medicalRecordRepository
+	public MedicalRecord getPersistent(MedicalRecord medicalRecord) {
+		Optional<MedicalRecord> medicalRecordOptional = medicalRecordRepository
 				.findById(medicalRecord.getMedicalRecordId());
 		if (medicalRecordOptional.isPresent()) {
 			return medicalRecordOptional.get();

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import net.safety.alert.model.Medicalrecord;
+import net.safety.alert.model.MedicalRecord;
 import net.safety.alert.service.IMedicalrecordService;
 
 @RestController
@@ -17,22 +17,22 @@ public class MedicalrecordController {
 	IMedicalrecordService medicalRecordService;
 
 	@PostMapping("/medicalRecord")
-	public Medicalrecord createMedicalRecord(@RequestBody Medicalrecord medicalRecord) {
+	public MedicalRecord createMedicalRecord(@RequestBody MedicalRecord medicalRecord) {
 		return medicalRecordService.createMedicalRecord(medicalRecord);
 	}
 
 	@PutMapping("/medicalRecord")
-	public Medicalrecord updateMedicalRecord(@RequestBody Medicalrecord medicalRecord) {
+	public MedicalRecord updateMedicalRecord(@RequestBody MedicalRecord medicalRecord) {
 		return medicalRecordService.updateMedicalRecord(medicalRecord);
 	}
 
 	@PatchMapping("/medicalRecord")
-	public Medicalrecord patchMedicalRecord(@RequestBody Medicalrecord medicalRecord) {
+	public MedicalRecord patchMedicalRecord(@RequestBody MedicalRecord medicalRecord) {
 		return medicalRecordService.patchMedicalRecord(medicalRecord);
 	}
 
 	@DeleteMapping("/medicalRecord")
-	public void deleteMedicalRecord(@RequestBody Medicalrecord medicalRecord) {
+	public void deleteMedicalRecord(@RequestBody MedicalRecord medicalRecord) {
 		medicalRecordService.deleteMedicalRecord(medicalRecord);
 	}
 }

@@ -13,7 +13,8 @@ public class GlobalExceptionHandler {
 	@Order(-1)
 	@ExceptionHandler({PersonNotFoundException.class, MedicalRecordNotFoundException.class,
 			FireStationNotFoundException.class, PersonAlreadyCreatedException.class,
-			MedicalRecordAlreadyCreatedException.class, FireStationAlreadyCreatedException.class})
+			MedicalRecordAlreadyCreatedException.class, FireStationAlreadyCreatedException.class,
+			PersonNotValidException.class, MedicalRecordNotValidException.class, FireStationNotValidException.class})
 
 	public ResponseEntity<ApiInfo> handlePersonNotFound(SafetyNetException exception, WebRequest request) {
 		HttpStatus status = null;
@@ -26,6 +27,9 @@ public class GlobalExceptionHandler {
 				|| exception instanceof MedicalRecordAlreadyCreatedException
 				|| exception instanceof FireStationAlreadyCreatedException) {
 			status = HttpStatus.FOUND;
+		} else if (exception instanceof PersonNotValidException || exception instanceof MedicalRecordNotValidException
+				|| exception instanceof FireStationNotValidException) {
+			status = HttpStatus.BAD_REQUEST;
 		}
 
 		return new ResponseEntity<ApiInfo>(new ApiInfo(request, exception), status);

@@ -3,9 +3,9 @@ package net.safety.alert.repository;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import net.safety.alert.model.Firestation;
-import net.safety.alert.model.FirestationId;
+import net.safety.alert.model.FireStation;
+import net.safety.alert.model.FireStationId;
 
 @Repository
-public interface FirestationRepository extends CrudRepository<Firestation, FirestationId> {
+public interface FirestationRepository extends CrudRepository<FireStation, FireStationId> {
 }

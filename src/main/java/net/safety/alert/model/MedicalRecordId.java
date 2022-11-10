@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MedicalrecordId implements Serializable {
+public class MedicalRecordId implements Serializable {
 	private static final long serialVersionUID = 3L;
 	private String firstName;
 	private String lastName;

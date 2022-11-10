@@ -1,13 +1,13 @@
 package net.safety.alert.service;
 
-import net.safety.alert.model.Firestation;
+import net.safety.alert.model.FireStation;
 
 public interface IFirestationService {
 
-	Firestation createFirestation(Firestation firestation);
+	FireStation createFirestation(FireStation fireStation);
 
-	void deleteFirestation(Firestation firestation);
+	void deleteFirestation(FireStation fireStation);
 
-	Firestation getPersistent(Firestation firestation);
+	FireStation getPersistent(FireStation fireStation);
 
 }

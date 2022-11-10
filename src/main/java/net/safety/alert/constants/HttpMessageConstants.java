@@ -7,6 +7,7 @@ public class HttpMessageConstants {
 	public final static String DELETE_PERSON = "DELETE_PERSON";
 
 	public final static String PERSON_NOT_FOUND = "PERSON NOT FOUND";
+	public final static String PERSON_NOT_VALID = "FIRSTNAME AND LASTNAME MUST BE NOT EMPTY";
 	public final static String PERSON_ALREADY_CREATED = "PERSON ALREADY CREATED";
 
 	public final static String CREATE_MEDICAL_RECORD = "CREATE_MEDICAL_RECORD";
@@ -16,10 +17,12 @@ public class HttpMessageConstants {
 
 	public final static String MEDICAL_RECORD_NOT_FOUND = "MEDICAL_RECORD NOT FOUND";
 	public final static String MEDICAL_RECORD_ALREADY_CREATED = "MEDICAL_RECORD ALREADY CREATED";
+	public final static String MEDICAL_RECORD_NOT_VALID = "FIRSTNAME AND LASTNAME MUST BE NOT EMPTY";
 
 	public final static String CREATE_FIRESTATION = "CREATE_FIRESTATION";
 	public final static String DELETE_FIRESTATION = "DELETE_FIRESTATION";
 
 	public final static String FIRESTATION_NOT_FOUND = "FIRESTATION NOT FOUND";
 	public final static String FIRESTATION_ALREADY_CREATED = "FIRESTATION ALREADY CREATED";
+	public final static String FIRESTATION_NOT_VALID = "ADDRESS AND STATION MUST BE NOT EMPTY";
 }

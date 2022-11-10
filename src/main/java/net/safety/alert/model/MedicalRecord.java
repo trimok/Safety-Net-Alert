@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.MapKeyColumn;
+import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -23,8 +24,9 @@ import lombok.Data;
 
 @Data
 @Entity
-@IdClass(MedicalrecordId.class)
-public class Medicalrecord {
+@Table(name = "MEDICAL_RECORD")
+@IdClass(MedicalRecordId.class)
+public class MedicalRecord {
 
 	@Id
 	@Column(name = "first_name")
@@ -59,11 +61,11 @@ public class Medicalrecord {
 	}
 
 	@JsonIgnore
-	public MedicalrecordId getMedicalRecordId() {
-		return new MedicalrecordId(this.firstName, this.lastName);
+	public MedicalRecordId getMedicalRecordId() {
+		return new MedicalRecordId(this.firstName, this.lastName);
 	}
 
-	public void patchBy(Medicalrecord medicalRecord) {
+	public void patchBy(MedicalRecord medicalRecord) {
 		if (medicalRecord != null) {
 
 			LocalDate birthdate = medicalRecord.getBirthdate();
@@ -82,5 +84,9 @@ public class Medicalrecord {
 				this.medications.putAll(medications);
 			}
 		}
+	}
+
+	public boolean isValid() {
+		return firstName != null && !firstName.isEmpty() && lastName != null && !lastName.isEmpty();
 	}
 }

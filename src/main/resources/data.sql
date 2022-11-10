@@ -14,14 +14,16 @@ drop table if exists person CASCADE ;
 
 
 drop table if exists firestation CASCADE ;
-create table firestation (
+drop table if exists fire_station CASCADE ;
+create table fire_station (
 	address varchar(255) not null, 
 	station varchar(255) not null, 
 	primary key (address, station)
 );
 
 drop table if exists medicalrecord CASCADE ;
-create table medicalrecord (
+drop table if exists medical_record CASCADE ;
+create table medical_record (
 	first_name varchar(255) not null, 
 	last_name varchar(255) not null, 
 	birthdate date, 
@@ -37,7 +39,7 @@ create table medication (
 	name varchar(255) not null, 
 	primary key (first_name, last_name, name)
 );
-alter table medication add constraint FK72d5v2o3gv89k2drh3we0hu98 foreign key (first_name, last_name) references medicalrecord;
+alter table medication add constraint FK72d5v2o3gv89k2drh3we0hu98 foreign key (first_name, last_name) references medical_record;
 
 drop table if exists allergie CASCADE ;
 create table allergie (
@@ -45,5 +47,5 @@ create table allergie (
 	last_name varchar(255) not null, 
 	name varchar(255) not null
 );
-alter table allergie add constraint FKnofexed22b6hb0mrshxx55pbp foreign key (first_name, last_name) references medicalrecord;
+alter table allergie add constraint FKnofexed22b6hb0mrshxx55pbp foreign key (first_name, last_name) references medical_record;
 

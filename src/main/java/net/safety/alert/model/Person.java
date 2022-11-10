@@ -62,4 +62,8 @@ public class Person {
 			}
 		}
 	}
+
+	public boolean isValid() {
+		return firstName != null && !firstName.isEmpty() && lastName != null && !lastName.isEmpty();
+	}
 }

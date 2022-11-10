@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class FirestationId implements Serializable {
+public class FireStationId implements Serializable {
 	private static final long serialVersionUID = 2L;
 	private String address;
 	private String station;

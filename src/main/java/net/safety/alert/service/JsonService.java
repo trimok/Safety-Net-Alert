@@ -47,7 +47,7 @@ public class JsonService {
 			medicalrecordRepository.saveAll(wrapper.getMedicalrecords());
 
 			System.out.println("Persons saved : " + wrapper.getPersons().size());
-			System.out.println("Firestation saved : " + wrapper.getFirestations().size());
+			System.out.println("FireStation saved : " + wrapper.getFirestations().size());
 			System.out.println("Medical records saved : " + wrapper.getMedicalrecords().size());
 
 		} catch (IOException e) {

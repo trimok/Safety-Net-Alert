@@ -5,6 +5,7 @@ import static net.safety.alert.constants.HttpMessageConstants.DELETE_PERSON;
 import static net.safety.alert.constants.HttpMessageConstants.PATCH_PERSON;
 import static net.safety.alert.constants.HttpMessageConstants.PERSON_ALREADY_CREATED;
 import static net.safety.alert.constants.HttpMessageConstants.PERSON_NOT_FOUND;
+import static net.safety.alert.constants.HttpMessageConstants.PERSON_NOT_VALID;
 import static net.safety.alert.constants.HttpMessageConstants.UPDATE_PERSON;
 
 import java.util.Optional;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import net.safety.alert.exception.PersonAlreadyCreatedException;
 import net.safety.alert.exception.PersonNotFoundException;
+import net.safety.alert.exception.PersonNotValidException;
 import net.safety.alert.model.Person;
 import net.safety.alert.repository.PersonRepository;
 
@@ -24,6 +26,10 @@ public class PersonService implements IPersonService {
 
 	@Override
 	public Person createPerson(Person person) {
+		if (!person.isValid()) {
+			throw new PersonNotValidException(CREATE_PERSON, PERSON_NOT_VALID, person);
+		}
+
 		Person personDatabase = getPersistent(person);
 
 		if (personDatabase == null) {
@@ -35,6 +41,10 @@ public class PersonService implements IPersonService {
 
 	@Override
 	public Person patchPerson(Person person) {
+		if (!person.isValid()) {
+			throw new PersonNotValidException(PATCH_PERSON, PERSON_NOT_VALID, person);
+		}
+
 		Person personDatabase = getPersistent(person);
 
 		if (personDatabase != null) {
@@ -47,6 +57,10 @@ public class PersonService implements IPersonService {
 
 	@Override
 	public Person updatePerson(Person person) {
+		if (!person.isValid()) {
+			throw new PersonNotValidException(UPDATE_PERSON, PERSON_NOT_VALID, person);
+		}
+
 		Person personDatabase = getPersistent(person);
 
 		if (personDatabase != null) {
@@ -58,6 +72,10 @@ public class PersonService implements IPersonService {
 
 	@Override
 	public void deletePerson(Person person) {
+		if (!person.isValid()) {
+			throw new PersonNotValidException(DELETE_PERSON, PERSON_NOT_VALID, person);
+		}
+
 		Person personDatabase = getPersistent(person);
 
 		if (personDatabase != null) {

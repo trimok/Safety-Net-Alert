@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import net.safety.alert.model.Firestation;
+import net.safety.alert.model.FireStation;
 import net.safety.alert.service.IFirestationService;
 
 @RestController
@@ -15,12 +15,12 @@ public class FirestationController {
 	IFirestationService firestationService;
 
 	@PostMapping("/firestation")
-	public Firestation createFirestation(@RequestBody Firestation firestation) {
-		return firestationService.createFirestation(firestation);
+	public FireStation createFirestation(@RequestBody FireStation fireStation) {
+		return firestationService.createFirestation(fireStation);
 	}
 
 	@DeleteMapping("/firestation")
-	public void deleteFirestation(@RequestBody Firestation firestation) {
-		firestationService.deleteFirestation(firestation);
+	public void deleteFirestation(@RequestBody FireStation fireStation) {
+		firestationService.deleteFirestation(fireStation);
 	}
 }
