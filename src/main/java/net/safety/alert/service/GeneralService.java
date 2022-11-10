@@ -14,7 +14,9 @@ import net.safety.alert.view.AdultDTO;
 import net.safety.alert.view.ChildrenByAddressDTO;
 import net.safety.alert.view.IChildrenByAddress;
 import net.safety.alert.view.IPersonsByStation;
+import net.safety.alert.view.IPhoneByStation;
 import net.safety.alert.view.PersonsByStationDTO;
+import net.safety.alert.view.PhoneByStationDTO;
 
 @Service
 public class GeneralService implements IGeneralService {
@@ -49,5 +51,11 @@ public class GeneralService implements IGeneralService {
 		}
 
 		return new ChildrenByAddressDTO(children, adultsDTO);
+	}
+
+	@Override
+	public PhoneByStationDTO findPhoneByStationDTO(String station) {
+		Iterable<IPhoneByStation> phones = generalRepository.findPhoneByStation(station);
+		return new PhoneByStationDTO(phones);
 	}
 }

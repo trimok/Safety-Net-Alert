@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import net.safety.alert.service.IGeneralService;
 import net.safety.alert.view.ChildrenByAddressDTO;
 import net.safety.alert.view.PersonsByStationDTO;
+import net.safety.alert.view.PhoneByStationDTO;
 
 @RestController
 public class GeneralController {
@@ -25,4 +26,8 @@ public class GeneralController {
 		return generalService.findChildrenByAddressDTO(address);
 	}
 
+	@GetMapping("/phoneAlert")
+	public PhoneByStationDTO findPhoneByStationDTO(@RequestParam(name = "firestation") String station) {
+		return generalService.findPhoneByStationDTO(station);
+	}
 }
