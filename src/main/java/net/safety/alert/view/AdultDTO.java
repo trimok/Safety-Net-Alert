@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PersonsByStationDTO {
-	private Iterable<IPersonsByStation> persons;
-	private Long childrenCount;
-	private Long adultCount;
+public class AdultDTO {
+	private String firstName;
+	private String lastName;
 }

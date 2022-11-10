@@ -1,5 +1,7 @@
 package net.safety.alert.view;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,8 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PersonsByStationDTO {
-	private Iterable<IPersonsByStation> persons;
-	private Long childrenCount;
-	private Long adultCount;
+public class ChildrenByAddressDTO {
+	private Iterable<IChildrenByAddress> children;
+	private List<AdultDTO> adults;
 }
