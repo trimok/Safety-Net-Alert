@@ -11,8 +11,8 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import net.safety.alert.constants.FilenameConstants;
 import net.safety.alert.database.MemoryDatabase;
+import net.safety.alert.dto.JsonDTO;
 import net.safety.alert.util.FileUtil;
-import net.safety.alert.util.JsonDTO;
 
 @Service
 public class JsonService {
@@ -28,23 +28,9 @@ public class JsonService {
 			is = FileUtil.getStreamFromFilename(context, FilenameConstants.JSON_DATA_FILE);
 			jsonDTO = objectMapper.readValue(is, new TypeReference<JsonDTO>() {
 			});
-			final JsonDTO finalJsonDTO = jsonDTO;
 
-			// Update persons with stations
-			jsonDTO.getPersons().forEach(p -> finalJsonDTO.getFirestations().stream()
-					.filter(f -> f.getAddress().equals(p.getAddress())).forEach(f -> p.setStation(f.getStation())));
-
-			// Update persons with allergies and medications
-			jsonDTO.getPersons()
-					.forEach(p -> finalJsonDTO.getMedicalrecords().stream().filter(
-							m -> m.getFirstName().equals(p.getFirstName()) && m.getLastName().equals(p.getLastName()))
-							.forEach(m -> {
-								p.setAllergies(m.getAllergies());
-								p.setMedications(m.getMapMedications());
-								p.setBirthdate(m.getBirthdate());
-							}));
 			// Database Initialisation
-			MemoryDatabase.getInstance().setPersons(jsonDTO.getPersons());
+			MemoryDatabase.getInstance().init(jsonDTO);
 
 			System.out.println("Loading data OK.");
 

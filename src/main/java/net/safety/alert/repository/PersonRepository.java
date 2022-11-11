@@ -23,6 +23,7 @@ public class PersonRepository implements IPersonRepository {
 	@Override
 	public Person save(Person person) {
 		instance.getPersons().add(person);
+		instance.synchronizeAddressStationDatabase(person);
 		return person;
 	}
 
@@ -31,6 +32,7 @@ public class PersonRepository implements IPersonRepository {
 		instance.getPersons().stream().filter(
 				p -> p.getFirstName().equals(person.getFirstName()) && p.getLastName().equals(person.getLastName()))
 				.map(p -> person);
+		instance.synchronizeAddressStationDatabase(person);
 		return person;
 	}
 

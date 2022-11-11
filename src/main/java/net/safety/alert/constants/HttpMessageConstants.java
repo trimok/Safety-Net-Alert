@@ -21,6 +21,7 @@ public class HttpMessageConstants {
 
 	public final static String CREATE_FIRESTATION = "CREATE_FIRESTATION";
 	public final static String DELETE_FIRESTATION = "DELETE_FIRESTATION";
+	public final static String UPDATE_FIRESTATION = "UPDATE_FIRESTATION";
 
 	public final static String FIRESTATION_NOT_FOUND = "FIRESTATION NOT FOUND";
 	public final static String FIRESTATION_ALREADY_CREATED = "FIRESTATION ALREADY CREATED";

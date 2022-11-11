@@ -34,7 +34,7 @@ public class PersonService implements IPersonService {
 		if (personDatabase == null) {
 			return personRepository.save(person);
 		} else {
-			throw new PersonAlreadyCreatedException(CREATE_PERSON, PERSON_ALREADY_CREATED, person);
+			throw new PersonAlreadyCreatedException(CREATE_PERSON, PERSON_ALREADY_CREATED, personDatabase);
 		}
 	}
 

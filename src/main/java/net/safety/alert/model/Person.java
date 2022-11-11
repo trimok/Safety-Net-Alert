@@ -27,9 +27,9 @@ public class Person {
 		return firstName != null && !firstName.isEmpty() && lastName != null && !lastName.isEmpty();
 	}
 
-	public static Person updateWithStation(Person person, String station) {
-		person.setStation(station);
-		return person;
+	public Person updateStation(String station) {
+		this.setStation(station);
+		return this;
 	}
 
 	public Person updatePerson(Person person) {
