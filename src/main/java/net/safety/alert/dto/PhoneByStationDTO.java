@@ -1,8 +1,9 @@
-package net.safety.alert.view;
+package net.safety.alert.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.safety.alert.view.IPhoneByStation;
 
 @Data
 @NoArgsConstructor

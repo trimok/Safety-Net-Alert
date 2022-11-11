@@ -1,69 +1,68 @@
 package net.safety.alert.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import lombok.Data;
+import net.safety.alert.util.StringsUtil;
 
 @Data
-@Entity
-@IdClass(PersonId.class)
 public class Person {
 
-	@Id
-	@Column(name = "first_name")
 	private String firstName;
-
-	@Id
-	@Column(name = "last_name")
 	private String lastName;
-
-	private String address;
 	private String city;
 	private String zip;
 	private String phone;
 	private String email;
-
-	@JsonIgnore
-	public PersonId getPersonId() {
-		return new PersonId(this.firstName, this.lastName);
-	}
-
-	public void patchBy(Person person) {
-		if (person != null) {
-			// Address
-			String address = person.getAddress();
-			if (address != null && !address.isEmpty()) {
-				this.setAddress(address);
-			}
-			// City
-			String city = person.getCity();
-			if (city != null && !city.isEmpty()) {
-				this.setCity(city);
-			}
-			// Email
-			String email = person.getEmail();
-			if (email != null && !email.isEmpty()) {
-				this.setEmail(email);
-			}
-			// Phone
-			String phone = person.getPhone();
-			if (phone != null && !phone.isEmpty()) {
-				this.setPhone(phone);
-			}
-			// Zip
-			String zip = person.getZip();
-			if (zip != null && !zip.isEmpty()) {
-				this.setZip(zip);
-			}
-		}
-	}
+	private String address;
+	private String station;
+	private String birthdate;
+	private Map<String, String> medications = new HashMap<>();
+	private List<String> allergies = new ArrayList<>();
 
 	public boolean isValid() {
 		return firstName != null && !firstName.isEmpty() && lastName != null && !lastName.isEmpty();
+	}
+
+	public static Person updateWithStation(Person person, String station) {
+		person.setStation(station);
+		return person;
+	}
+
+	public Person updatePerson(Person person) {
+		this.setCity(person.getCity());
+		this.setZip(person.getZip());
+		this.setPhone(person.getPhone());
+		this.setEmail(person.getEmail());
+		this.setAddress(person.getAddress());
+
+		return this;
+	}
+
+	public Person patchPerson(Person person) {
+		String city = person.getCity();
+		if (StringsUtil.isValid(city)) {
+			this.setCity(city);
+		}
+		String zip = person.getZip();
+		if (StringsUtil.isValid(zip)) {
+			this.setZip(zip);
+		}
+		String phone = person.getPhone();
+		if (StringsUtil.isValid(phone)) {
+			this.setPhone(phone);
+		}
+		String email = person.getEmail();
+		if (StringsUtil.isValid(email)) {
+			this.setEmail(email);
+		}
+		String address = person.getAddress();
+		if (StringsUtil.isValid(address)) {
+			this.setAddress(address);
+		}
+		return this;
 	}
 }

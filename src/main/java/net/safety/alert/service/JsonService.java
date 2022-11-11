@@ -3,7 +3,6 @@ package net.safety.alert.service;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -11,44 +10,43 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import net.safety.alert.constants.FilenameConstants;
-import net.safety.alert.repository.FireStationRepository;
-import net.safety.alert.repository.MedicalRecordRepository;
-import net.safety.alert.repository.PersonRepository;
+import net.safety.alert.database.MemoryDatabase;
 import net.safety.alert.util.FileUtil;
-import net.safety.alert.util.JsonWrapper;
+import net.safety.alert.util.JsonDTO;
 
 @Service
 public class JsonService {
-
-	@Autowired
-	private PersonRepository personRepository;
-
-	@Autowired
-	private FireStationRepository fireStationRepository;
-
-	@Autowired
-	private MedicalRecordRepository medicalRecordRepository;
-
 	public void initDatabase(Object context) {
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.registerModule(new JavaTimeModule());
 		InputStream is = null;
+		JsonDTO jsonDTO = null;
 
-		// Read json data
 		try {
-			JsonWrapper wrapper = null;
+			// Reading the json data
 			is = FileUtil.getStreamFromFilename(context, FilenameConstants.JSON_DATA_FILE);
-			wrapper = objectMapper.readValue(is, new TypeReference<JsonWrapper>() {
+			jsonDTO = objectMapper.readValue(is, new TypeReference<JsonDTO>() {
 			});
+			final JsonDTO finalJsonDTO = jsonDTO;
 
-			personRepository.saveAll(wrapper.getPersons());
-			fireStationRepository.saveAll(wrapper.getFirestations());
-			medicalRecordRepository.saveAll(wrapper.getMedicalrecords());
+			// Update persons with stations
+			jsonDTO.getPersons().forEach(p -> finalJsonDTO.getFirestations().stream()
+					.filter(f -> f.getAddress().equals(p.getAddress())).forEach(f -> p.setStation(f.getStation())));
 
-			System.out.println("Persons saved : " + wrapper.getPersons().size());
-			System.out.println("FireStation saved : " + wrapper.getFirestations().size());
-			System.out.println("Medical records saved : " + wrapper.getMedicalrecords().size());
+			// Update persons with allergies and medications
+			jsonDTO.getPersons()
+					.forEach(p -> finalJsonDTO.getMedicalrecords().stream().filter(
+							m -> m.getFirstName().equals(p.getFirstName()) && m.getLastName().equals(p.getLastName()))
+							.forEach(m -> {
+								p.setAllergies(m.getAllergies());
+								p.setMedications(m.getMapMedications());
+								p.setBirthdate(m.getBirthdate());
+							}));
+			// Database Initialisation
+			MemoryDatabase.getInstance().setPersons(jsonDTO.getPersons());
+
+			System.out.println("Loading data OK.");
 
 		} catch (IOException e) {
 			e.printStackTrace();

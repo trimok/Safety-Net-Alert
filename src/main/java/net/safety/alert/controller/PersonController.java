@@ -13,6 +13,7 @@ import net.safety.alert.service.IPersonService;
 
 @RestController
 public class PersonController {
+
 	@Autowired
 	IPersonService personService;
 
@@ -35,4 +36,5 @@ public class PersonController {
 	public void deletePerson(@RequestBody Person person) {
 		personService.deletePerson(person);
 	}
+
 }
