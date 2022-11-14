@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class FireStationAlreadyCreatedException extends SafetyNetException {
+public class AddressStationAlreadyCreatedException extends SafetyNetException {
 	private static final long serialVersionUID = 5L;
-	public FireStationAlreadyCreatedException(String operation, String message, Object payload) {
+	public AddressStationAlreadyCreatedException(String operation, String message, Object payload) {
 		super(operation, message, payload);
 	}
 }

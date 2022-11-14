@@ -1,43 +1,32 @@
 package net.safety.alert.repository;
 
-import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
-import org.springframework.stereotype.Component;
-
-import net.safety.alert.database.MemoryDatabase;
+import net.safety.alert.database.Database;
 import net.safety.alert.model.Person;
 
-@Component
+@Repository
 public class PersonRepository implements IPersonRepository {
-	private static MemoryDatabase instance = MemoryDatabase.getInstance();
+	@Autowired
+	private Database database;
 
 	@Override
 	public Person getPersistent(Person person) {
 
-		Optional<Person> personOptional = instance.getPersons().stream().filter(
-				p -> p.getFirstName().equals(person.getFirstName()) && p.getLastName().equals(person.getLastName()))
-				.findFirst();
-		return personOptional.orElse(null);
+		Person personDatabase = database.getPersonsMap().get(person.getPersonId());
+		return personDatabase;
 	}
 
 	@Override
 	public Person save(Person person) {
-		instance.getPersons().add(person);
-		instance.synchronizeAddressStationDatabase(person);
-		return person;
-	}
-
-	@Override
-	public Person update(Person person) {
-		instance.getPersons().stream().filter(
-				p -> p.getFirstName().equals(person.getFirstName()) && p.getLastName().equals(person.getLastName()))
-				.map(p -> person);
-		instance.synchronizeAddressStationDatabase(person);
+		database.getPersonsMap().put(person.getPersonId(), person);
+		database.triggerAddressForPerson(person);
 		return person;
 	}
 
 	@Override
 	public void delete(Person person) {
-		instance.getPersons().remove(person);
+		database.getPersonsMap().remove(person.getPersonId());
 	}
 }

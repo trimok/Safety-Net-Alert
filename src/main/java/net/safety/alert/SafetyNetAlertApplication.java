@@ -6,12 +6,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 
-import net.safety.alert.service.JsonService;
+import net.safety.alert.database.Database;
 
 @SpringBootApplication
 public class SafetyNetAlertApplication {
 	@Autowired
-	private JsonService jsonService;
+	private Database database;
 
 	public static void main(String[] args) {
 		SpringApplication.run(SafetyNetAlertApplication.class, args);
@@ -19,6 +19,6 @@ public class SafetyNetAlertApplication {
 
 	@EventListener(ApplicationReadyEvent.class)
 	public void initDatabase() {
-		jsonService.initDatabase(this);
+		database.init();
 	}
 }

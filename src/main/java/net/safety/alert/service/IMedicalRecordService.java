@@ -1,16 +1,17 @@
 package net.safety.alert.service;
 
+import net.safety.alert.model.Person;
+
 public interface IMedicalRecordService {
-	/*
-	 * 
-	 * MedicalRecord createMedicalRecord(MedicalRecord medicalRecord);
-	 * 
-	 * MedicalRecord updateMedicalRecord(MedicalRecord medicalRecord);
-	 * 
-	 * void deleteMedicalRecord(MedicalRecord medicalRecord);
-	 * 
-	 * MedicalRecord getPersistent(MedicalRecord medicalRecord);
-	 * 
-	 * MedicalRecord patchMedicalRecord(MedicalRecord medicalRecord);
-	 */
+
+	Person createMedicalRecord(Person medicalRecord);
+
+	Person updateMedicalRecord(Person medicalRecord);
+
+	void deleteMedicalRecord(Person medicalRecord);
+
+	Person getPersistent(Person medicalRecord);
+
+	Person patchMedicalRecord(Person medicalRecord);
+
 }

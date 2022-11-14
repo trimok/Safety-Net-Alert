@@ -8,7 +8,5 @@ public interface IPersonRepository {
 
 	void delete(Person person);
 
-	Person update(Person person);
-
 	Person save(Person person);
 }

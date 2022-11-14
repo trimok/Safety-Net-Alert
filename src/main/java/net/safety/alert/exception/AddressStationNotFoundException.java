@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class FireStationNotValidException extends SafetyNetException {
+public class AddressStationNotFoundException extends SafetyNetException {
 	private static final long serialVersionUID = 5L;
-	public FireStationNotValidException(String operation, String message, Object payload) {
+	public AddressStationNotFoundException(String operation, String message, Object payload) {
 		super(operation, message, payload);
 	}
 }
