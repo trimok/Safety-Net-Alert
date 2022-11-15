@@ -3,17 +3,20 @@ package net.safety.alert.service;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import net.safety.alert.dto.AdultDTO;
+import net.safety.alert.dto.AdultByAddressDTO;
 import net.safety.alert.dto.ChildrenByAddressDTO;
 import net.safety.alert.dto.ChildrensByAddressDTO;
 import net.safety.alert.dto.PersonByAddressDTO;
 import net.safety.alert.dto.PersonByStationDTO;
+import net.safety.alert.dto.PersonGroupByAddressByListStationDTO;
 import net.safety.alert.dto.PersonsByAddressDTO;
 import net.safety.alert.dto.PersonsByStationDTO;
+import net.safety.alert.dto.PersonsGroupByAddressByListStationDTO;
 import net.safety.alert.dto.PhonesByStationDTO;
 import net.safety.alert.repository.IGeneralRepository;
 
@@ -43,7 +46,7 @@ public class GeneralService implements IGeneralService {
 	public ChildrensByAddressDTO findChildrensByAddressDTO(String address) {
 
 		List<ChildrenByAddressDTO> children = generalRepository.findChildrenByAddressDTO(address);
-		List<AdultDTO> adults = generalRepository.findAdultsByAddressDTO(address);
+		List<AdultByAddressDTO> adults = generalRepository.findAdultsByAddressDTO(address);
 
 		return ChildrensByAddressDTO.toChildrensByAddressDTO(children, adults);
 	}
@@ -60,4 +63,10 @@ public class GeneralService implements IGeneralService {
 		return PersonsByAddressDTO.toPersonsByAddressDTO(personsDTO);
 	}
 
+	@Override
+	public PersonsGroupByAddressByListStationDTO findPersonsGroupByAddressByListStationDTO(List<String> stations) {
+		Map<String, List<PersonGroupByAddressByListStationDTO>> personsMap = generalRepository
+				.findPersonsGroupByAddressByListStationDTO(stations);
+		return PersonsGroupByAddressByListStationDTO.toPersonsGroupByAddressByListStationDTO(personsMap);
+	}
 }

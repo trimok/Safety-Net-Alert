@@ -11,10 +11,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ChildrensByAddressDTO {
 	private List<ChildrenByAddressDTO> children;
-	private List<AdultDTO> adults;
+	private List<AdultByAddressDTO> adults;
 
 	public static ChildrensByAddressDTO toChildrensByAddressDTO(List<ChildrenByAddressDTO> children,
-			List<AdultDTO> adults) {
+			List<AdultByAddressDTO> adults) {
 		ChildrensByAddressDTO childrensByAddressDTO = new ChildrensByAddressDTO();
 		childrensByAddressDTO.setChildren(children);
 		childrensByAddressDTO.setAdults(adults);
