@@ -1,0 +1,3 @@
+2022-11-15 14:43:44,998 INFO o.s.b.StartupInfoLogger [main] Starting SafetyNetAlertApplicationTests using Java 17.0.5 on pc-espoir with PID 10876 (started by trimok in C:\Users\trimok\git\SafetyNewAlert)
+2022-11-15 14:43:45,029 INFO o.s.b.SpringApplication [main] No active profile set, falling back to 1 default profile: "default"
+2022-11-15 14:43:51,977 INFO o.s.b.StartupInfoLogger [main] Started SafetyNetAlertApplicationTests in 7.969 seconds (JVM running for 13.026)

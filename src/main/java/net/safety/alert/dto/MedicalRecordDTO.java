@@ -1,5 +1,7 @@
 package net.safety.alert.dto;
 
+import static net.safety.alert.constants.SeparatorConstants.COLONS_SEPARATOR;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,7 +18,6 @@ import net.safety.alert.model.Allergie;
 import net.safety.alert.model.Medication;
 import net.safety.alert.model.Person;
 import net.safety.alert.util.StringsUtil;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -32,7 +33,7 @@ public class MedicalRecordDTO {
 	public Map<String, Medication> getMapMedications() {
 		Map<String, Medication> mapMedications = new HashMap<>();
 		medications.forEach(m -> {
-			String[] infos = m.split(":");
+			String[] infos = m.split(COLONS_SEPARATOR);
 			mapMedications.put(infos[0], new Medication(infos[0], infos[1]));
 		});
 		return mapMedications;

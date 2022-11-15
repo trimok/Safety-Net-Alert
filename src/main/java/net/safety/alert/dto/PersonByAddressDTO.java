@@ -8,6 +8,7 @@ import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.safety.alert.model.Address;
 import net.safety.alert.model.FireStation;
 import net.safety.alert.model.Person;
 import net.safety.alert.util.DateUtil;
@@ -26,9 +27,12 @@ public class PersonByAddressDTO {
 	public static PersonByAddressDTO toPersonByAddressDTO(Person person) {
 		PersonByAddressDTO personByAddressDTO = new PersonByAddressDTO();
 
-		FireStation personFireStation = person.getAddress().getFireStation();
-		if (personFireStation != null) {
-			personByAddressDTO.setFireStation(personFireStation.getId());
+		Address personAddress = person.getAddress();
+		if (personAddress != null) {
+			FireStation personFireStation = person.getAddress().getFireStation();
+			if (personFireStation != null) {
+				personByAddressDTO.setFireStation(personFireStation.getId());
+			}
 		}
 
 		personByAddressDTO.setLastName(person.getLastName());

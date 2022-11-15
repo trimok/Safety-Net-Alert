@@ -6,10 +6,12 @@ import java.util.Map;
 import net.safety.alert.dto.AdultByAddressDTO;
 import net.safety.alert.dto.ChildrenByAddressDTO;
 import net.safety.alert.dto.PersonByAddressDTO;
+import net.safety.alert.dto.PersonByFirstNameLastNameDTO;
 import net.safety.alert.dto.PersonByStationDTO;
 import net.safety.alert.dto.PersonGroupByAddressByListStationDTO;
 
-public interface IGeneralRepository {
+public interface IQueryRepository {
+
 	List<PersonByStationDTO> findPersonsByStationDTO(String station);
 
 	List<ChildrenByAddressDTO> findChildrenByAddressDTO(String address);
@@ -22,4 +24,8 @@ public interface IGeneralRepository {
 
 	Map<String, List<PersonGroupByAddressByListStationDTO>> findPersonsGroupByAddressByListStationDTO(
 			List<String> stations);
+
+	List<PersonByFirstNameLastNameDTO> findPersonsByFirstNameLastNameDTO(String firstName, String lastName);
+
+	List<String> findEmailsByCityDTO(String city);
 }
