@@ -63,7 +63,6 @@ public class LoggingFilterBean extends GenericFilterBean {
 
 	private void logResponse(ContentCachingResponseWrapper response) throws IOException {
 		StringBuilder builder = new StringBuilder();
-		builder.append(headersToString(response.getHeaderNames(), response::getHeader));
 		builder.append(new String(response.getContentAsByteArray()));
 
 		if (builder.lastIndexOf("error") > -1) {

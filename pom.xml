@@ -7,7 +7,7 @@
 		<version>2.7.4</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>net.safety.alert</groupId>
+	<groupId>net.safety.alert.tests</groupId>
 	<artifactId>net-safety-alert</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>SafetyNetAlert</name>
@@ -106,7 +106,7 @@
 							<archive>
 								<manifest>
 									<mainClass>
-                                        net.safety.alert.SafetyNetAlertApplication
+                                        net.safety.alert.tests.SafetyNetAlertApplication
                                     </mainClass>
 								</manifest>
 							</archive>
