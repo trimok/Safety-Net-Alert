@@ -11,6 +11,7 @@ import static net.safety.alert.constants.HttpMessageConstants.UPDATE_MEDICAL_REC
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import net.safety.alert.dto.MedicalRecordDTO;
 import net.safety.alert.exception.MedicalRecordAlreadyCreatedException;
 import net.safety.alert.exception.MedicalRecordNotFoundException;
 import net.safety.alert.exception.PersonNotValidException;
@@ -24,65 +25,69 @@ public class MedicalRecordService implements IMedicalRecordService {
 	IMedicalRecordRepository medicalRecordRepository;
 
 	@Override
-	public Person createMedicalRecord(Person medicalRecord) {
-		if (!medicalRecord.isValid()) {
-			throw new PersonNotValidException(CREATE_MEDICAL_RECORD, MEDICAL_RECORD_NOT_VALID, medicalRecord);
+	public MedicalRecordDTO createMedicalRecord(MedicalRecordDTO medicalRecordDTO) {
+		Person person = medicalRecordDTO.toPerson();
+		if (!person.isValid()) {
+			throw new PersonNotValidException(CREATE_MEDICAL_RECORD, MEDICAL_RECORD_NOT_VALID, person);
 		}
 
-		Person medicalRecordDatabase = getPersistent(medicalRecord);
+		Person personDatabase = getPersistent(person);
 
-		if (medicalRecordDatabase == null) {
-			return medicalRecordRepository.save(medicalRecord);
+		if (personDatabase == null) {
+			return MedicalRecordDTO.toMedicalRecordDTO(medicalRecordRepository.save(person));
 		} else {
 			throw new MedicalRecordAlreadyCreatedException(CREATE_MEDICAL_RECORD, MEDICAL_RECORD_ALREADY_CREATED,
-					medicalRecordDatabase);
+					personDatabase);
 		}
 	}
 
 	@Override
-	public Person updateMedicalRecord(Person medicalRecord) {
-
-		if (!medicalRecord.isValid()) {
-			throw new PersonNotValidException(UPDATE_MEDICAL_RECORD, MEDICAL_RECORD_NOT_VALID, medicalRecord);
+	public MedicalRecordDTO updateMedicalRecord(MedicalRecordDTO medicalRecordDTO) {
+		Person person = medicalRecordDTO.toPerson();
+		if (!person.isValid()) {
+			throw new PersonNotValidException(UPDATE_MEDICAL_RECORD, MEDICAL_RECORD_NOT_VALID, person);
 		}
 
-		Person medicalRecordDatabase = getPersistent(medicalRecord);
+		Person personDatabase = getPersistent(person);
 
-		if (medicalRecordDatabase != null) {
-			return medicalRecordRepository.save(medicalRecord);
+		if (personDatabase != null) {
+			personDatabase.updateMedicalRecords(person);
+			return MedicalRecordDTO.toMedicalRecordDTO(medicalRecordRepository.save(personDatabase));
 		} else {
-			throw new MedicalRecordNotFoundException(UPDATE_MEDICAL_RECORD, MEDICAL_RECORD_NOT_FOUND, medicalRecord);
+			throw new MedicalRecordNotFoundException(UPDATE_MEDICAL_RECORD, MEDICAL_RECORD_NOT_FOUND, person);
 		}
 	}
 
 	@Override
-	public Person patchMedicalRecord(Person medicalRecord) {
-		if (!medicalRecord.isValid()) {
-			throw new PersonNotValidException(PATCH_MEDICAL_RECORD, MEDICAL_RECORD_NOT_VALID, medicalRecord);
+	public MedicalRecordDTO patchMedicalRecord(MedicalRecordDTO medicalRecordDTO) {
+		Person person = medicalRecordDTO.toPerson();
+		if (!person.isValid()) {
+			throw new PersonNotValidException(PATCH_MEDICAL_RECORD, MEDICAL_RECORD_NOT_VALID, person);
 		}
 
-		Person medicalRecordDatabase = getPersistent(medicalRecord);
+		Person personDatabase = getPersistent(person);
 
-		if (medicalRecordDatabase != null) {
-			medicalRecordDatabase.patchMedicalRecordBy(medicalRecord);
-			return medicalRecordRepository.save(medicalRecordDatabase);
+		if (personDatabase != null) {
+			personDatabase.patchMedicalRecordBy(person);
+			return MedicalRecordDTO.toMedicalRecordDTO(medicalRecordRepository.save(personDatabase));
 		} else {
-			throw new MedicalRecordNotFoundException(PATCH_MEDICAL_RECORD, MEDICAL_RECORD_NOT_FOUND, medicalRecord);
+			throw new MedicalRecordNotFoundException(PATCH_MEDICAL_RECORD, MEDICAL_RECORD_NOT_FOUND, person);
 		}
 	}
 
 	@Override
-	public void deleteMedicalRecord(Person medicalRecord) {
-		if (!medicalRecord.isValid()) {
-			throw new PersonNotValidException(DELETE_MEDICAL_RECORD, MEDICAL_RECORD_NOT_VALID, medicalRecord);
+	public void deleteMedicalRecord(MedicalRecordDTO medicalRecordDTO) {
+		Person person = medicalRecordDTO.toPerson();
+		if (!person.isValid()) {
+			throw new PersonNotValidException(DELETE_MEDICAL_RECORD, MEDICAL_RECORD_NOT_VALID, person);
 		}
 
-		Person medicalRecordDatabase = getPersistent(medicalRecord);
+		Person personDatabase = getPersistent(person);
 
-		if (medicalRecordDatabase != null) {
-			medicalRecordRepository.delete(medicalRecordDatabase);
+		if (personDatabase != null) {
+			medicalRecordRepository.delete(personDatabase);
 		} else {
-			throw new MedicalRecordNotFoundException(DELETE_MEDICAL_RECORD, MEDICAL_RECORD_NOT_FOUND, medicalRecord);
+			throw new MedicalRecordNotFoundException(DELETE_MEDICAL_RECORD, MEDICAL_RECORD_NOT_FOUND, person);
 		}
 	}
 

@@ -25,7 +25,9 @@ public class PersonService implements IPersonService {
 	PersonRepository personRepository;
 
 	@Override
-	public Person createPerson(Person person) {
+	public PersonDTO createPerson(PersonDTO personDTO) {
+
+		Person person = personDTO.toPerson();
 		if (!person.isValid()) {
 			throw new PersonNotValidException(CREATE_PERSON, PERSON_NOT_VALID, PersonDTO.toPersonDTO(person));
 		}
@@ -33,7 +35,7 @@ public class PersonService implements IPersonService {
 		Person personDatabase = getPersistent(person);
 
 		if (personDatabase == null) {
-			return personRepository.save(person);
+			return PersonDTO.toPersonDTO(personRepository.save(person));
 		} else {
 			throw new PersonAlreadyCreatedException(CREATE_PERSON, PERSON_ALREADY_CREATED,
 					PersonDTO.toPersonDTO(personDatabase));
@@ -41,7 +43,8 @@ public class PersonService implements IPersonService {
 	}
 
 	@Override
-	public Person updatePerson(Person person) {
+	public PersonDTO updatePerson(PersonDTO personDTO) {
+		Person person = personDTO.toPerson();
 		if (!person.isValid()) {
 			throw new PersonNotValidException(UPDATE_PERSON, PERSON_NOT_VALID, PersonDTO.toPersonDTO(person));
 		}
@@ -49,14 +52,15 @@ public class PersonService implements IPersonService {
 		Person personDatabase = getPersistent(person);
 
 		if (personDatabase != null) {
-			return personRepository.save(personDatabase.updatePerson(person));
+			return PersonDTO.toPersonDTO(personRepository.save(personDatabase.updatePerson(person)));
 		} else {
 			throw new PersonAlreadyCreatedException(UPDATE_PERSON, PERSON_NOT_FOUND, PersonDTO.toPersonDTO(person));
 		}
 	}
 
 	@Override
-	public Person patchPerson(Person person) {
+	public PersonDTO patchPerson(PersonDTO personDTO) {
+		Person person = personDTO.toPerson();
 		if (!person.isValid()) {
 			throw new PersonNotValidException(PATCH_PERSON, PERSON_NOT_VALID, PersonDTO.toPersonDTO(person));
 		}
@@ -64,14 +68,15 @@ public class PersonService implements IPersonService {
 		Person personDatabase = getPersistent(person);
 
 		if (personDatabase != null) {
-			return personRepository.save(personDatabase.patchPerson(person));
+			return PersonDTO.toPersonDTO(personRepository.save(personDatabase.patchPerson(person)));
 		} else {
 			throw new PersonAlreadyCreatedException(PATCH_PERSON, PERSON_NOT_FOUND, PersonDTO.toPersonDTO(person));
 		}
 	}
 
 	@Override
-	public void deletePerson(Person person) {
+	public void deletePerson(PersonDTO personDTO) {
+		Person person = personDTO.toPerson();
 		if (!person.isValid()) {
 			throw new PersonNotValidException(DELETE_PERSON, PERSON_NOT_VALID, PersonDTO.toPersonDTO(person));
 		}

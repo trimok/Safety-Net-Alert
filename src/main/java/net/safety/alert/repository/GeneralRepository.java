@@ -1,33 +1,60 @@
 package net.safety.alert.repository;
 
-public interface GeneralRepository {
-	/*
-	 * @Query("Select distinct p.firstName as firstName, p.lastName as lastName, p.address as address, p.phone as phone , "
-	 * + "m.birthdate as birthdate from MedicalRecord m, Person p  join FireStation f on (p.address = f.address) " +
-	 * " left join MedicalRecord m on (p.firstName = m.firstName and p.lastName = m.lastName) where f.station=?1 ")
-	 * Iterable<IPersonsByStation> findPersonsByStation(String station);
-	 * 
-	 * @Query("Select distinct p.firstName as firstName, p.lastName as lastName, " +
-	 * " m.birthdate as birthdate from MedicalRecord m, Person p " +
-	 * " left join MedicalRecord m on (p.firstName = m.firstName and p.lastName = m.lastName) where p.address=?1 ")
-	 * Iterable<IChildrenByAddress> findPersonsByAddress(String address);
-	 * 
-	 * @Query("Select distinct p.phone as phone from Person p " + "  join FireStation f on (p.address = f.address) " +
-	 * " where f.station=?1 ") Iterable<IPhoneByStation> findPhonesByStation(String station);
-	 */
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
 
-	/*
-	 * @Query("Select distinct p.lastName as lastName, p.phone as phone, m.medications as medications, m.allergies as allergies "
-	 * + " from MedicalRecord m, Person p " +
-	 * " left join MedicalRecord m on (p.firstName = m.firstName and p.lastName = m.lastName) " +
-	 * " where p.address=?1 ") Iterable<IPersonsByAddress> findPersonsByAddressDTO(String address);
-	 */
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
-	/*
-	 * @Query(nativeQuery = true, value =
-	 * "Select distinct m.birthdate as birthdate, medication.name as name, medication.quantity as quantity " +
-	 * " from MedicalRecord m, Medication medication " +
-	 * " inner join Medication  on (m.firstName = medication.firstName and m.lastName = medication.lastName) ")
-	 * Iterable<IPersonsByAddress> findPersonsByAddressDTO(String address);
-	 */
+import net.safety.alert.database.Database;
+import net.safety.alert.dto.AdultDTO;
+import net.safety.alert.dto.ChildrenByAddressDTO;
+import net.safety.alert.dto.PersonByAddressDTO;
+import net.safety.alert.dto.PersonByStationDTO;
+
+@Repository
+public class GeneralRepository implements IGeneralRepository {
+	@Autowired
+	private Database database;
+
+	@Override
+	public List<PersonByStationDTO> findPersonsByStationDTO(String station) {
+		return database.getPersonsMap().values().stream()
+				.filter(p -> p.getAddress() != null && p.getAddress().getFireStation() != null
+						&& station.equals(p.getAddress().getFireStation().getId()))
+				.map(p -> PersonByStationDTO.toPersonByStationDTO(p)).toList();
+	}
+
+	@Override
+	public List<ChildrenByAddressDTO> findChildrenByAddressDTO(String address) {
+		LocalDate now = LocalDate.now();
+		return database.getPersonsMap().values().stream()
+				.filter(p -> ChronoUnit.YEARS.between(p.getBirthdate(), now) < 18.0 && p.getAddress() != null
+						&& address.equals(p.getAddress().getName()))
+				.map(p -> ChildrenByAddressDTO.toChildrenByAddressDTO(p)).toList();
+	}
+
+	@Override
+	public List<AdultDTO> findAdultsByAddressDTO(String address) {
+		LocalDate now = LocalDate.now();
+		return database
+				.getPersonsMap().values().stream().filter(p -> ChronoUnit.YEARS.between(p.getBirthdate(), now) >= 18.0
+						&& p.getAddress() != null && address.equals(p.getAddress().getName()))
+				.map(p -> AdultDTO.toAdultDTO(p)).toList();
+	}
+
+	@Override
+	public List<String> findPhonesByStationDTO(String station) {
+		return database.getPersonsMap().values().stream().filter(p -> p.getAddress() != null
+				&& p.getAddress().getFireStation() != null && station.equals(p.getAddress().getFireStation().getId()))
+				.map(p -> p.getPhone()).toList();
+	}
+
+	@Override
+	public List<PersonByAddressDTO> findPersonsByAddressDTO(String address) {
+		return database.getPersonsMap().values().stream()
+				.filter(p -> p.getAddress() != null && address.equals(p.getAddress().getName()))
+				.map(p -> PersonByAddressDTO.toPersonByAddressDTO(p)).toList();
+	}
 }

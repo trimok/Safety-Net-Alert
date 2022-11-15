@@ -19,22 +19,22 @@ public class PersonController {
 
 	@PostMapping("/person")
 	public PersonDTO createPerson(@RequestBody PersonDTO personDTO) {
-		return PersonDTO.toPersonDTO(personService.createPerson(personDTO.toPerson()));
+		return personService.createPerson(personDTO);
 	}
 
 	@PutMapping("/person")
 	public PersonDTO updatePerson(@RequestBody PersonDTO personDTO) {
-		return PersonDTO.toPersonDTO(personService.updatePerson(personDTO.toPerson()));
+		return personService.updatePerson(personDTO);
 	}
 
 	@PatchMapping("/person")
 	public PersonDTO patchPerson(@RequestBody PersonDTO personDTO) {
-		return PersonDTO.toPersonDTO(personService.patchPerson(personDTO.toPerson()));
+		return personService.patchPerson(personDTO);
 	}
 
 	@DeleteMapping("/person")
 	public void deletePerson(@RequestBody PersonDTO personDTO) {
-		personService.deletePerson(personDTO.toPerson());
+		personService.deletePerson(personDTO);
 	}
 
 }

@@ -75,9 +75,16 @@ public class Person {
 		return this;
 	}
 
-	public Person patchMedicalRecordBy(Person medicalRecord) {
-		Map<String, Allergie> allergies = medicalRecord.getAllergies();
-		Map<String, Medication> medications = medicalRecord.getMedications();
+	public Person updateMedicalRecords(Person person) {
+		this.setBirthdate(person.getBirthdate());
+		this.setAllergies(person.getAllergies());
+		this.setMedications(person.getMedications());
+		return this;
+	}
+
+	public Person patchMedicalRecordBy(Person person) {
+		Map<String, Allergie> allergies = person.getAllergies();
+		Map<String, Medication> medications = person.getMedications();
 
 		if (allergies != null) {
 			this.allergies.putAll(allergies);
@@ -87,7 +94,7 @@ public class Person {
 		}
 
 		if (birthdate != null) {
-			this.birthdate = medicalRecord.getBirthdate();
+			this.birthdate = person.getBirthdate();
 		}
 
 		return this;

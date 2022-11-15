@@ -19,24 +19,21 @@ public class MedicalRecordController {
 
 	@PostMapping("/medicalRecord")
 	public MedicalRecordDTO createMedicalRecord(@RequestBody MedicalRecordDTO medicalRecordDTO) {
-		return MedicalRecordDTO
-				.toMedicalRecordDTO(medicalRecordService.createMedicalRecord(medicalRecordDTO.toPerson()));
+		return medicalRecordService.createMedicalRecord(medicalRecordDTO);
 	}
 
 	@PutMapping("/medicalRecord")
 	public MedicalRecordDTO updateMedicalRecord(@RequestBody MedicalRecordDTO medicalRecordDTO) {
-		return MedicalRecordDTO
-				.toMedicalRecordDTO(medicalRecordService.updateMedicalRecord(medicalRecordDTO.toPerson()));
+		return medicalRecordService.updateMedicalRecord(medicalRecordDTO);
 	}
 
 	@PatchMapping("/medicalRecord")
 	public MedicalRecordDTO patchMedicalRecord(@RequestBody MedicalRecordDTO medicalRecordDTO) {
-		return MedicalRecordDTO
-				.toMedicalRecordDTO(medicalRecordService.patchMedicalRecord(medicalRecordDTO.toPerson()));
+		return medicalRecordService.patchMedicalRecord(medicalRecordDTO);
 	}
 
 	@DeleteMapping("/medicalRecord")
 	public void deleteMedicalRecord(@RequestBody MedicalRecordDTO medicalRecordDTO) {
-		medicalRecordService.deleteMedicalRecord(medicalRecordDTO.toPerson());
+		medicalRecordService.deleteMedicalRecord(medicalRecordDTO);
 	}
 }

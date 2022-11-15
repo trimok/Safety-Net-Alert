@@ -17,18 +17,16 @@ public class AddressStationController {
 
 	@PostMapping("/firestation")
 	public FireStationDTO createMappingAddressStation(@RequestBody FireStationDTO fireStationDTO) {
-		return FireStationDTO
-				.toFireStationDTO(addressStationService.createMappingAddressStation(fireStationDTO.toAddress()));
+		return addressStationService.createMappingAddressStation(fireStationDTO);
 	}
 
 	@PutMapping("/firestation")
 	public FireStationDTO updateMappingAddressStation(@RequestBody FireStationDTO fireStationDTO) {
-		return FireStationDTO
-				.toFireStationDTO(addressStationService.updateMappingAddressStation(fireStationDTO.toAddress()));
+		return addressStationService.updateMappingAddressStation(fireStationDTO);
 	}
 
 	@DeleteMapping("/firestation")
 	public void deleteMappingAddressStation(@RequestBody FireStationDTO fireStationDTO) {
-		addressStationService.deleteMappingAddressStation(fireStationDTO.toAddress());
+		addressStationService.deleteMappingAddressStation(fireStationDTO);
 	}
 }

@@ -1,14 +1,15 @@
 package net.safety.alert.service;
 
+import net.safety.alert.dto.FireStationDTO;
 import net.safety.alert.model.Address;
 
 public interface IAddressStationService {
 
-	Address createMappingAddressStation(Address address);
+	FireStationDTO createMappingAddressStation(FireStationDTO fireStationDTO);
 
-	Address updateMappingAddressStation(Address address);
+	FireStationDTO updateMappingAddressStation(FireStationDTO fireStationDTO);
 
-	void deleteMappingAddressStation(Address address);
+	void deleteMappingAddressStation(FireStationDTO fireStationDTO);
 
 	Address getPersistent(Address address);
 }

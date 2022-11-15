@@ -10,6 +10,7 @@ import static net.safety.alert.constants.HttpMessageConstants.UPDATE_MAPPING_ADD
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import net.safety.alert.dto.FireStationDTO;
 import net.safety.alert.exception.AddressStationAlreadyCreatedException;
 import net.safety.alert.exception.AddressStationNotFoundException;
 import net.safety.alert.exception.PersonNotValidException;
@@ -23,7 +24,8 @@ public class AddressStationService implements IAddressStationService {
 	IAddressStationRepository addressStationRepository;
 
 	@Override
-	public Address createMappingAddressStation(Address address) {
+	public FireStationDTO createMappingAddressStation(FireStationDTO fireStationDTO) {
+		Address address = fireStationDTO.toAddress();
 		if (!address.isValid()) {
 			throw new PersonNotValidException(CREATE_MAPPING_ADDRESS_STATION, MAPPING_ADDRESS_STATION_NOT_VALID,
 					address);
@@ -32,7 +34,7 @@ public class AddressStationService implements IAddressStationService {
 		Address addressDatabase = getPersistent(address);
 
 		if (addressDatabase == null || addressDatabase.getFireStation() == null) {
-			return addressStationRepository.save(address);
+			return FireStationDTO.toFireStationDTO(addressStationRepository.save(address));
 		} else {
 			throw new AddressStationAlreadyCreatedException(CREATE_MAPPING_ADDRESS_STATION,
 					MAPPING_ADDRESS_STATION_ALREADY_CREATED, address);
@@ -40,7 +42,8 @@ public class AddressStationService implements IAddressStationService {
 	}
 
 	@Override
-	public Address updateMappingAddressStation(Address address) {
+	public FireStationDTO updateMappingAddressStation(FireStationDTO fireStationDTO) {
+		Address address = fireStationDTO.toAddress();
 		if (!address.isValid()) {
 			throw new PersonNotValidException(UPDATE_MAPPING_ADDRESS_STATION, MAPPING_ADDRESS_STATION_NOT_VALID,
 					address);
@@ -49,7 +52,7 @@ public class AddressStationService implements IAddressStationService {
 		Address addressDatabase = getPersistent(address);
 
 		if (addressDatabase != null) {
-			return addressStationRepository.save(address);
+			return FireStationDTO.toFireStationDTO(addressStationRepository.save(address));
 		} else {
 			throw new AddressStationAlreadyCreatedException(UPDATE_MAPPING_ADDRESS_STATION,
 					MAPPING_ADDRESS_STATION_NOT_FOUND, address);
@@ -57,7 +60,8 @@ public class AddressStationService implements IAddressStationService {
 	}
 
 	@Override
-	public void deleteMappingAddressStation(Address address) {
+	public void deleteMappingAddressStation(FireStationDTO fireStationDTO) {
+		Address address = fireStationDTO.toAddress();
 		if (!address.isValid()) {
 			throw new PersonNotValidException(DELETE_MAPPING_ADDRESS_STATION, MAPPING_ADDRESS_STATION_NOT_VALID,
 					address);
