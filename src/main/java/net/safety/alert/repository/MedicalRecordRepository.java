@@ -19,8 +19,7 @@ public class MedicalRecordRepository implements IMedicalRecordRepository {
 
 	@Override
 	public void delete(Person medicalRecord) {
-		// TODO Auto-generated method stub
-
+		database.getPersonsMap().put(medicalRecord.getPersonId(), medicalRecord);
 	}
 
 	@Override

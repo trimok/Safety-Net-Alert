@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import net.safety.alert.dto.AddressDTO;
 import net.safety.alert.dto.FireStationDTO;
+import net.safety.alert.dto.MappingAddressStationDTO;
 import net.safety.alert.service.IAddressStationService;
 
 @RestController
@@ -16,17 +18,24 @@ public class AddressStationController {
 	IAddressStationService addressStationService;
 
 	@PostMapping("/firestation")
-	public FireStationDTO createMappingAddressStation(@RequestBody FireStationDTO fireStationDTO) {
-		return addressStationService.createMappingAddressStation(fireStationDTO);
+	public MappingAddressStationDTO createMappingAddressStation(
+			@RequestBody MappingAddressStationDTO mappingAddressStationDTO) {
+		return addressStationService.createMappingAddressStation(mappingAddressStationDTO);
 	}
 
 	@PutMapping("/firestation")
-	public FireStationDTO updateMappingAddressStation(@RequestBody FireStationDTO fireStationDTO) {
-		return addressStationService.updateMappingAddressStation(fireStationDTO);
+	public MappingAddressStationDTO updateMappingAddressStation(
+			@RequestBody MappingAddressStationDTO mappingAddressStationDTO) {
+		return addressStationService.updateMappingAddressStation(mappingAddressStationDTO);
 	}
 
-	@DeleteMapping("/firestation")
-	public void deleteMappingAddressStation(@RequestBody FireStationDTO fireStationDTO) {
-		addressStationService.deleteMappingAddressStation(fireStationDTO);
+	@DeleteMapping("/firestation/byFireStation")
+	public void deleteMappingAddressStationByFireStation(@RequestBody FireStationDTO fireStationDTO) {
+		addressStationService.deleteMappingAddressStationByFireStation(fireStationDTO);
+	}
+
+	@DeleteMapping("/firestation/byAddress")
+	public void deleteMappingAddressStationByAddress(@RequestBody AddressDTO addressDTO) {
+		addressStationService.deleteMappingAddressStationByAddress(addressDTO);
 	}
 }

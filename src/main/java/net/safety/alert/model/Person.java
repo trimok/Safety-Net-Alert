@@ -100,6 +100,19 @@ public class Person {
 		return this;
 	}
 
+	public boolean isMedicalRecordEmpty() {
+		return birthdate == null && (allergies == null || allergies.isEmpty())
+				&& (medications == null || medications.isEmpty());
+	}
+
+	public Person emptyMedicalRecord() {
+		this.allergies = null;
+		this.medications = null;
+		this.birthdate = null;
+
+		return this;
+	}
+
 	@JsonIgnore
 	public PersonId getPersonId() {
 		return new PersonId(firstName, lastName);

@@ -35,6 +35,8 @@ public class MedicalRecordService implements IMedicalRecordService {
 
 		if (personDatabase == null) {
 			return MedicalRecordDTO.toMedicalRecordDTO(medicalRecordRepository.save(person));
+		} else if (personDatabase.isMedicalRecordEmpty()) {
+			return updateMedicalRecord(medicalRecordDTO);
 		} else {
 			throw new MedicalRecordAlreadyCreatedException(CREATE_MEDICAL_RECORD, MEDICAL_RECORD_ALREADY_CREATED,
 					personDatabase);
@@ -51,6 +53,7 @@ public class MedicalRecordService implements IMedicalRecordService {
 		Person personDatabase = getPersistent(person);
 
 		if (personDatabase != null) {
+
 			personDatabase.updateMedicalRecords(person);
 			return MedicalRecordDTO.toMedicalRecordDTO(medicalRecordRepository.save(personDatabase));
 		} else {
@@ -85,7 +88,7 @@ public class MedicalRecordService implements IMedicalRecordService {
 		Person personDatabase = getPersistent(person);
 
 		if (personDatabase != null) {
-			medicalRecordRepository.delete(personDatabase);
+			medicalRecordRepository.delete(personDatabase.emptyMedicalRecord());
 		} else {
 			throw new MedicalRecordNotFoundException(DELETE_MEDICAL_RECORD, MEDICAL_RECORD_NOT_FOUND, person);
 		}

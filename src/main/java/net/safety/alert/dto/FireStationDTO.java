@@ -13,27 +13,25 @@ import net.safety.alert.util.StringsUtil;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FireStationDTO {
-	private String address;
-	private String station;
+	private String fireStation;
 
 	@JsonIgnore
 	public boolean isValid() {
-		return StringsUtil.isValid(address) && StringsUtil.isValid(station);
-	}
-
-	public FireStation toFireStation() {
-		return new FireStation(station);
+		return StringsUtil.isValid(fireStation);
 	}
 
 	public Address toAddress() {
-		return new Address(address, new FireStation(station));
+		return new Address("", new FireStation(fireStation));
 	}
 
 	public static FireStationDTO toFireStationDTO(Address address) {
-		String id = null;
-		if (address.getFireStation() != null) {
-			id = address.getFireStation().getId();
+		FireStationDTO fireStationDTO = new FireStationDTO();
+		if (address != null) {
+			FireStation fireStation = address.getFireStation();
+			if (fireStation != null) {
+				fireStationDTO.setFireStation(fireStation.getId());
+			}
 		}
-		return new FireStationDTO(address.getName(), id);
+		return fireStationDTO;
 	}
 }

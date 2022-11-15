@@ -6,8 +6,9 @@ public interface IAddressStationRepository {
 
 	Address getPersistent(Address address);
 
-	void delete(Address address);
+	void deleteByFireStation(Address address);
+
+	void deleteByAddress(Address address);
 
 	Address save(Address address);
-
 }

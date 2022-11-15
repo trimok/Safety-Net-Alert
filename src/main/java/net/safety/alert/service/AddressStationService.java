@@ -10,9 +10,10 @@ import static net.safety.alert.constants.HttpMessageConstants.UPDATE_MAPPING_ADD
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import net.safety.alert.dto.AddressDTO;
 import net.safety.alert.dto.FireStationDTO;
+import net.safety.alert.dto.MappingAddressStationDTO;
 import net.safety.alert.exception.AddressStationAlreadyCreatedException;
-import net.safety.alert.exception.AddressStationNotFoundException;
 import net.safety.alert.exception.PersonNotValidException;
 import net.safety.alert.model.Address;
 import net.safety.alert.repository.IAddressStationRepository;
@@ -24,8 +25,8 @@ public class AddressStationService implements IAddressStationService {
 	IAddressStationRepository addressStationRepository;
 
 	@Override
-	public FireStationDTO createMappingAddressStation(FireStationDTO fireStationDTO) {
-		Address address = fireStationDTO.toAddress();
+	public MappingAddressStationDTO createMappingAddressStation(MappingAddressStationDTO mappingAddressStationDTO) {
+		Address address = mappingAddressStationDTO.toAddress();
 		if (!address.isValid()) {
 			throw new PersonNotValidException(CREATE_MAPPING_ADDRESS_STATION, MAPPING_ADDRESS_STATION_NOT_VALID,
 					address);
@@ -34,7 +35,7 @@ public class AddressStationService implements IAddressStationService {
 		Address addressDatabase = getPersistent(address);
 
 		if (addressDatabase == null || addressDatabase.getFireStation() == null) {
-			return FireStationDTO.toFireStationDTO(addressStationRepository.save(address));
+			return MappingAddressStationDTO.toFireStationDTO(addressStationRepository.save(address));
 		} else {
 			throw new AddressStationAlreadyCreatedException(CREATE_MAPPING_ADDRESS_STATION,
 					MAPPING_ADDRESS_STATION_ALREADY_CREATED, address);
@@ -42,8 +43,8 @@ public class AddressStationService implements IAddressStationService {
 	}
 
 	@Override
-	public FireStationDTO updateMappingAddressStation(FireStationDTO fireStationDTO) {
-		Address address = fireStationDTO.toAddress();
+	public MappingAddressStationDTO updateMappingAddressStation(MappingAddressStationDTO mappingAddressStationDTO) {
+		Address address = mappingAddressStationDTO.toAddress();
 		if (!address.isValid()) {
 			throw new PersonNotValidException(UPDATE_MAPPING_ADDRESS_STATION, MAPPING_ADDRESS_STATION_NOT_VALID,
 					address);
@@ -52,7 +53,7 @@ public class AddressStationService implements IAddressStationService {
 		Address addressDatabase = getPersistent(address);
 
 		if (addressDatabase != null) {
-			return FireStationDTO.toFireStationDTO(addressStationRepository.save(address));
+			return MappingAddressStationDTO.toFireStationDTO(addressStationRepository.save(address));
 		} else {
 			throw new AddressStationAlreadyCreatedException(UPDATE_MAPPING_ADDRESS_STATION,
 					MAPPING_ADDRESS_STATION_NOT_FOUND, address);
@@ -60,21 +61,25 @@ public class AddressStationService implements IAddressStationService {
 	}
 
 	@Override
-	public void deleteMappingAddressStation(FireStationDTO fireStationDTO) {
+	public void deleteMappingAddressStationByFireStation(FireStationDTO fireStationDTO) {
 		Address address = fireStationDTO.toAddress();
-		if (!address.isValid()) {
+		if (!fireStationDTO.isValid()) {
 			throw new PersonNotValidException(DELETE_MAPPING_ADDRESS_STATION, MAPPING_ADDRESS_STATION_NOT_VALID,
 					address);
 		}
 
-		Address addressDatabase = getPersistent(address);
+		addressStationRepository.deleteByFireStation(address);
+	}
 
-		if (address.equals(addressDatabase)) {
-			addressStationRepository.delete(address);
-		} else {
-			throw new AddressStationNotFoundException(DELETE_MAPPING_ADDRESS_STATION, MAPPING_ADDRESS_STATION_NOT_FOUND,
+	@Override
+	public void deleteMappingAddressStationByAddress(AddressDTO addressDTO) {
+		Address address = addressDTO.toAddress();
+		if (!addressDTO.isValid()) {
+			throw new PersonNotValidException(DELETE_MAPPING_ADDRESS_STATION, MAPPING_ADDRESS_STATION_NOT_VALID,
 					address);
 		}
+
+		addressStationRepository.deleteByAddress(address);
 	}
 
 	@Override

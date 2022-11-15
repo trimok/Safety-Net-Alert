@@ -36,9 +36,18 @@ public class AddressStationRepository implements IAddressStationRepository {
 	}
 
 	@Override
-	public void delete(Address address) {
+	public void deleteByFireStation(Address address) {
 		database.getAddressesMap().values().forEach(a -> {
 			if (a.getFireStation() != null && a.getFireStation().equals(address.getFireStation())) {
+				a.setFireStation(null);
+			}
+		});
+	}
+
+	@Override
+	public void deleteByAddress(Address address) {
+		database.getAddressesMap().values().forEach(a -> {
+			if (a.getName().equals(address.getName())) {
 				a.setFireStation(null);
 			}
 		});
