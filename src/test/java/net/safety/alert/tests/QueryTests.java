@@ -1,6 +1,7 @@
 package net.safety.alert.tests;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 import java.util.List;
@@ -24,9 +25,11 @@ import net.safety.alert.dto.AdultByAddressDTO;
 import net.safety.alert.dto.ChildrenByAddressDTO;
 import net.safety.alert.dto.ChildrensByAddressDTO;
 import net.safety.alert.dto.PersonByAddressDTO;
+import net.safety.alert.dto.PersonByFirstNameLastNameDTO;
 import net.safety.alert.dto.PersonByStationDTO;
 import net.safety.alert.dto.PersonGroupByAddressByListStationDTO;
 import net.safety.alert.dto.PersonsByAddressDTO;
+import net.safety.alert.dto.PersonsByFirstNameLastNameDTO;
 import net.safety.alert.dto.PersonsByStationDTO;
 import net.safety.alert.dto.PersonsGroupByAddressByListStationDTO;
 import net.safety.alert.dto.PhonesByStationDTO;
@@ -52,6 +55,9 @@ class QueryTests {
 
 	private final static String ADDRESS_CULVER = "1509 Culver St";
 	private static final int ADDRESS_CULVER_PERSONS_COUNT = 5;
+	private final static String FELICIA = "Felicia";
+	private final static String BOYD = "Boyd";
+	private final static int BOYD_COUNT = 6;
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -227,5 +233,42 @@ class QueryTests {
 		assertThat(person.getAge()).isGreaterThan(0);
 		assertThat(medications.size()).isGreaterThan(0);
 		assertThat(allergies.size()).isGreaterThan(0);
+	}
+
+	/********* TEST GET /personInfo?firstName=&lastName= QueryController.findPersonsByFirstNameLastNameDTO *********/
+
+	public static Stream<Arguments> whenFirstNameAndOrLastNameIsGiven_ShouldReturnPersonPersonListProvider() {
+		// GIVEN
+		return Stream.of(Arguments.arguments(FELICIA, BOYD, 1), Arguments.arguments("", BOYD, BOYD_COUNT));
+	}
+
+	@DisplayName("GET /personInfo?firstName=&lastName= : ")
+	@ParameterizedTest(name = "when firstName is {0}, and lastName is {1}  should return {2} person(s)")
+	@MethodSource("whenFirstNameAndOrLastNameIsGiven_ShouldReturnPersonPersonListProvider")
+	public void whenFirstNameAndOrLastNameIsGiven_ShouldReturnPersonPersonList(String firstName, String lastName,
+			int personCount) throws Exception {
+
+		// WHEN
+		PersonsByFirstNameLastNameDTO personsDTO = getDtoFromUrlGet(
+				"/personInfo?firstName=" + firstName + "&lastName=" + lastName,
+				new TypeReference<PersonsByFirstNameLastNameDTO>() {
+				});
+
+		// THEN
+		List<PersonByFirstNameLastNameDTO> persons = personsDTO.getPersons();
+		PersonByFirstNameLastNameDTO person = persons.get(0);
+
+		assertThat(persons.size()).isEqualTo(personCount);
+
+		Map<String, String> medications = person.getMedications();
+		List<String> allergies = person.getAllergies();
+		assert (!person.getLastName().isEmpty());
+		assert (!person.getAddress().isEmpty());
+		assertThat(person.getAge()).isGreaterThan(0);
+		if (personCount == 1) {
+			assertTrue(medications.size() > 0 && allergies.size() > 0);
+		} else {
+			assertTrue(medications.size() > 0 || allergies.size() > 0);
+		}
 	}
 }
