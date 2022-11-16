@@ -37,6 +37,7 @@ public class LoggingFilterBean extends GenericFilterBean {
 
 	private void logRequest(ContentCachingRequestWrapper request) {
 		StringBuilder builder = new StringBuilder();
+		builder.append(request.getMethod() + " ");
 		builder.append(request.getRequestURI() + " ");
 		builder.append(new String(request.getContentAsByteArray()));
 		// Parameters for GET

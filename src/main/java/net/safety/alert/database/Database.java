@@ -57,8 +57,8 @@ public class Database {
 
 		// Building the map addressesMap
 		// The FireStation objects must be retrieving from the fireStationsMap
-		jsonDTO.getFirestations().forEach(
-				f -> addressesMap.put(f.getAddress(), new Address(f.getAddress(), fireStationsMap.get(f.getStation()))));
+		jsonDTO.getFirestations().forEach(f -> addressesMap.put(f.getAddress(),
+				new Address(f.getAddress(), fireStationsMap.get(f.getStation()))));
 
 		// Building the persons Map
 		jsonDTO.getPersons().forEach(p -> personsMap.put(p.getPersonId(), p.toPerson()));
@@ -98,5 +98,11 @@ public class Database {
 
 	public void triggerAddressDatabaseForAllPerson() {
 		personsMap.values().forEach(p -> triggerAddressForPerson(p));
+	}
+
+	public void raz() {
+		personsMap = new HashMap<>();
+		addressesMap = new HashMap<>();
+		fireStationsMap = new HashMap<>();
 	}
 }

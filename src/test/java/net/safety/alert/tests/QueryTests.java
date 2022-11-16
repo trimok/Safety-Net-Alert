@@ -2,13 +2,15 @@ package net.safety.alert.tests;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -16,10 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
+import net.safety.alert.database.Database;
 import net.safety.alert.dto.AdultByAddressDTO;
 import net.safety.alert.dto.ChildrenByAddressDTO;
 import net.safety.alert.dto.ChildrensByAddressDTO;
@@ -33,9 +34,11 @@ import net.safety.alert.dto.PersonsByFirstNameLastNameDTO;
 import net.safety.alert.dto.PersonsByStationDTO;
 import net.safety.alert.dto.PersonsGroupByAddressByListStationDTO;
 import net.safety.alert.dto.PhonesByStationDTO;
+import net.safety.alert.tests.util.JsonUtil;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@TestInstance(Lifecycle.PER_CLASS)
 class QueryTests {
 	private static final int FIRESTATION_3_PHONE_COUNT = 11;
 	private static final int ADDRESS_CULVER_CHILD_COUNT = 2;
@@ -64,22 +67,13 @@ class QueryTests {
 	@Autowired
 	private MockMvc mockMvc;
 
-	public final static ObjectMapper mapper = new ObjectMapper();
+	@Autowired
+	private Database database;
 
-	// Utilitary Method
-	public <T> T getDtoFromUrlGet(String url, Class<T> classT) {
-		T tDTO = null;
-		try {
-
-			MvcResult result = mockMvc.perform(get(url)).andReturn();
-
-			tDTO = mapper.readValue(result.getResponse().getContentAsString(),
-					mapper.getTypeFactory().constructType(classT));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return tDTO;
+	@BeforeAll
+	public void razDatabase() {
+		database.raz();
+		database.init();
 	}
 
 	/********************** TEST GET /firestation?stationNumber= QueryController.findPersonsByStationDTO **********/
@@ -100,8 +94,8 @@ class QueryTests {
 			long childrenCount) throws Exception {
 
 		// WHEN
-		PersonsByStationDTO personsByStationDTO = getDtoFromUrlGet("/firestation?stationNumber=" + station,
-				PersonsByStationDTO.class);
+		PersonsByStationDTO personsByStationDTO = JsonUtil.dtoFromUrl(true, MockMvcRequestBuilders::get, mockMvc,
+				"/firestation?stationNumber=" + station, PersonsByStationDTO.class);
 
 		// THEN
 		List<PersonByStationDTO> persons = personsByStationDTO.getPersons();
@@ -128,8 +122,8 @@ class QueryTests {
 			throws Exception {
 
 		// WHEN
-		ChildrensByAddressDTO childrens = getDtoFromUrlGet("/childAlert?address=" + address,
-				ChildrensByAddressDTO.class);
+		ChildrensByAddressDTO childrens = JsonUtil.dtoFromUrl(true, MockMvcRequestBuilders::get, mockMvc,
+				"/childAlert?address=" + address, ChildrensByAddressDTO.class);
 
 		// THEN
 		List<ChildrenByAddressDTO> children = childrens.getChildren();
@@ -159,8 +153,8 @@ class QueryTests {
 	public void whenFireStationIsGiven_ShouldReturnPhoneList(String fireStation, long phonesCount) throws Exception {
 
 		// WHEN
-		PhonesByStationDTO phonesDTO = getDtoFromUrlGet("/phoneAlert?firestation=" + fireStation,
-				PhonesByStationDTO.class);
+		PhonesByStationDTO phonesDTO = JsonUtil.dtoFromUrl(true, MockMvcRequestBuilders::get, mockMvc,
+				"/phoneAlert?firestation=" + fireStation, PhonesByStationDTO.class);
 
 		// THEN
 		List<String> phones = phonesDTO.getPhones();
@@ -180,7 +174,8 @@ class QueryTests {
 	public void whenAddressIsGiven_ShouldReturnPersonList(String address, long personsCount) throws Exception {
 
 		// WHEN
-		PersonsByAddressDTO personsDTO = getDtoFromUrlGet("/fire?address=" + address, PersonsByAddressDTO.class);
+		PersonsByAddressDTO personsDTO = JsonUtil.dtoFromUrl(true, MockMvcRequestBuilders::get, mockMvc,
+				"/fire?address=" + address, PersonsByAddressDTO.class);
 
 		// THEN
 		List<PersonByAddressDTO> persons = personsDTO.getPersons();
@@ -212,8 +207,8 @@ class QueryTests {
 			String groupName, long personsGroupCount) throws Exception {
 
 		// WHEN
-		PersonsGroupByAddressByListStationDTO mapPersonsDTO = getDtoFromUrlGet(
-				"/flood/stations?stations=" + addressList, PersonsGroupByAddressByListStationDTO.class);
+		PersonsGroupByAddressByListStationDTO mapPersonsDTO = JsonUtil.dtoFromUrl(true, MockMvcRequestBuilders::get,
+				mockMvc, "/flood/stations?stations=" + addressList, PersonsGroupByAddressByListStationDTO.class);
 
 		// THEN
 		Map<String, List<PersonGroupByAddressByListStationDTO>> mapPersons = mapPersonsDTO.getPersonsMap();
@@ -247,7 +242,7 @@ class QueryTests {
 			int personCount) throws Exception {
 
 		// WHEN
-		PersonsByFirstNameLastNameDTO personsDTO = getDtoFromUrlGet(
+		PersonsByFirstNameLastNameDTO personsDTO = JsonUtil.dtoFromUrl(true, MockMvcRequestBuilders::get, mockMvc,
 				"/personInfo?firstName=" + firstName + "&lastName=" + lastName, PersonsByFirstNameLastNameDTO.class);
 
 		// THEN
@@ -281,7 +276,8 @@ class QueryTests {
 	public void whenCityIsGiven_ShouldReturnPersonEmailList(String city, int personCount) throws Exception {
 
 		// WHEN
-		EmailsByCityDTO emailsDTO = getDtoFromUrlGet("/communityEmail?city=" + city, EmailsByCityDTO.class);
+		EmailsByCityDTO emailsDTO = JsonUtil.dtoFromUrl(true, MockMvcRequestBuilders::get, mockMvc,
+				"/communityEmail?city=" + city, EmailsByCityDTO.class);
 
 		// THEN
 		List<String> emails = emailsDTO.getEmails();
