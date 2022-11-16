@@ -18,12 +18,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import net.safety.alert.dto.AdultByAddressDTO;
 import net.safety.alert.dto.ChildrenByAddressDTO;
 import net.safety.alert.dto.ChildrensByAddressDTO;
+import net.safety.alert.dto.EmailsByCityDTO;
 import net.safety.alert.dto.PersonByAddressDTO;
 import net.safety.alert.dto.PersonByFirstNameLastNameDTO;
 import net.safety.alert.dto.PersonByStationDTO;
@@ -58,19 +58,23 @@ class QueryTests {
 	private final static String FELICIA = "Felicia";
 	private final static String BOYD = "Boyd";
 	private final static int BOYD_COUNT = 6;
+	private final static String CULVER_CITY = "Culver";
+	private final static int CULVER_CITY_PERSONS_COUNT = 23;
 
 	@Autowired
 	private MockMvc mockMvc;
 
+	public final static ObjectMapper mapper = new ObjectMapper();
+
 	// Utilitary Method
-	public <T> T getDtoFromUrlGet(String url, TypeReference<T> type) {
+	public <T> T getDtoFromUrlGet(String url, Class<T> classT) {
 		T tDTO = null;
 		try {
+
 			MvcResult result = mockMvc.perform(get(url)).andReturn();
 
-			ObjectMapper mapper = new ObjectMapper();
-
-			tDTO = mapper.readValue(result.getResponse().getContentAsString(), type);
+			tDTO = mapper.readValue(result.getResponse().getContentAsString(),
+					mapper.getTypeFactory().constructType(classT));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -97,8 +101,7 @@ class QueryTests {
 
 		// WHEN
 		PersonsByStationDTO personsByStationDTO = getDtoFromUrlGet("/firestation?stationNumber=" + station,
-				new TypeReference<PersonsByStationDTO>() {
-				});
+				PersonsByStationDTO.class);
 
 		// THEN
 		List<PersonByStationDTO> persons = personsByStationDTO.getPersons();
@@ -126,8 +129,7 @@ class QueryTests {
 
 		// WHEN
 		ChildrensByAddressDTO childrens = getDtoFromUrlGet("/childAlert?address=" + address,
-				new TypeReference<ChildrensByAddressDTO>() {
-				});
+				ChildrensByAddressDTO.class);
 
 		// THEN
 		List<ChildrenByAddressDTO> children = childrens.getChildren();
@@ -158,8 +160,7 @@ class QueryTests {
 
 		// WHEN
 		PhonesByStationDTO phonesDTO = getDtoFromUrlGet("/phoneAlert?firestation=" + fireStation,
-				new TypeReference<PhonesByStationDTO>() {
-				});
+				PhonesByStationDTO.class);
 
 		// THEN
 		List<String> phones = phonesDTO.getPhones();
@@ -179,9 +180,7 @@ class QueryTests {
 	public void whenAddressIsGiven_ShouldReturnPersonList(String address, long personsCount) throws Exception {
 
 		// WHEN
-		PersonsByAddressDTO personsDTO = getDtoFromUrlGet("/fire?address=" + address,
-				new TypeReference<PersonsByAddressDTO>() {
-				});
+		PersonsByAddressDTO personsDTO = getDtoFromUrlGet("/fire?address=" + address, PersonsByAddressDTO.class);
 
 		// THEN
 		List<PersonByAddressDTO> persons = personsDTO.getPersons();
@@ -214,8 +213,7 @@ class QueryTests {
 
 		// WHEN
 		PersonsGroupByAddressByListStationDTO mapPersonsDTO = getDtoFromUrlGet(
-				"/flood/stations?stations=" + addressList, new TypeReference<PersonsGroupByAddressByListStationDTO>() {
-				});
+				"/flood/stations?stations=" + addressList, PersonsGroupByAddressByListStationDTO.class);
 
 		// THEN
 		Map<String, List<PersonGroupByAddressByListStationDTO>> mapPersons = mapPersonsDTO.getPersonsMap();
@@ -250,9 +248,7 @@ class QueryTests {
 
 		// WHEN
 		PersonsByFirstNameLastNameDTO personsDTO = getDtoFromUrlGet(
-				"/personInfo?firstName=" + firstName + "&lastName=" + lastName,
-				new TypeReference<PersonsByFirstNameLastNameDTO>() {
-				});
+				"/personInfo?firstName=" + firstName + "&lastName=" + lastName, PersonsByFirstNameLastNameDTO.class);
 
 		// THEN
 		List<PersonByFirstNameLastNameDTO> persons = personsDTO.getPersons();
@@ -271,4 +267,25 @@ class QueryTests {
 			assertTrue(medications.size() > 0 || allergies.size() > 0);
 		}
 	}
+
+	/********* TEST GET /communityEmail?city= QueryController.findEmailsByCityDTO *********/
+
+	public static Stream<Arguments> whenCityIsGiven_ShouldReturnPersonEmailListProvider() {
+		// GIVEN
+		return Stream.of(Arguments.arguments(CULVER_CITY, CULVER_CITY_PERSONS_COUNT), Arguments.arguments("", 0));
+	}
+
+	@DisplayName("GET /communityEmail?city= : ")
+	@ParameterizedTest(name = "when city is {0}  should return {1} emails(s)")
+	@MethodSource("whenCityIsGiven_ShouldReturnPersonEmailListProvider")
+	public void whenCityIsGiven_ShouldReturnPersonEmailList(String city, int personCount) throws Exception {
+
+		// WHEN
+		EmailsByCityDTO emailsDTO = getDtoFromUrlGet("/communityEmail?city=" + city, EmailsByCityDTO.class);
+
+		// THEN
+		List<String> emails = emailsDTO.getEmails();
+		assertThat(emails.size()).isEqualTo(personCount);
+	}
+	/**************************************************************************************************************************/
 }
