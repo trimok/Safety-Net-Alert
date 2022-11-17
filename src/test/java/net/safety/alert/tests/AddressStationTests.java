@@ -43,6 +43,12 @@ import net.safety.alert.tests.util.TestsUtil;
 @AutoConfigureMockMvc
 @TestInstance(Lifecycle.PER_CLASS)
 public class AddressStationTests {
+	private static final String URL_FIRESTATION_DELETE_BY_ADDRESS = "/firestation/byAddress";
+
+	private static final String URL_FIRESTATION_DELETE_BY_FIRESTATION = "/firestation/byFireStation";
+
+	private static final String URL_FIRESTATION = "/firestation";
+
 	private static Mapper objectMapper;
 
 	@Autowired
@@ -65,14 +71,14 @@ public class AddressStationTests {
 			"5");
 	private final static MappingAddressStationDTO CREATE_MAPPING_ADDRESS_STATION_NOT_VALID = new MappingAddressStationDTO(
 			"", "");
-	private final static ApiInfo ERROR_CREATE_MAPPING_ADDRESS_STATION_NOT_VALID = new ApiInfo("/firestation",
+	private final static ApiInfo ERROR_CREATE_MAPPING_ADDRESS_STATION_NOT_VALID = new ApiInfo(URL_FIRESTATION,
 			MAPPING_ADDRESS_STATION_NOT_VALID, CREATE_MAPPING_ADDRESS_STATION_OPERATION, null);
 
 	private final static MappingAddressStationDTO UPDATE_MAPPING = new MappingAddressStationDTO("489 Manchester St",
 			"6");
 	private final static MappingAddressStationDTO UPDATE_MAPPING_ADDRESS_STATION_NOT_VALID = new MappingAddressStationDTO(
 			"", "");
-	private final static ApiInfo ERROR_UPDATE_MAPPING_ADDRESS_STATION_NOT_VALID = new ApiInfo("/firestation",
+	private final static ApiInfo ERROR_UPDATE_MAPPING_ADDRESS_STATION_NOT_VALID = new ApiInfo(URL_FIRESTATION,
 			MAPPING_ADDRESS_STATION_NOT_VALID, UPDATE_MAPPING_ADDRESS_STATION_OPERATION, null);
 
 	private final static FireStationDTO DELETE_MAPPING_BY_FIRESTATION = new FireStationDTO("8");
@@ -81,14 +87,14 @@ public class AddressStationTests {
 	private final static FireStationDTO DELETE_MAPPING_ADDRESS_STATION_BY_FIRESTATION_NOT_VALID = new FireStationDTO(
 			"");
 	private final static ApiInfo ERROR_DELETE_MAPPING_ADDRESS_STATION_BY_FIRESTATION_NOT_VALID = new ApiInfo(
-			"/firestation/byFireStation", MAPPING_ADDRESS_STATION_NOT_VALID,
+			URL_FIRESTATION_DELETE_BY_FIRESTATION, MAPPING_ADDRESS_STATION_NOT_VALID,
 			DELETE_MAPPING_ADDRESS_STATION_BY_FIRESTATION_OPERATION, null);
 
 	private final static AddressDTO DELETE_MAPPING_BY_ADDRESS = new AddressDTO("961 LoneTree Rd");
 	private final static FireStationDTO DELETE_MAPPING_BY_ADDRESS_FIRESTATION = new FireStationDTO("9");
 	private final static AddressDTO DELETE_MAPPING_ADDRESS_STATION_BY_ADDRESS_NOT_VALID = new AddressDTO("");
 	private final static ApiInfo ERROR_DELETE_MAPPING_ADDRESS_STATION_BY_ADDRESS_NOT_VALID = new ApiInfo(
-			"/firestation/byAddress", MAPPING_ADDRESS_STATION_NOT_VALID,
+			URL_FIRESTATION_DELETE_BY_ADDRESS, MAPPING_ADDRESS_STATION_NOT_VALID,
 			DELETE_MAPPING_ADDRESS_STATION_BY_ADDRESS_OPERATION, null);
 
 	/********************** TEST ERROR PERSON NOT VALID /person **********/
@@ -98,16 +104,16 @@ public class AddressStationTests {
 		return Stream.of(
 				Arguments.arguments(CREATE_MAPPING_ADDRESS_STATION_NOT_VALID,
 						ERROR_CREATE_MAPPING_ADDRESS_STATION_NOT_VALID, HttpStatus.BAD_REQUEST, TestsUtil.HTTP_POST,
-						"POST", "/firestation"),
+						"POST", URL_FIRESTATION),
 				Arguments.arguments(UPDATE_MAPPING_ADDRESS_STATION_NOT_VALID,
 						ERROR_UPDATE_MAPPING_ADDRESS_STATION_NOT_VALID, HttpStatus.BAD_REQUEST, TestsUtil.HTTP_PUT,
-						"PUT", "/firestation"),
+						"PUT", URL_FIRESTATION),
 				Arguments.arguments(DELETE_MAPPING_ADDRESS_STATION_BY_FIRESTATION_NOT_VALID,
 						ERROR_DELETE_MAPPING_ADDRESS_STATION_BY_FIRESTATION_NOT_VALID, HttpStatus.BAD_REQUEST,
-						TestsUtil.HTTP_DELETE, "DELETE BY FIRESTATION", "/firestation/byFireStation"),
+						TestsUtil.HTTP_DELETE, "DELETE BY FIRESTATION", URL_FIRESTATION_DELETE_BY_FIRESTATION),
 				Arguments.arguments(DELETE_MAPPING_ADDRESS_STATION_BY_ADDRESS_NOT_VALID,
 						ERROR_DELETE_MAPPING_ADDRESS_STATION_BY_ADDRESS_NOT_VALID, HttpStatus.BAD_REQUEST,
-						TestsUtil.HTTP_DELETE, "DELETE BY ADDRESS", "/firestation/byAddress"));
+						TestsUtil.HTTP_DELETE, "DELETE BY ADDRESS", URL_FIRESTATION_DELETE_BY_ADDRESS));
 	}
 
 	@DisplayName("ERROR MAPPING_ADDRESS_STATION NOT VALID, CRUD  /firestation : ")
@@ -142,7 +148,7 @@ public class AddressStationTests {
 
 		// WHEN
 		MappingAddressStationDTO mappingAddressStationDTOResult = TestsUtil.dtoFromUrl(objectMapper, false,
-				TestsUtil.HTTP_POST, mockMvc, "/firestation", MappingAddressStationDTO.class, mappingAddressStationDTO);
+				TestsUtil.HTTP_POST, mockMvc, URL_FIRESTATION, MappingAddressStationDTO.class, mappingAddressStationDTO);
 
 		// THEN
 		Address addressAfterMapping = database.getAddressesMap().get(mappingAddressStationDTO.getAddress());
@@ -174,7 +180,7 @@ public class AddressStationTests {
 
 		// WHEN
 		MappingAddressStationDTO mappingAddressStationDTOResult = TestsUtil.dtoFromUrl(objectMapper, false,
-				TestsUtil.HTTP_PUT, mockMvc, "/firestation", MappingAddressStationDTO.class, mappingAddressStationDTO);
+				TestsUtil.HTTP_PUT, mockMvc, URL_FIRESTATION, MappingAddressStationDTO.class, mappingAddressStationDTO);
 
 		// THEN
 		Address addressAfterMapping = database.getAddressesMap().get(mappingAddressStationDTO.getAddress());
@@ -208,7 +214,7 @@ public class AddressStationTests {
 		assertThat(addressesOld.size()).isEqualTo(2);
 
 		// WHEN
-		TestsUtil.dtoFromDeleteUrl(objectMapper, mockMvc, "/firestation/byFireStation", fireStationDTO);
+		TestsUtil.dtoFromDeleteUrl(objectMapper, mockMvc, URL_FIRESTATION_DELETE_BY_FIRESTATION, fireStationDTO);
 
 		// THEN
 		List<String> addressesNew = database.getAddressesMap().values().stream().filter(
@@ -239,7 +245,7 @@ public class AddressStationTests {
 		assertFalse(fireStation.getId().isEmpty());
 
 		// WHEN
-		TestsUtil.dtoFromDeleteUrl(objectMapper, mockMvc, "/firestation/byAddress", addressDTO);
+		TestsUtil.dtoFromDeleteUrl(objectMapper, mockMvc, URL_FIRESTATION_DELETE_BY_ADDRESS, addressDTO);
 
 		// THEN
 		FireStation fireStationDatabase = address.getFireStation();

@@ -36,6 +36,8 @@ import net.safety.alert.tests.util.TestsUtil;
 @TestInstance(Lifecycle.PER_CLASS)
 public class PersonTests {
 
+	private static final String URL_PERSON = "/person";
+
 	private static Mapper objectMapper;
 
 	@Autowired
@@ -57,23 +59,23 @@ public class PersonTests {
 	private final static PersonDTO CREATE_PERSON = new PersonDTO("Tristan", "Mokobodzki", "Paris", "75001", "0600000000",
 			"tristan@paris.com", "rue de Rivoli");
 	private final static PersonDTO CREATE_PERSON_NOT_VALID = new PersonDTO("", "");
-	private final static ApiInfo ERROR_CREATE_PERSON_NOT_VALID = new ApiInfo("/person", PERSON_NOT_VALID,
+	private final static ApiInfo ERROR_CREATE_PERSON_NOT_VALID = new ApiInfo(URL_PERSON, PERSON_NOT_VALID,
 			CREATE_PERSON_OPERATION, null);
 
 	private final static PersonDTO UPDATE_PERSON = new PersonDTO("Roger", "Boyd", "Paris", "75001", "0600000000",
 			"tristan@paris.com", "rue de Rivoli");
 	private final static PersonDTO UPDATE_PERSON_NOT_VALID = new PersonDTO("", "");
-	private final static ApiInfo ERROR_UPDATE_PERSON_NOT_VALID = new ApiInfo("/person", PERSON_NOT_VALID,
+	private final static ApiInfo ERROR_UPDATE_PERSON_NOT_VALID = new ApiInfo(URL_PERSON, PERSON_NOT_VALID,
 			UPDATE_PERSON_OPERATION, null);
 
 	private final static PersonDTO PATCH_PERSON = new PersonDTO("Jacob", "Boyd", "Paris", "", "", "", "");
 	private final static PersonDTO PATCH_PERSON_NOT_VALID = new PersonDTO("", "");
-	private final static ApiInfo ERROR_PATCH_PERSON_NOT_VALID = new ApiInfo("/person", PERSON_NOT_VALID,
+	private final static ApiInfo ERROR_PATCH_PERSON_NOT_VALID = new ApiInfo(URL_PERSON, PERSON_NOT_VALID,
 			PATCH_PERSON_OPERATION, null);
 
 	private final static PersonDTO DELETE_PERSON = new PersonDTO("Sophia", "Zemicks", "", "", "", "", "");
 	private final static PersonDTO DELETE_PERSON_NOT_VALID = new PersonDTO("", "");
-	private final static ApiInfo ERROR_DELETE_PERSON_NOT_VALID = new ApiInfo("/person", PERSON_NOT_VALID,
+	private final static ApiInfo ERROR_DELETE_PERSON_NOT_VALID = new ApiInfo(URL_PERSON, PERSON_NOT_VALID,
 			DELETE_PERSON_OPERATION, null);
 
 	/********************** TEST ERROR PERSON NOT VALID /person **********/
@@ -97,7 +99,7 @@ public class PersonTests {
 	public void whenNotValidPersonIsGiven_ShouldRaiseException(PersonDTO personDTO, ApiInfo apiInfo, HttpStatus status,
 			Function<String, MockHttpServletRequestBuilder> operation, String operationName) throws Exception {
 
-		ApiInfo error = TestsUtil.errorFromUrl(objectMapper, operation, mockMvc, "/person", ApiInfo.class, personDTO,
+		ApiInfo error = TestsUtil.errorFromUrl(objectMapper, operation, mockMvc, URL_PERSON, ApiInfo.class, personDTO,
 				status);
 
 		// THEN
@@ -117,7 +119,7 @@ public class PersonTests {
 	public void whenPersonIsGiven_ShouldCreatePerson(PersonDTO personDTO) throws Exception {
 
 		// WHEN
-		PersonDTO personResultDTO = TestsUtil.dtoFromUrl(objectMapper, false, TestsUtil.HTTP_POST, mockMvc, "/person",
+		PersonDTO personResultDTO = TestsUtil.dtoFromUrl(objectMapper, false, TestsUtil.HTTP_POST, mockMvc, URL_PERSON,
 				PersonDTO.class, personDTO);
 
 		// THEN
@@ -138,7 +140,7 @@ public class PersonTests {
 	public void whenPersonIsGiven_ShouldUpdatePerson(PersonDTO personDTO) throws Exception {
 
 		// WHEN
-		PersonDTO personResultDTO = TestsUtil.dtoFromUrl(objectMapper, false, TestsUtil.HTTP_PUT, mockMvc, "/person",
+		PersonDTO personResultDTO = TestsUtil.dtoFromUrl(objectMapper, false, TestsUtil.HTTP_PUT, mockMvc, URL_PERSON,
 				PersonDTO.class, personDTO);
 
 		// THEN
@@ -162,7 +164,7 @@ public class PersonTests {
 		personDTOPatch.setCity(personDTO.getCity());
 
 		// WHEN
-		PersonDTO personResultDTO = TestsUtil.dtoFromUrl(objectMapper, false, TestsUtil.HTTP_PATCH, mockMvc, "/person",
+		PersonDTO personResultDTO = TestsUtil.dtoFromUrl(objectMapper, false, TestsUtil.HTTP_PATCH, mockMvc, URL_PERSON,
 				PersonDTO.class, personDTO);
 
 		// THEN
@@ -182,7 +184,7 @@ public class PersonTests {
 	public void whenPersonIsGiven_ShouldDeletePerson(PersonDTO personDTO) throws Exception {
 
 		// WHEN
-		TestsUtil.dtoFromDeleteUrl(objectMapper, mockMvc, "/person", personDTO);
+		TestsUtil.dtoFromDeleteUrl(objectMapper, mockMvc, URL_PERSON, personDTO);
 
 		// THEN
 		Person personDatabase = database.getPersonsMap().get(personDTO.getPersonId());

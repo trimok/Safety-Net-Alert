@@ -38,6 +38,8 @@ import net.safety.alert.tests.util.TestsUtil;
 @AutoConfigureMockMvc
 @TestInstance(Lifecycle.PER_CLASS)
 public class MedicalRecordTests {
+	private static final String URL_MEDICAL_RECORD = "/medicalRecord";
+
 	private static Mapper objectMapper;
 
 	@Autowired
@@ -64,7 +66,7 @@ public class MedicalRecordTests {
 		CREATE_MEDICAL_RECORD.setBirthdate(LocalDate.now().minusYears(20));
 	}
 	private final static MedicalRecordDTO CREATE_MEDICAL_RECORD_NOT_VALID = new MedicalRecordDTO("", "");
-	private final static ApiInfo ERROR_CREATE_MEDICAL_RECORD_NOT_VALID = new ApiInfo("/medicalRecord",
+	private final static ApiInfo ERROR_CREATE_MEDICAL_RECORD_NOT_VALID = new ApiInfo(URL_MEDICAL_RECORD,
 			MEDICAL_RECORD_NOT_VALID, CREATE_MEDICAL_RECORD_OPERATION, null);
 
 	private static final MedicalRecordDTO UPDATE_MEDICAL_RECORD = new MedicalRecordDTO("Allison", "Boyd");
@@ -76,7 +78,7 @@ public class MedicalRecordTests {
 		UPDATE_MEDICAL_RECORD.setBirthdate(LocalDate.now().minusYears(20));
 	}
 	private final static MedicalRecordDTO UPDATE_MEDICAL_RECORD_NOT_VALID = new MedicalRecordDTO("", "");
-	private final static ApiInfo ERROR_UPDATE_MEDICAL_RECORD_NOT_VALID = new ApiInfo("/medicalRecord",
+	private final static ApiInfo ERROR_UPDATE_MEDICAL_RECORD_NOT_VALID = new ApiInfo(URL_MEDICAL_RECORD,
 			MEDICAL_RECORD_NOT_VALID, UPDATE_MEDICAL_RECORD_OPERATION, null);
 
 	private static final MedicalRecordDTO PATCH_MEDICAL_RECORD = new MedicalRecordDTO("Reginold", "Walker");
@@ -85,12 +87,12 @@ public class MedicalRecordTests {
 		PATCH_MEDICAL_RECORD.getMedications().add("hydrapermazol:300mg");
 	}
 	private final static MedicalRecordDTO PATCH_MEDICAL_RECORD_NOT_VALID = new MedicalRecordDTO("", "");
-	private final static ApiInfo ERROR_PATCH_MEDICAL_RECORD_NOT_VALID = new ApiInfo("/medicalRecord",
+	private final static ApiInfo ERROR_PATCH_MEDICAL_RECORD_NOT_VALID = new ApiInfo(URL_MEDICAL_RECORD,
 			MEDICAL_RECORD_NOT_VALID, PATCH_MEDICAL_RECORD_OPERATION, null);
 
 	private static final MedicalRecordDTO DELETE_MEDICAL_RECORD = new MedicalRecordDTO("Sophia", "Zemicks");
 	private final static MedicalRecordDTO DELETE_MEDICAL_RECORD_NOT_VALID = new MedicalRecordDTO("", "");
-	private final static ApiInfo ERROR_DELETE_MEDICAL_RECORD_NOT_VALID = new ApiInfo("/medicalRecord",
+	private final static ApiInfo ERROR_DELETE_MEDICAL_RECORD_NOT_VALID = new ApiInfo(URL_MEDICAL_RECORD,
 			MEDICAL_RECORD_NOT_VALID, DELETE_MEDICAL_RECORD_OPERATION, null);
 
 	/********************** TEST ERROR MEDICAL_RECORD NOT VALID /person **********/
@@ -115,7 +117,7 @@ public class MedicalRecordTests {
 			HttpStatus status, Function<String, MockHttpServletRequestBuilder> operation, String operationName)
 			throws Exception {
 
-		ApiInfo error = TestsUtil.errorFromUrl(objectMapper, operation, mockMvc, "/medicalRecord", ApiInfo.class,
+		ApiInfo error = TestsUtil.errorFromUrl(objectMapper, operation, mockMvc, URL_MEDICAL_RECORD, ApiInfo.class,
 				personDTO, status);
 
 		// THEN
@@ -141,7 +143,7 @@ public class MedicalRecordTests {
 
 		// WHEN
 		MedicalRecordDTO medicalRecordResultDTO = TestsUtil.dtoFromUrl(objectMapper, false, TestsUtil.HTTP_POST,
-				mockMvc, "/medicalRecord", MedicalRecordDTO.class, medicalRecordDTO);
+				mockMvc, URL_MEDICAL_RECORD, MedicalRecordDTO.class, medicalRecordDTO);
 
 		// THEN
 		MedicalRecordDTO medicalRecordDatabase = MedicalRecordDTO
@@ -169,7 +171,7 @@ public class MedicalRecordTests {
 
 		// WHEN
 		MedicalRecordDTO medicalRecordResultDTO = TestsUtil.dtoFromUrl(objectMapper, false, TestsUtil.HTTP_PUT, mockMvc,
-				"/medicalRecord", MedicalRecordDTO.class, medicalRecordDTO);
+				URL_MEDICAL_RECORD, MedicalRecordDTO.class, medicalRecordDTO);
 
 		// THEN
 		MedicalRecordDTO medicalRecordDatabase = MedicalRecordDTO
@@ -199,7 +201,7 @@ public class MedicalRecordTests {
 
 		// WHEN
 		MedicalRecordDTO medicalRecordResultDTO = TestsUtil.dtoFromUrl(objectMapper, false, TestsUtil.HTTP_PATCH,
-				mockMvc, "/medicalRecord", MedicalRecordDTO.class, medicalRecordDTO);
+				mockMvc, URL_MEDICAL_RECORD, MedicalRecordDTO.class, medicalRecordDTO);
 
 		// THEN
 		MedicalRecordDTO medicalRecordDatabase = MedicalRecordDTO
@@ -228,7 +230,7 @@ public class MedicalRecordTests {
 		assertNotNull(person.getBirthdate());
 
 		// WHEN
-		TestsUtil.dtoFromDeleteUrl(objectMapper, mockMvc, "/medicalRecord", medicalRecordDTO);
+		TestsUtil.dtoFromDeleteUrl(objectMapper, mockMvc, URL_MEDICAL_RECORD, medicalRecordDTO);
 
 		// THEN
 		Person personAfterDelete = database.getPersonsMap().get(medicalRecordDTO.getPersonId());
