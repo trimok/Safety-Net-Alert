@@ -8,14 +8,40 @@ import org.springframework.web.context.request.WebRequest;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class ApiInfo {
 	private String url;
 	private String errorMessage;
 	private String operation;
 	private Object payload;
+
+	public boolean equalsMetadata(ApiInfo apiInfo) {
+		boolean ret = true;
+
+		if (url == null) {
+			ret = ret & (apiInfo.getUrl() == null);
+		} else {
+			ret = ret & url.equals(apiInfo.getUrl());
+		}
+
+		if (errorMessage == null) {
+			ret = ret & (apiInfo.getErrorMessage() == null);
+		} else {
+			ret = ret & errorMessage.equals(apiInfo.getErrorMessage());
+		}
+
+		if (operation == null) {
+			ret = ret & (apiInfo.getOperation() == null);
+		} else {
+			ret = ret & operation.equals(apiInfo.getOperation());
+		}
+
+		return ret;
+	}
 
 	public ApiInfo(WebRequest request, SafetyNetException exception) {
 		this.url = uriFromWebRequest(request);

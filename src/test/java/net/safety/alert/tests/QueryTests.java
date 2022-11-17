@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import net.safety.alert.config.Mapper;
 import net.safety.alert.database.Database;
@@ -35,7 +34,7 @@ import net.safety.alert.dto.PersonsByFirstNameLastNameDTO;
 import net.safety.alert.dto.PersonsByStationDTO;
 import net.safety.alert.dto.PersonsGroupByAddressByListStationDTO;
 import net.safety.alert.dto.PhonesByStationDTO;
-import net.safety.alert.tests.util.JsonUtil;
+import net.safety.alert.tests.util.TestsUtil;
 
 @SpringBootTest(classes = net.safety.alert.config.SafetyNetAlertApplication.class)
 @AutoConfigureMockMvc
@@ -102,8 +101,8 @@ class QueryTests {
 			long childrenCount) throws Exception {
 
 		// WHEN
-		PersonsByStationDTO personsByStationDTO = JsonUtil.dtoFromUrl(objectMapper, true, MockMvcRequestBuilders::get,
-				mockMvc, "/firestation?stationNumber=" + station, PersonsByStationDTO.class);
+		PersonsByStationDTO personsByStationDTO = TestsUtil.dtoFromUrl(objectMapper, true, TestsUtil.HTTP_GET, mockMvc,
+				"/firestation?stationNumber=" + station, PersonsByStationDTO.class);
 
 		// THEN
 		List<PersonByStationDTO> persons = personsByStationDTO.getPersons();
@@ -130,7 +129,7 @@ class QueryTests {
 			throws Exception {
 
 		// WHEN
-		ChildrensByAddressDTO childrens = JsonUtil.dtoFromUrl(objectMapper, true, MockMvcRequestBuilders::get, mockMvc,
+		ChildrensByAddressDTO childrens = TestsUtil.dtoFromUrl(objectMapper, true, TestsUtil.HTTP_GET, mockMvc,
 				"/childAlert?address=" + address, ChildrensByAddressDTO.class);
 
 		// THEN
@@ -161,7 +160,7 @@ class QueryTests {
 	public void whenFireStationIsGiven_ShouldReturnPhoneList(String fireStation, long phonesCount) throws Exception {
 
 		// WHEN
-		PhonesByStationDTO phonesDTO = JsonUtil.dtoFromUrl(objectMapper, true, MockMvcRequestBuilders::get, mockMvc,
+		PhonesByStationDTO phonesDTO = TestsUtil.dtoFromUrl(objectMapper, true, TestsUtil.HTTP_GET, mockMvc,
 				"/phoneAlert?firestation=" + fireStation, PhonesByStationDTO.class);
 
 		// THEN
@@ -182,7 +181,7 @@ class QueryTests {
 	public void whenAddressIsGiven_ShouldReturnPersonList(String address, long personsCount) throws Exception {
 
 		// WHEN
-		PersonsByAddressDTO personsDTO = JsonUtil.dtoFromUrl(objectMapper, true, MockMvcRequestBuilders::get, mockMvc,
+		PersonsByAddressDTO personsDTO = TestsUtil.dtoFromUrl(objectMapper, true, TestsUtil.HTTP_GET, mockMvc,
 				"/fire?address=" + address, PersonsByAddressDTO.class);
 
 		// THEN
@@ -215,8 +214,8 @@ class QueryTests {
 			String groupName, long personsGroupCount) throws Exception {
 
 		// WHEN
-		PersonsGroupByAddressByListStationDTO mapPersonsDTO = JsonUtil.dtoFromUrl(objectMapper, true,
-				MockMvcRequestBuilders::get, mockMvc, "/flood/stations?stations=" + addressList,
+		PersonsGroupByAddressByListStationDTO mapPersonsDTO = TestsUtil.dtoFromUrl(objectMapper, true,
+				TestsUtil.HTTP_GET, mockMvc, "/flood/stations?stations=" + addressList,
 				PersonsGroupByAddressByListStationDTO.class);
 
 		// THEN
@@ -251,9 +250,8 @@ class QueryTests {
 			int personCount) throws Exception {
 
 		// WHEN
-		PersonsByFirstNameLastNameDTO personsDTO = JsonUtil.dtoFromUrl(objectMapper, true, MockMvcRequestBuilders::get,
-				mockMvc, "/personInfo?firstName=" + firstName + "&lastName=" + lastName,
-				PersonsByFirstNameLastNameDTO.class);
+		PersonsByFirstNameLastNameDTO personsDTO = TestsUtil.dtoFromUrl(objectMapper, true, TestsUtil.HTTP_GET, mockMvc,
+				"/personInfo?firstName=" + firstName + "&lastName=" + lastName, PersonsByFirstNameLastNameDTO.class);
 
 		// THEN
 		List<PersonByFirstNameLastNameDTO> persons = personsDTO.getPersons();
@@ -286,7 +284,7 @@ class QueryTests {
 	public void whenCityIsGiven_ShouldReturnPersonEmailList(String city, int personCount) throws Exception {
 
 		// WHEN
-		EmailsByCityDTO emailsDTO = JsonUtil.dtoFromUrl(objectMapper, true, MockMvcRequestBuilders::get, mockMvc,
+		EmailsByCityDTO emailsDTO = TestsUtil.dtoFromUrl(objectMapper, true, TestsUtil.HTTP_GET, mockMvc,
 				"/communityEmail?city=" + city, EmailsByCityDTO.class);
 
 		// THEN

@@ -1,12 +1,12 @@
 package net.safety.alert.service;
 
-import static net.safety.alert.constants.HttpMessageConstants.CREATE_PERSON;
-import static net.safety.alert.constants.HttpMessageConstants.DELETE_PERSON;
-import static net.safety.alert.constants.HttpMessageConstants.PATCH_PERSON;
+import static net.safety.alert.constants.HttpMessageConstants.CREATE_PERSON_OPERATION;
+import static net.safety.alert.constants.HttpMessageConstants.DELETE_PERSON_OPERATION;
+import static net.safety.alert.constants.HttpMessageConstants.PATCH_PERSON_OPERATION;
 import static net.safety.alert.constants.HttpMessageConstants.PERSON_ALREADY_CREATED;
 import static net.safety.alert.constants.HttpMessageConstants.PERSON_NOT_FOUND;
 import static net.safety.alert.constants.HttpMessageConstants.PERSON_NOT_VALID;
-import static net.safety.alert.constants.HttpMessageConstants.UPDATE_PERSON;
+import static net.safety.alert.constants.HttpMessageConstants.UPDATE_PERSON_OPERATION;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,7 +29,7 @@ public class PersonService implements IPersonService {
 
 		Person person = personDTO.toPerson();
 		if (!person.isValid()) {
-			throw new PersonNotValidException(CREATE_PERSON, PERSON_NOT_VALID, PersonDTO.toPersonDTO(person));
+			throw new PersonNotValidException(CREATE_PERSON_OPERATION, PERSON_NOT_VALID, PersonDTO.toPersonDTO(person));
 		}
 
 		Person personDatabase = getPersistent(person);
@@ -37,7 +37,7 @@ public class PersonService implements IPersonService {
 		if (personDatabase == null) {
 			return PersonDTO.toPersonDTO(personRepository.save(person));
 		} else {
-			throw new PersonAlreadyCreatedException(CREATE_PERSON, PERSON_ALREADY_CREATED,
+			throw new PersonAlreadyCreatedException(CREATE_PERSON_OPERATION, PERSON_ALREADY_CREATED,
 					PersonDTO.toPersonDTO(personDatabase));
 		}
 	}
@@ -46,7 +46,7 @@ public class PersonService implements IPersonService {
 	public PersonDTO updatePerson(PersonDTO personDTO) {
 		Person person = personDTO.toPerson();
 		if (!person.isValid()) {
-			throw new PersonNotValidException(UPDATE_PERSON, PERSON_NOT_VALID, PersonDTO.toPersonDTO(person));
+			throw new PersonNotValidException(UPDATE_PERSON_OPERATION, PERSON_NOT_VALID, PersonDTO.toPersonDTO(person));
 		}
 
 		Person personDatabase = getPersistent(person);
@@ -54,7 +54,7 @@ public class PersonService implements IPersonService {
 		if (personDatabase != null) {
 			return PersonDTO.toPersonDTO(personRepository.save(personDatabase.updatePerson(person)));
 		} else {
-			throw new PersonAlreadyCreatedException(UPDATE_PERSON, PERSON_NOT_FOUND, PersonDTO.toPersonDTO(person));
+			throw new PersonAlreadyCreatedException(UPDATE_PERSON_OPERATION, PERSON_NOT_FOUND, PersonDTO.toPersonDTO(person));
 		}
 	}
 
@@ -62,7 +62,7 @@ public class PersonService implements IPersonService {
 	public PersonDTO patchPerson(PersonDTO personDTO) {
 		Person person = personDTO.toPerson();
 		if (!person.isValid()) {
-			throw new PersonNotValidException(PATCH_PERSON, PERSON_NOT_VALID, PersonDTO.toPersonDTO(person));
+			throw new PersonNotValidException(PATCH_PERSON_OPERATION, PERSON_NOT_VALID, PersonDTO.toPersonDTO(person));
 		}
 
 		Person personDatabase = getPersistent(person);
@@ -70,7 +70,7 @@ public class PersonService implements IPersonService {
 		if (personDatabase != null) {
 			return PersonDTO.toPersonDTO(personRepository.save(personDatabase.patchPerson(person)));
 		} else {
-			throw new PersonAlreadyCreatedException(PATCH_PERSON, PERSON_NOT_FOUND, PersonDTO.toPersonDTO(person));
+			throw new PersonAlreadyCreatedException(PATCH_PERSON_OPERATION, PERSON_NOT_FOUND, PersonDTO.toPersonDTO(person));
 		}
 	}
 
@@ -78,7 +78,7 @@ public class PersonService implements IPersonService {
 	public void deletePerson(PersonDTO personDTO) {
 		Person person = personDTO.toPerson();
 		if (!person.isValid()) {
-			throw new PersonNotValidException(DELETE_PERSON, PERSON_NOT_VALID, PersonDTO.toPersonDTO(person));
+			throw new PersonNotValidException(DELETE_PERSON_OPERATION, PERSON_NOT_VALID, PersonDTO.toPersonDTO(person));
 		}
 
 		Person personDatabase = getPersistent(person);
@@ -86,7 +86,7 @@ public class PersonService implements IPersonService {
 		if (personDatabase != null) {
 			personRepository.delete(personDatabase);
 		} else {
-			throw new PersonNotFoundException(DELETE_PERSON, PERSON_NOT_FOUND, PersonDTO.toPersonDTO(person));
+			throw new PersonNotFoundException(DELETE_PERSON_OPERATION, PERSON_NOT_FOUND, PersonDTO.toPersonDTO(person));
 		}
 	}
 

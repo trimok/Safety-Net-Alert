@@ -20,6 +20,6 @@ public class SafetyNetAlertApplication {
 
 	@EventListener(ApplicationReadyEvent.class)
 	public void initDatabase() {
-		database.init();
+		database.reset();
 	}
 }

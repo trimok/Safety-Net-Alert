@@ -88,7 +88,6 @@ public class Database {
 								p.setBirthdate(m.getBirthdate());
 							}));
 
-			log.info("Database loaded.");
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error(e.getMessage());

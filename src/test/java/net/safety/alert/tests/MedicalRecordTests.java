@@ -1,10 +1,16 @@
 package net.safety.alert.tests;
 
+import static net.safety.alert.constants.HttpMessageConstants.CREATE_MEDICAL_RECORD_OPERATION;
+import static net.safety.alert.constants.HttpMessageConstants.DELETE_MEDICAL_RECORD_OPERATION;
+import static net.safety.alert.constants.HttpMessageConstants.MEDICAL_RECORD_NOT_VALID;
+import static net.safety.alert.constants.HttpMessageConstants.PATCH_MEDICAL_RECORD_OPERATION;
+import static net.safety.alert.constants.HttpMessageConstants.UPDATE_MEDICAL_RECORD_OPERATION;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.time.LocalDate;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -17,14 +23,16 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import net.safety.alert.config.Mapper;
 import net.safety.alert.database.Database;
 import net.safety.alert.dto.MedicalRecordDTO;
+import net.safety.alert.exception.ApiInfo;
 import net.safety.alert.model.Person;
-import net.safety.alert.tests.util.JsonUtil;
+import net.safety.alert.tests.util.TestsUtil;
 
 @SpringBootTest(classes = net.safety.alert.config.SafetyNetAlertApplication.class)
 @AutoConfigureMockMvc
@@ -48,32 +56,77 @@ public class MedicalRecordTests {
 		database.reset();
 	}
 
-	private static final MedicalRecordDTO NEW_MEDICAL_RECORD = new MedicalRecordDTO("Cedric", "Nomedic");
-	private static final MedicalRecordDTO UPDATE_MEDICAL_RECORD = new MedicalRecordDTO("Allison", "Boyd");
-	private static final MedicalRecordDTO PATCH_MEDICAL_RECORD = new MedicalRecordDTO("Reginold", "Walker");
-	private static final MedicalRecordDTO DELETE_MEDICAL_RECORD = new MedicalRecordDTO("Sophia", "Zemicks");
-
+	private static final MedicalRecordDTO CREATE_MEDICAL_RECORD = new MedicalRecordDTO("Cedric", "Nomedic");
 	static {
-		NEW_MEDICAL_RECORD.getAllergies().add("xilliathal");
-		NEW_MEDICAL_RECORD.getMedications().add("hydrapermazol:300mg");
-		NEW_MEDICAL_RECORD.getMedications().add("dodoxadin:30mg");
-		NEW_MEDICAL_RECORD.setBirthdate(LocalDate.now().minusYears(20));
+		CREATE_MEDICAL_RECORD.getAllergies().add("xilliathal");
+		CREATE_MEDICAL_RECORD.getMedications().add("hydrapermazol:300mg");
+		CREATE_MEDICAL_RECORD.getMedications().add("dodoxadin:30mg");
+		CREATE_MEDICAL_RECORD.setBirthdate(LocalDate.now().minusYears(20));
+	}
+	private final static MedicalRecordDTO CREATE_MEDICAL_RECORD_NOT_VALID = new MedicalRecordDTO("", "");
+	private final static ApiInfo ERROR_CREATE_MEDICAL_RECORD_NOT_VALID = new ApiInfo("/medicalRecord",
+			MEDICAL_RECORD_NOT_VALID, CREATE_MEDICAL_RECORD_OPERATION, null);
 
+	private static final MedicalRecordDTO UPDATE_MEDICAL_RECORD = new MedicalRecordDTO("Allison", "Boyd");
+	static {
 		UPDATE_MEDICAL_RECORD.getAllergies().add("xilliathal");
 		UPDATE_MEDICAL_RECORD.getAllergies().add("pollen");
 		UPDATE_MEDICAL_RECORD.getMedications().add("hydrapermazol:300mg");
 		UPDATE_MEDICAL_RECORD.getMedications().add("dodoxadin:30mg");
 		UPDATE_MEDICAL_RECORD.setBirthdate(LocalDate.now().minusYears(20));
+	}
+	private final static MedicalRecordDTO UPDATE_MEDICAL_RECORD_NOT_VALID = new MedicalRecordDTO("", "");
+	private final static ApiInfo ERROR_UPDATE_MEDICAL_RECORD_NOT_VALID = new ApiInfo("/medicalRecord",
+			MEDICAL_RECORD_NOT_VALID, UPDATE_MEDICAL_RECORD_OPERATION, null);
 
+	private static final MedicalRecordDTO PATCH_MEDICAL_RECORD = new MedicalRecordDTO("Reginold", "Walker");
+	static {
 		PATCH_MEDICAL_RECORD.getAllergies().add("xilliathal");
 		PATCH_MEDICAL_RECORD.getMedications().add("hydrapermazol:300mg");
+	}
+	private final static MedicalRecordDTO PATCH_MEDICAL_RECORD_NOT_VALID = new MedicalRecordDTO("", "");
+	private final static ApiInfo ERROR_PATCH_MEDICAL_RECORD_NOT_VALID = new ApiInfo("/medicalRecord",
+			MEDICAL_RECORD_NOT_VALID, PATCH_MEDICAL_RECORD_OPERATION, null);
+
+	private static final MedicalRecordDTO DELETE_MEDICAL_RECORD = new MedicalRecordDTO("Sophia", "Zemicks");
+	private final static MedicalRecordDTO DELETE_MEDICAL_RECORD_NOT_VALID = new MedicalRecordDTO("", "");
+	private final static ApiInfo ERROR_DELETE_MEDICAL_RECORD_NOT_VALID = new ApiInfo("/medicalRecord",
+			MEDICAL_RECORD_NOT_VALID, DELETE_MEDICAL_RECORD_OPERATION, null);
+
+	/********************** TEST ERROR MEDICAL_RECORD NOT VALID /person **********/
+
+	public static Stream<Arguments> whenNotValidMedicalRecordIsGiven_ShouldRaiseExceptionProvider() {
+		// GIVEN
+		return Stream.of(
+				Arguments.arguments(CREATE_MEDICAL_RECORD_NOT_VALID, ERROR_CREATE_MEDICAL_RECORD_NOT_VALID,
+						HttpStatus.BAD_REQUEST, TestsUtil.HTTP_POST, "POST"),
+				Arguments.arguments(UPDATE_MEDICAL_RECORD_NOT_VALID, ERROR_UPDATE_MEDICAL_RECORD_NOT_VALID,
+						HttpStatus.BAD_REQUEST, TestsUtil.HTTP_PUT, "PUT"),
+				Arguments.arguments(PATCH_MEDICAL_RECORD_NOT_VALID, ERROR_PATCH_MEDICAL_RECORD_NOT_VALID,
+						HttpStatus.BAD_REQUEST, TestsUtil.HTTP_PATCH, "PATCH"),
+				Arguments.arguments(DELETE_MEDICAL_RECORD_NOT_VALID, ERROR_DELETE_MEDICAL_RECORD_NOT_VALID,
+						HttpStatus.BAD_REQUEST, TestsUtil.HTTP_DELETE, "DELETE"));
+	}
+
+	@DisplayName("ERROR MEDICAL_RECORD NOT VALID, CRUD  /medicalRecord : ")
+	@ParameterizedTest(name = "{4} : when medicalRecord {0} is not valid, should raise an exception {1}, with status {2}")
+	@MethodSource("whenNotValidMedicalRecordIsGiven_ShouldRaiseExceptionProvider")
+	public void whenNotValidMedicalRecordIsGiven_ShouldRaiseException(MedicalRecordDTO personDTO, ApiInfo apiInfo,
+			HttpStatus status, Function<String, MockHttpServletRequestBuilder> operation, String operationName)
+			throws Exception {
+
+		ApiInfo error = TestsUtil.errorFromUrl(objectMapper, operation, mockMvc, "/medicalRecord", ApiInfo.class,
+				personDTO, status);
+
+		// THEN
+		assert (error.equalsMetadata(apiInfo));
 	}
 
 	/********************** TEST POST /medicalRecord MedicalRecordController.createMedicalRecord **********/
 
 	public static Stream<Arguments> whenMedicalRecordIsGiven_ShouldCreateMedicalRecordProvider() {
 		// GIVEN
-		return Stream.of(Arguments.arguments(NEW_MEDICAL_RECORD));
+		return Stream.of(Arguments.arguments(CREATE_MEDICAL_RECORD));
 	}
 
 	@DisplayName("POST /medicalRecord : ")
@@ -87,7 +140,7 @@ public class MedicalRecordTests {
 		assertThat(person.getMedications().size()).isEqualTo(0);
 
 		// WHEN
-		MedicalRecordDTO medicalRecordResultDTO = JsonUtil.dtoFromUrl(objectMapper, false, MockMvcRequestBuilders::post,
+		MedicalRecordDTO medicalRecordResultDTO = TestsUtil.dtoFromUrl(objectMapper, false, TestsUtil.HTTP_POST,
 				mockMvc, "/medicalRecord", MedicalRecordDTO.class, medicalRecordDTO);
 
 		// THEN
@@ -115,8 +168,8 @@ public class MedicalRecordTests {
 		assertThat(person.getMedications().size()).isEqualTo(1);
 
 		// WHEN
-		MedicalRecordDTO medicalRecordResultDTO = JsonUtil.dtoFromUrl(objectMapper, false, MockMvcRequestBuilders::put,
-				mockMvc, "/medicalRecord", MedicalRecordDTO.class, medicalRecordDTO);
+		MedicalRecordDTO medicalRecordResultDTO = TestsUtil.dtoFromUrl(objectMapper, false, TestsUtil.HTTP_PUT, mockMvc,
+				"/medicalRecord", MedicalRecordDTO.class, medicalRecordDTO);
 
 		// THEN
 		MedicalRecordDTO medicalRecordDatabase = MedicalRecordDTO
@@ -145,8 +198,8 @@ public class MedicalRecordTests {
 		assertThat(person.getMedications().size()).isEqualTo(1);
 
 		// WHEN
-		MedicalRecordDTO medicalRecordResultDTO = JsonUtil.dtoFromUrl(objectMapper, false,
-				MockMvcRequestBuilders::patch, mockMvc, "/medicalRecord", MedicalRecordDTO.class, medicalRecordDTO);
+		MedicalRecordDTO medicalRecordResultDTO = TestsUtil.dtoFromUrl(objectMapper, false, TestsUtil.HTTP_PATCH,
+				mockMvc, "/medicalRecord", MedicalRecordDTO.class, medicalRecordDTO);
 
 		// THEN
 		MedicalRecordDTO medicalRecordDatabase = MedicalRecordDTO
@@ -175,7 +228,7 @@ public class MedicalRecordTests {
 		assertNotNull(person.getBirthdate());
 
 		// WHEN
-		JsonUtil.dtoFromDeleteUrl(objectMapper, mockMvc, "/medicalRecord", medicalRecordDTO);
+		TestsUtil.dtoFromDeleteUrl(objectMapper, mockMvc, "/medicalRecord", medicalRecordDTO);
 
 		// THEN
 		Person personAfterDelete = database.getPersonsMap().get(medicalRecordDTO.getPersonId());

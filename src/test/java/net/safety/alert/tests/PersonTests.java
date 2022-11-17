@@ -1,7 +1,13 @@
 package net.safety.alert.tests;
 
+import static net.safety.alert.constants.HttpMessageConstants.CREATE_PERSON_OPERATION;
+import static net.safety.alert.constants.HttpMessageConstants.DELETE_PERSON_OPERATION;
+import static net.safety.alert.constants.HttpMessageConstants.PATCH_PERSON_OPERATION;
+import static net.safety.alert.constants.HttpMessageConstants.PERSON_NOT_VALID;
+import static net.safety.alert.constants.HttpMessageConstants.UPDATE_PERSON_OPERATION;
 import static org.junit.Assert.assertNull;
 
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -14,14 +20,16 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import net.safety.alert.config.Mapper;
 import net.safety.alert.database.Database;
 import net.safety.alert.dto.PersonDTO;
+import net.safety.alert.exception.ApiInfo;
 import net.safety.alert.model.Person;
-import net.safety.alert.tests.util.JsonUtil;
+import net.safety.alert.tests.util.TestsUtil;
 
 @SpringBootTest(classes = net.safety.alert.config.SafetyNetAlertApplication.class)
 @AutoConfigureMockMvc
@@ -46,21 +54,61 @@ public class PersonTests {
 		database.reset();
 	}
 
-	private final static PersonDTO NEW_PERSON = new PersonDTO("Tristan", "Mokobodzki", "Paris", "75001", "0600000000",
+	private final static PersonDTO CREATE_PERSON = new PersonDTO("Tristan", "Mokobodzki", "Paris", "75001", "0600000000",
 			"tristan@paris.com", "rue de Rivoli");
+	private final static PersonDTO CREATE_PERSON_NOT_VALID = new PersonDTO("", "");
+	private final static ApiInfo ERROR_CREATE_PERSON_NOT_VALID = new ApiInfo("/person", PERSON_NOT_VALID,
+			CREATE_PERSON_OPERATION, null);
 
 	private final static PersonDTO UPDATE_PERSON = new PersonDTO("Roger", "Boyd", "Paris", "75001", "0600000000",
 			"tristan@paris.com", "rue de Rivoli");
+	private final static PersonDTO UPDATE_PERSON_NOT_VALID = new PersonDTO("", "");
+	private final static ApiInfo ERROR_UPDATE_PERSON_NOT_VALID = new ApiInfo("/person", PERSON_NOT_VALID,
+			UPDATE_PERSON_OPERATION, null);
 
 	private final static PersonDTO PATCH_PERSON = new PersonDTO("Jacob", "Boyd", "Paris", "", "", "", "");
+	private final static PersonDTO PATCH_PERSON_NOT_VALID = new PersonDTO("", "");
+	private final static ApiInfo ERROR_PATCH_PERSON_NOT_VALID = new ApiInfo("/person", PERSON_NOT_VALID,
+			PATCH_PERSON_OPERATION, null);
 
 	private final static PersonDTO DELETE_PERSON = new PersonDTO("Sophia", "Zemicks", "", "", "", "", "");
+	private final static PersonDTO DELETE_PERSON_NOT_VALID = new PersonDTO("", "");
+	private final static ApiInfo ERROR_DELETE_PERSON_NOT_VALID = new ApiInfo("/person", PERSON_NOT_VALID,
+			DELETE_PERSON_OPERATION, null);
+
+	/********************** TEST ERROR PERSON NOT VALID /person **********/
+
+	public static Stream<Arguments> whenNotValidPersonIsGiven_ShouldRaiseExceptionProvider() {
+		// GIVEN
+		return Stream.of(
+				Arguments.arguments(CREATE_PERSON_NOT_VALID, ERROR_CREATE_PERSON_NOT_VALID, HttpStatus.BAD_REQUEST,
+						TestsUtil.HTTP_POST, "POST"),
+				Arguments.arguments(UPDATE_PERSON_NOT_VALID, ERROR_UPDATE_PERSON_NOT_VALID, HttpStatus.BAD_REQUEST,
+						TestsUtil.HTTP_PUT, "PUT"),
+				Arguments.arguments(PATCH_PERSON_NOT_VALID, ERROR_PATCH_PERSON_NOT_VALID, HttpStatus.BAD_REQUEST,
+						TestsUtil.HTTP_PATCH, "PATCH"),
+				Arguments.arguments(DELETE_PERSON_NOT_VALID, ERROR_DELETE_PERSON_NOT_VALID, HttpStatus.BAD_REQUEST,
+						TestsUtil.HTTP_DELETE, "DELETE"));
+	}
+
+	@DisplayName("ERROR PERSON NOT VALID, CRUD  /person : ")
+	@ParameterizedTest(name = "{4} : when person {0} is not valid, should raise an exception {1}, with status {2}")
+	@MethodSource("whenNotValidPersonIsGiven_ShouldRaiseExceptionProvider")
+	public void whenNotValidPersonIsGiven_ShouldRaiseException(PersonDTO personDTO, ApiInfo apiInfo, HttpStatus status,
+			Function<String, MockHttpServletRequestBuilder> operation, String operationName) throws Exception {
+
+		ApiInfo error = TestsUtil.errorFromUrl(objectMapper, operation, mockMvc, "/person", ApiInfo.class, personDTO,
+				status);
+
+		// THEN
+		assert (error.equalsMetadata(apiInfo));
+	}
 
 	/********************** TEST POST /person PersonController.createPerson **********/
 
 	public static Stream<Arguments> whenPersonIsGiven_ShouldCreatePersonProvider() {
 		// GIVEN
-		return Stream.of(Arguments.arguments(NEW_PERSON));
+		return Stream.of(Arguments.arguments(CREATE_PERSON));
 	}
 
 	@DisplayName("POST /person : ")
@@ -69,8 +117,8 @@ public class PersonTests {
 	public void whenPersonIsGiven_ShouldCreatePerson(PersonDTO personDTO) throws Exception {
 
 		// WHEN
-		PersonDTO personResultDTO = JsonUtil.dtoFromUrl(objectMapper, false, MockMvcRequestBuilders::post, mockMvc,
-				"/person", PersonDTO.class, personDTO);
+		PersonDTO personResultDTO = TestsUtil.dtoFromUrl(objectMapper, false, TestsUtil.HTTP_POST, mockMvc, "/person",
+				PersonDTO.class, personDTO);
 
 		// THEN
 		assert (PersonDTO.toPersonDTO(database.getPersonsMap().get(personDTO.getPersonId())).equals(personDTO));
@@ -90,8 +138,8 @@ public class PersonTests {
 	public void whenPersonIsGiven_ShouldUpdatePerson(PersonDTO personDTO) throws Exception {
 
 		// WHEN
-		PersonDTO personResultDTO = JsonUtil.dtoFromUrl(objectMapper, false, MockMvcRequestBuilders::put, mockMvc,
-				"/person", PersonDTO.class, personDTO);
+		PersonDTO personResultDTO = TestsUtil.dtoFromUrl(objectMapper, false, TestsUtil.HTTP_PUT, mockMvc, "/person",
+				PersonDTO.class, personDTO);
 
 		// THEN
 		assert (PersonDTO.toPersonDTO(database.getPersonsMap().get(personDTO.getPersonId())).equals(personDTO));
@@ -114,8 +162,8 @@ public class PersonTests {
 		personDTOPatch.setCity(personDTO.getCity());
 
 		// WHEN
-		PersonDTO personResultDTO = JsonUtil.dtoFromUrl(objectMapper, false, MockMvcRequestBuilders::patch, mockMvc,
-				"/person", PersonDTO.class, personDTO);
+		PersonDTO personResultDTO = TestsUtil.dtoFromUrl(objectMapper, false, TestsUtil.HTTP_PATCH, mockMvc, "/person",
+				PersonDTO.class, personDTO);
 
 		// THEN
 		assert (PersonDTO.toPersonDTO(database.getPersonsMap().get(personDTO.getPersonId())).equals(personDTOPatch));
@@ -134,7 +182,7 @@ public class PersonTests {
 	public void whenPersonIsGiven_ShouldDeletePerson(PersonDTO personDTO) throws Exception {
 
 		// WHEN
-		JsonUtil.dtoFromDeleteUrl(objectMapper, mockMvc, "/person", personDTO);
+		TestsUtil.dtoFromDeleteUrl(objectMapper, mockMvc, "/person", personDTO);
 
 		// THEN
 		Person personDatabase = database.getPersonsMap().get(personDTO.getPersonId());

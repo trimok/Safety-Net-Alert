@@ -22,6 +22,11 @@ public class PersonDTO {
 	private String email;
 	private String address;
 
+	public PersonDTO(String firstName, String lastName) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
+
 	@JsonIgnore
 	public PersonId getPersonId() {
 		return new PersonId(firstName, lastName);
