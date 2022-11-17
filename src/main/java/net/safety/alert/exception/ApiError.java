@@ -13,44 +13,44 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ApiInfo {
+public class ApiError {
 	private String url;
 	private String errorMessage;
 	private String operation;
 	private Object payload;
 
-	public boolean equalsMetadata(ApiInfo apiInfo) {
+	public boolean equalsMetadata(ApiError apiError) {
 		boolean ret = true;
 
 		if (url == null) {
-			ret = ret & (apiInfo.getUrl() == null);
+			ret = ret & (apiError.getUrl() == null);
 		} else {
-			ret = ret & url.equals(apiInfo.getUrl());
+			ret = ret & url.equals(apiError.getUrl());
 		}
 
 		if (errorMessage == null) {
-			ret = ret & (apiInfo.getErrorMessage() == null);
+			ret = ret & (apiError.getErrorMessage() == null);
 		} else {
-			ret = ret & errorMessage.equals(apiInfo.getErrorMessage());
+			ret = ret & errorMessage.equals(apiError.getErrorMessage());
 		}
 
 		if (operation == null) {
-			ret = ret & (apiInfo.getOperation() == null);
+			ret = ret & (apiError.getOperation() == null);
 		} else {
-			ret = ret & operation.equals(apiInfo.getOperation());
+			ret = ret & operation.equals(apiError.getOperation());
 		}
 
 		return ret;
 	}
 
-	public ApiInfo(WebRequest request, SafetyNetException exception) {
+	public ApiError(WebRequest request, SafetyNetException exception) {
 		this.url = uriFromWebRequest(request);
 		this.operation = exception.getOperation();
 		this.payload = exception.getPayload();
 		this.errorMessage = exception.getErrorMessage();
 	}
 
-	public ApiInfo(WebRequest request, Exception exception) {
+	public ApiError(WebRequest request, Exception exception) {
 		this.url = uriFromWebRequest(request);
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);

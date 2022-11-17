@@ -34,7 +34,7 @@ import net.safety.alert.database.Database;
 import net.safety.alert.dto.AddressDTO;
 import net.safety.alert.dto.FireStationDTO;
 import net.safety.alert.dto.MappingAddressStationDTO;
-import net.safety.alert.exception.ApiInfo;
+import net.safety.alert.exception.ApiError;
 import net.safety.alert.model.Address;
 import net.safety.alert.model.FireStation;
 import net.safety.alert.tests.util.TestsUtil;
@@ -71,14 +71,14 @@ public class AddressStationTests {
 			"5");
 	private final static MappingAddressStationDTO CREATE_MAPPING_ADDRESS_STATION_NOT_VALID = new MappingAddressStationDTO(
 			"", "");
-	private final static ApiInfo ERROR_CREATE_MAPPING_ADDRESS_STATION_NOT_VALID = new ApiInfo(URL_FIRESTATION,
+	private final static ApiError ERROR_CREATE_MAPPING_ADDRESS_STATION_NOT_VALID = new ApiError(URL_FIRESTATION,
 			MAPPING_ADDRESS_STATION_NOT_VALID, CREATE_MAPPING_ADDRESS_STATION_OPERATION, null);
 
 	private final static MappingAddressStationDTO UPDATE_MAPPING = new MappingAddressStationDTO("489 Manchester St",
 			"6");
 	private final static MappingAddressStationDTO UPDATE_MAPPING_ADDRESS_STATION_NOT_VALID = new MappingAddressStationDTO(
 			"", "");
-	private final static ApiInfo ERROR_UPDATE_MAPPING_ADDRESS_STATION_NOT_VALID = new ApiInfo(URL_FIRESTATION,
+	private final static ApiError ERROR_UPDATE_MAPPING_ADDRESS_STATION_NOT_VALID = new ApiError(URL_FIRESTATION,
 			MAPPING_ADDRESS_STATION_NOT_VALID, UPDATE_MAPPING_ADDRESS_STATION_OPERATION, null);
 
 	private final static FireStationDTO DELETE_MAPPING_BY_FIRESTATION = new FireStationDTO("8");
@@ -86,14 +86,14 @@ public class AddressStationTests {
 			"960 LoneTree Rd");
 	private final static FireStationDTO DELETE_MAPPING_ADDRESS_STATION_BY_FIRESTATION_NOT_VALID = new FireStationDTO(
 			"");
-	private final static ApiInfo ERROR_DELETE_MAPPING_ADDRESS_STATION_BY_FIRESTATION_NOT_VALID = new ApiInfo(
+	private final static ApiError ERROR_DELETE_MAPPING_ADDRESS_STATION_BY_FIRESTATION_NOT_VALID = new ApiError(
 			URL_FIRESTATION_DELETE_BY_FIRESTATION, MAPPING_ADDRESS_STATION_NOT_VALID,
 			DELETE_MAPPING_ADDRESS_STATION_BY_FIRESTATION_OPERATION, null);
 
 	private final static AddressDTO DELETE_MAPPING_BY_ADDRESS = new AddressDTO("961 LoneTree Rd");
 	private final static FireStationDTO DELETE_MAPPING_BY_ADDRESS_FIRESTATION = new FireStationDTO("9");
 	private final static AddressDTO DELETE_MAPPING_ADDRESS_STATION_BY_ADDRESS_NOT_VALID = new AddressDTO("");
-	private final static ApiInfo ERROR_DELETE_MAPPING_ADDRESS_STATION_BY_ADDRESS_NOT_VALID = new ApiInfo(
+	private final static ApiError ERROR_DELETE_MAPPING_ADDRESS_STATION_BY_ADDRESS_NOT_VALID = new ApiError(
 			URL_FIRESTATION_DELETE_BY_ADDRESS, MAPPING_ADDRESS_STATION_NOT_VALID,
 			DELETE_MAPPING_ADDRESS_STATION_BY_ADDRESS_OPERATION, null);
 
@@ -119,14 +119,14 @@ public class AddressStationTests {
 	@DisplayName("ERROR MAPPING_ADDRESS_STATION NOT VALID, CRUD  /firestation : ")
 	@ParameterizedTest(name = "{4} : when mapping address station {0} is not valid, should raise an exception {1}, with status {2}")
 	@MethodSource("whenNotValidMappingAddressStationIsGiven_ShouldRaiseExceptionProvider")
-	public void whenNotValidMappingAddressStationIsGiven_ShouldRaiseException(Object dto, ApiInfo apiInfo,
+	public void whenNotValidMappingAddressStationIsGiven_ShouldRaiseException(Object dto, ApiError apiError,
 			HttpStatus status, Function<String, MockHttpServletRequestBuilder> operation, String operationName,
 			String url) throws Exception {
 
-		ApiInfo error = TestsUtil.errorFromUrl(objectMapper, operation, mockMvc, url, ApiInfo.class, dto, status);
+		ApiError error = TestsUtil.errorFromUrl(objectMapper, operation, mockMvc, url, ApiError.class, dto, status);
 
 		// THEN
-		assert (error.equalsMetadata(apiInfo));
+		assert (error.equalsMetadata(apiError));
 	}
 
 	/********************** TEST POST /firestation AddressRecordController.createMappingAddressStation **********/

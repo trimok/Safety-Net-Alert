@@ -27,7 +27,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import net.safety.alert.config.Mapper;
 import net.safety.alert.database.Database;
 import net.safety.alert.dto.PersonDTO;
-import net.safety.alert.exception.ApiInfo;
+import net.safety.alert.exception.ApiError;
 import net.safety.alert.model.Person;
 import net.safety.alert.tests.util.TestsUtil;
 
@@ -59,23 +59,23 @@ public class PersonTests {
 	private final static PersonDTO CREATE_PERSON = new PersonDTO("Tristan", "Mokobodzki", "Paris", "75001", "0600000000",
 			"tristan@paris.com", "rue de Rivoli");
 	private final static PersonDTO CREATE_PERSON_NOT_VALID = new PersonDTO("", "");
-	private final static ApiInfo ERROR_CREATE_PERSON_NOT_VALID = new ApiInfo(URL_PERSON, PERSON_NOT_VALID,
+	private final static ApiError ERROR_CREATE_PERSON_NOT_VALID = new ApiError(URL_PERSON, PERSON_NOT_VALID,
 			CREATE_PERSON_OPERATION, null);
 
 	private final static PersonDTO UPDATE_PERSON = new PersonDTO("Roger", "Boyd", "Paris", "75001", "0600000000",
 			"tristan@paris.com", "rue de Rivoli");
 	private final static PersonDTO UPDATE_PERSON_NOT_VALID = new PersonDTO("", "");
-	private final static ApiInfo ERROR_UPDATE_PERSON_NOT_VALID = new ApiInfo(URL_PERSON, PERSON_NOT_VALID,
+	private final static ApiError ERROR_UPDATE_PERSON_NOT_VALID = new ApiError(URL_PERSON, PERSON_NOT_VALID,
 			UPDATE_PERSON_OPERATION, null);
 
 	private final static PersonDTO PATCH_PERSON = new PersonDTO("Jacob", "Boyd", "Paris", "", "", "", "");
 	private final static PersonDTO PATCH_PERSON_NOT_VALID = new PersonDTO("", "");
-	private final static ApiInfo ERROR_PATCH_PERSON_NOT_VALID = new ApiInfo(URL_PERSON, PERSON_NOT_VALID,
+	private final static ApiError ERROR_PATCH_PERSON_NOT_VALID = new ApiError(URL_PERSON, PERSON_NOT_VALID,
 			PATCH_PERSON_OPERATION, null);
 
 	private final static PersonDTO DELETE_PERSON = new PersonDTO("Sophia", "Zemicks", "", "", "", "", "");
 	private final static PersonDTO DELETE_PERSON_NOT_VALID = new PersonDTO("", "");
-	private final static ApiInfo ERROR_DELETE_PERSON_NOT_VALID = new ApiInfo(URL_PERSON, PERSON_NOT_VALID,
+	private final static ApiError ERROR_DELETE_PERSON_NOT_VALID = new ApiError(URL_PERSON, PERSON_NOT_VALID,
 			DELETE_PERSON_OPERATION, null);
 
 	/********************** TEST ERROR PERSON NOT VALID /person **********/
@@ -96,14 +96,14 @@ public class PersonTests {
 	@DisplayName("ERROR PERSON NOT VALID, CRUD  /person : ")
 	@ParameterizedTest(name = "{4} : when person {0} is not valid, should raise an exception {1}, with status {2}")
 	@MethodSource("whenNotValidPersonIsGiven_ShouldRaiseExceptionProvider")
-	public void whenNotValidPersonIsGiven_ShouldRaiseException(PersonDTO personDTO, ApiInfo apiInfo, HttpStatus status,
+	public void whenNotValidPersonIsGiven_ShouldRaiseException(PersonDTO personDTO, ApiError apiError, HttpStatus status,
 			Function<String, MockHttpServletRequestBuilder> operation, String operationName) throws Exception {
 
-		ApiInfo error = TestsUtil.errorFromUrl(objectMapper, operation, mockMvc, URL_PERSON, ApiInfo.class, personDTO,
+		ApiError error = TestsUtil.errorFromUrl(objectMapper, operation, mockMvc, URL_PERSON, ApiError.class, personDTO,
 				status);
 
 		// THEN
-		assert (error.equalsMetadata(apiInfo));
+		assert (error.equalsMetadata(apiError));
 	}
 
 	/********************** TEST POST /person PersonController.createPerson **********/

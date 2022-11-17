@@ -30,7 +30,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import net.safety.alert.config.Mapper;
 import net.safety.alert.database.Database;
 import net.safety.alert.dto.MedicalRecordDTO;
-import net.safety.alert.exception.ApiInfo;
+import net.safety.alert.exception.ApiError;
 import net.safety.alert.model.Person;
 import net.safety.alert.tests.util.TestsUtil;
 
@@ -66,7 +66,7 @@ public class MedicalRecordTests {
 		CREATE_MEDICAL_RECORD.setBirthdate(LocalDate.now().minusYears(20));
 	}
 	private final static MedicalRecordDTO CREATE_MEDICAL_RECORD_NOT_VALID = new MedicalRecordDTO("", "");
-	private final static ApiInfo ERROR_CREATE_MEDICAL_RECORD_NOT_VALID = new ApiInfo(URL_MEDICAL_RECORD,
+	private final static ApiError ERROR_CREATE_MEDICAL_RECORD_NOT_VALID = new ApiError(URL_MEDICAL_RECORD,
 			MEDICAL_RECORD_NOT_VALID, CREATE_MEDICAL_RECORD_OPERATION, null);
 
 	private static final MedicalRecordDTO UPDATE_MEDICAL_RECORD = new MedicalRecordDTO("Allison", "Boyd");
@@ -78,7 +78,7 @@ public class MedicalRecordTests {
 		UPDATE_MEDICAL_RECORD.setBirthdate(LocalDate.now().minusYears(20));
 	}
 	private final static MedicalRecordDTO UPDATE_MEDICAL_RECORD_NOT_VALID = new MedicalRecordDTO("", "");
-	private final static ApiInfo ERROR_UPDATE_MEDICAL_RECORD_NOT_VALID = new ApiInfo(URL_MEDICAL_RECORD,
+	private final static ApiError ERROR_UPDATE_MEDICAL_RECORD_NOT_VALID = new ApiError(URL_MEDICAL_RECORD,
 			MEDICAL_RECORD_NOT_VALID, UPDATE_MEDICAL_RECORD_OPERATION, null);
 
 	private static final MedicalRecordDTO PATCH_MEDICAL_RECORD = new MedicalRecordDTO("Reginold", "Walker");
@@ -87,12 +87,12 @@ public class MedicalRecordTests {
 		PATCH_MEDICAL_RECORD.getMedications().add("hydrapermazol:300mg");
 	}
 	private final static MedicalRecordDTO PATCH_MEDICAL_RECORD_NOT_VALID = new MedicalRecordDTO("", "");
-	private final static ApiInfo ERROR_PATCH_MEDICAL_RECORD_NOT_VALID = new ApiInfo(URL_MEDICAL_RECORD,
+	private final static ApiError ERROR_PATCH_MEDICAL_RECORD_NOT_VALID = new ApiError(URL_MEDICAL_RECORD,
 			MEDICAL_RECORD_NOT_VALID, PATCH_MEDICAL_RECORD_OPERATION, null);
 
 	private static final MedicalRecordDTO DELETE_MEDICAL_RECORD = new MedicalRecordDTO("Sophia", "Zemicks");
 	private final static MedicalRecordDTO DELETE_MEDICAL_RECORD_NOT_VALID = new MedicalRecordDTO("", "");
-	private final static ApiInfo ERROR_DELETE_MEDICAL_RECORD_NOT_VALID = new ApiInfo(URL_MEDICAL_RECORD,
+	private final static ApiError ERROR_DELETE_MEDICAL_RECORD_NOT_VALID = new ApiError(URL_MEDICAL_RECORD,
 			MEDICAL_RECORD_NOT_VALID, DELETE_MEDICAL_RECORD_OPERATION, null);
 
 	/********************** TEST ERROR MEDICAL_RECORD NOT VALID /person **********/
@@ -113,15 +113,15 @@ public class MedicalRecordTests {
 	@DisplayName("ERROR MEDICAL_RECORD NOT VALID, CRUD  /medicalRecord : ")
 	@ParameterizedTest(name = "{4} : when medicalRecord {0} is not valid, should raise an exception {1}, with status {2}")
 	@MethodSource("whenNotValidMedicalRecordIsGiven_ShouldRaiseExceptionProvider")
-	public void whenNotValidMedicalRecordIsGiven_ShouldRaiseException(MedicalRecordDTO personDTO, ApiInfo apiInfo,
+	public void whenNotValidMedicalRecordIsGiven_ShouldRaiseException(MedicalRecordDTO personDTO, ApiError apiError,
 			HttpStatus status, Function<String, MockHttpServletRequestBuilder> operation, String operationName)
 			throws Exception {
 
-		ApiInfo error = TestsUtil.errorFromUrl(objectMapper, operation, mockMvc, URL_MEDICAL_RECORD, ApiInfo.class,
+		ApiError error = TestsUtil.errorFromUrl(objectMapper, operation, mockMvc, URL_MEDICAL_RECORD, ApiError.class,
 				personDTO, status);
 
 		// THEN
-		assert (error.equalsMetadata(apiInfo));
+		assert (error.equalsMetadata(apiError));
 	}
 
 	/********************** TEST POST /medicalRecord MedicalRecordController.createMedicalRecord **********/
