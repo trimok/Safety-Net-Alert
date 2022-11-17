@@ -106,8 +106,8 @@ public class Person {
 	}
 
 	public Person emptyMedicalRecord() {
-		this.allergies = null;
-		this.medications = null;
+		this.allergies = new HashMap<>();
+		this.medications = new HashMap<>();
 		this.birthdate = null;
 
 		return this;

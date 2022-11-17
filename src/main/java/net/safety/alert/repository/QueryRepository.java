@@ -36,18 +36,18 @@ public class QueryRepository implements IQueryRepository {
 	@Override
 	public List<ChildrenByAddressDTO> findChildrenByAddressDTO(String address) {
 		LocalDate now = LocalDate.now();
-		return database.getPersonsMap().values().stream()
-				.filter(p -> ChronoUnit.YEARS.between(p.getBirthdate(), now) < ADULT_LIMIT && p.getAddress() != null
-						&& address.equals(p.getAddress().getName()))
+		return database.getPersonsMap().values().stream().filter(
+				p -> ((p.getBirthdate() != null) && (ChronoUnit.YEARS.between(p.getBirthdate(), now) < ADULT_LIMIT))
+						&& p.getAddress() != null && address.equals(p.getAddress().getName()))
 				.map(p -> ChildrenByAddressDTO.toChildrenByAddressDTO(p)).toList();
 	}
 
 	@Override
 	public List<AdultByAddressDTO> findAdultsByAddressDTO(String address) {
 		LocalDate now = LocalDate.now();
-		return database.getPersonsMap().values().stream()
-				.filter(p -> ChronoUnit.YEARS.between(p.getBirthdate(), now) >= ADULT_LIMIT && p.getAddress() != null
-						&& address.equals(p.getAddress().getName()))
+		return database.getPersonsMap().values().stream().filter(
+				p -> ((p.getBirthdate() == null) || (ChronoUnit.YEARS.between(p.getBirthdate(), now) >= ADULT_LIMIT))
+						&& p.getAddress() != null && address.equals(p.getAddress().getName()))
 				.map(p -> AdultByAddressDTO.toAdultDTO(p)).toList();
 	}
 

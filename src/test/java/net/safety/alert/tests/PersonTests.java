@@ -17,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import net.safety.alert.Mapper;
 import net.safety.alert.database.Database;
 import net.safety.alert.dto.PersonDTO;
 import net.safety.alert.model.Person;
@@ -26,6 +27,14 @@ import net.safety.alert.tests.util.JsonUtil;
 @AutoConfigureMockMvc
 @TestInstance(Lifecycle.PER_CLASS)
 public class PersonTests {
+
+	private static Mapper objectMapper;
+
+	@Autowired
+	public void setMapper(Mapper objectMapper) {
+		PersonTests.objectMapper = objectMapper;
+	}
+
 	@Autowired
 	private MockMvc mockMvc;
 
@@ -61,8 +70,8 @@ public class PersonTests {
 	public void whenPersonIsGiven_ShouldCreatePerson(PersonDTO personDTO) throws Exception {
 
 		// WHEN
-		PersonDTO personResultDTO = JsonUtil.dtoFromUrl(false, MockMvcRequestBuilders::post, mockMvc, "/person",
-				PersonDTO.class, personDTO);
+		PersonDTO personResultDTO = JsonUtil.dtoFromUrl(objectMapper, false, MockMvcRequestBuilders::post, mockMvc,
+				"/person", PersonDTO.class, personDTO);
 
 		// THEN
 		assert (PersonDTO.toPersonDTO(database.getPersonsMap().get(personDTO.getPersonId())).equals(personDTO));
@@ -82,8 +91,8 @@ public class PersonTests {
 	public void whenPersonIsGiven_ShouldUpdatePerson(PersonDTO personDTO) throws Exception {
 
 		// WHEN
-		PersonDTO personResultDTO = JsonUtil.dtoFromUrl(false, MockMvcRequestBuilders::put, mockMvc, "/person",
-				PersonDTO.class, personDTO);
+		PersonDTO personResultDTO = JsonUtil.dtoFromUrl(objectMapper, false, MockMvcRequestBuilders::put, mockMvc,
+				"/person", PersonDTO.class, personDTO);
 
 		// THEN
 		assert (PersonDTO.toPersonDTO(database.getPersonsMap().get(personDTO.getPersonId())).equals(personDTO));
@@ -106,8 +115,8 @@ public class PersonTests {
 		personDTOPatch.setCity(personDTO.getCity());
 
 		// WHEN
-		PersonDTO personResultDTO = JsonUtil.dtoFromUrl(false, MockMvcRequestBuilders::patch, mockMvc, "/person",
-				PersonDTO.class, personDTO);
+		PersonDTO personResultDTO = JsonUtil.dtoFromUrl(objectMapper, false, MockMvcRequestBuilders::patch, mockMvc,
+				"/person", PersonDTO.class, personDTO);
 
 		// THEN
 		assert (PersonDTO.toPersonDTO(database.getPersonsMap().get(personDTO.getPersonId())).equals(personDTOPatch));
@@ -126,7 +135,7 @@ public class PersonTests {
 	public void whenPersonIsGiven_ShouldDeletePerson(PersonDTO personDTO) throws Exception {
 
 		// WHEN
-		JsonUtil.dtoFromDeleteUrl(mockMvc, "/person", personDTO);
+		JsonUtil.dtoFromDeleteUrl(objectMapper, mockMvc, "/person", personDTO);
 
 		// THEN
 		Person personDatabase = database.getPersonsMap().get(personDTO.getPersonId());

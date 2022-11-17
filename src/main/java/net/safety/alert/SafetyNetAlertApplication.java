@@ -10,6 +10,7 @@ import net.safety.alert.database.Database;
 
 @SpringBootApplication
 public class SafetyNetAlertApplication {
+
 	@Autowired
 	private Database database;
 

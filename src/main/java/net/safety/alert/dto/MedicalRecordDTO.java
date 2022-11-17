@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 import net.safety.alert.model.Allergie;
 import net.safety.alert.model.Medication;
 import net.safety.alert.model.Person;
+import net.safety.alert.model.PersonId;
 import net.safety.alert.util.StringsUtil;
 @Data
 @AllArgsConstructor
@@ -28,6 +29,13 @@ public class MedicalRecordDTO {
 	private LocalDate birthdate;
 	private List<String> medications = new ArrayList<>();
 	private List<String> allergies = new ArrayList<>();
+
+	public MedicalRecordDTO(String firstName, String lastName) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.medications = new ArrayList<>();
+		this.allergies = new ArrayList<>();
+	}
 
 	@JsonIgnore
 	public Map<String, Medication> getMapMedications() {
@@ -70,5 +78,10 @@ public class MedicalRecordDTO {
 	@JsonIgnore
 	public boolean isValid() {
 		return StringsUtil.isValid(firstName) && StringsUtil.isValid(lastName);
+	}
+
+	@JsonIgnore
+	public PersonId getPersonId() {
+		return new PersonId(firstName, lastName);
 	}
 }

@@ -15,11 +15,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JsonUtil {
 
-	public final static ObjectMapper mapper = new ObjectMapper();
-
 	@SafeVarargs
-	public static <T> T dtoFromUrl(boolean httpGet, Function<String, MockHttpServletRequestBuilder> method,
-			MockMvc mockMvc, String url, Class<T> classT, T... dtoObject) {
+	public static <T> T dtoFromUrl(ObjectMapper mapper, boolean httpGet,
+			Function<String, MockHttpServletRequestBuilder> method, MockMvc mockMvc, String url, Class<T> classT,
+			T... dtoObject) {
 		T tDTO = null;
 		try {
 
@@ -42,7 +41,7 @@ public class JsonUtil {
 		return tDTO;
 	}
 
-	public static String dtoFromDeleteUrl(MockMvc mockMvc, String url, Object dtoObject) {
+	public static String dtoFromDeleteUrl(ObjectMapper mapper, MockMvc mockMvc, String url, Object dtoObject) {
 		String result = null;
 		try {
 

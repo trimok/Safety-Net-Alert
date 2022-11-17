@@ -5,15 +5,15 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import lombok.Data;
+import net.safety.alert.Mapper;
 import net.safety.alert.constants.FilenameConstants;
 import net.safety.alert.dto.JsonDTO;
 import net.safety.alert.model.Address;
@@ -28,6 +28,9 @@ import net.safety.alert.util.StringsUtil;
 @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class Database {
 
+	@Autowired
+	private Mapper objectMapper;
+
 	// Global structure for persons
 	private Map<PersonId, Person> personsMap = new HashMap<>();
 	// Global structure for addresses
@@ -38,8 +41,6 @@ public class Database {
 	public void init() {
 
 		// Step 1 : reading the data and putting this into a temporatyJsonData structure
-		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.registerModule(new JavaTimeModule());
 		InputStream is = null;
 		JsonDTO jsonDTO = null;
 
@@ -62,6 +63,9 @@ public class Database {
 
 		// Building the persons Map
 		jsonDTO.getPersons().forEach(p -> personsMap.put(p.getPersonId(), p.toPerson()));
+
+		// Completing the personsMap with medical records if medicalRecord does not match to an existing person
+		jsonDTO.getMedicalrecords().stream().forEach(m -> personsMap.putIfAbsent(m.getPersonId(), m.toPerson()));
 
 		// Update the persons map with the (global structure) address
 		triggerAddressDatabaseForAllPerson();
