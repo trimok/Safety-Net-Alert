@@ -17,13 +17,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import net.safety.alert.Mapper;
+import net.safety.alert.config.Mapper;
 import net.safety.alert.database.Database;
 import net.safety.alert.dto.PersonDTO;
 import net.safety.alert.model.Person;
 import net.safety.alert.tests.util.JsonUtil;
 
-@SpringBootTest
+@SpringBootTest(classes = net.safety.alert.config.SafetyNetAlertApplication.class)
 @AutoConfigureMockMvc
 @TestInstance(Lifecycle.PER_CLASS)
 public class PersonTests {
@@ -43,8 +43,7 @@ public class PersonTests {
 
 	@BeforeAll
 	public void razDatabase() {
-		database.raz();
-		database.init();
+		database.reset();
 	}
 
 	private final static PersonDTO NEW_PERSON = new PersonDTO("Tristan", "Mokobodzki", "Paris", "75001", "0600000000",

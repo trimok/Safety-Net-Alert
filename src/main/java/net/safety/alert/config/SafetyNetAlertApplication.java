@@ -1,4 +1,4 @@
-package net.safety.alert;
+package net.safety.alert.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -8,7 +8,7 @@ import org.springframework.context.event.EventListener;
 
 import net.safety.alert.database.Database;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "net.safety.alert")
 public class SafetyNetAlertApplication {
 
 	@Autowired

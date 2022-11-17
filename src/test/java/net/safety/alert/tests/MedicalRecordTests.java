@@ -20,13 +20,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import net.safety.alert.Mapper;
+import net.safety.alert.config.Mapper;
 import net.safety.alert.database.Database;
 import net.safety.alert.dto.MedicalRecordDTO;
 import net.safety.alert.model.Person;
 import net.safety.alert.tests.util.JsonUtil;
 
-@SpringBootTest
+@SpringBootTest(classes = net.safety.alert.config.SafetyNetAlertApplication.class)
 @AutoConfigureMockMvc
 @TestInstance(Lifecycle.PER_CLASS)
 public class MedicalRecordTests {
@@ -45,8 +45,7 @@ public class MedicalRecordTests {
 
 	@BeforeAll
 	public void razDatabase() {
-		database.raz();
-		database.init();
+		database.reset();
 	}
 
 	private static final MedicalRecordDTO NEW_MEDICAL_RECORD = new MedicalRecordDTO("Cedric", "Nomedic");
@@ -78,7 +77,7 @@ public class MedicalRecordTests {
 	}
 
 	@DisplayName("POST /medicalRecord : ")
-	@ParameterizedTest(name = "when medical Record is {0}, should create the medical recotd in the database.")
+	@ParameterizedTest(name = "when medical Record is {0}, should create the medical record in the database.")
 	@MethodSource("whenMedicalRecordIsGiven_ShouldCreateMedicalRecordProvider")
 	public void whenMedicalRecordIsGiven_ShouldCreateMedicalRecord(MedicalRecordDTO medicalRecordDTO) throws Exception {
 

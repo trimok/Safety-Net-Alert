@@ -37,7 +37,9 @@
         { "address":"908 73rd St", "station":"1" },
         { "address":"947 E. Rose Dr", "station":"1" },
         { "address":"951 LoneTree Rd", "station":"2" },
-        { "address":"947 Rivoli Street", "station":"5" }
+        { "address":"959 LoneTree Rd", "station":"8" },
+        { "address":"960 LoneTree Rd", "station":"8" },
+        { "address":"961 LoneTree Rd", "station":"9" }
 	],
     "medicalrecords": [
         { "firstName":"John", "lastName":"Boyd", "birthdate":"03/06/1984", "medications":["aznol:350mg", "hydrapermazol:100mg"], "allergies":["nillacilan"] },

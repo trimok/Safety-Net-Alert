@@ -1,9 +1,7 @@
 package net.safety.alert.filter;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Map;
-import java.util.function.Function;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -72,15 +70,6 @@ public class LoggingFilterBean extends GenericFilterBean {
 			log.info("Response: {}", builder);
 		}
 		response.copyBodyToResponse();
-	}
-
-	private String headersToString(Collection<String> headerNames, Function<String, String> headerValueResolver) {
-		StringBuilder builder = new StringBuilder();
-		for (String headerName : headerNames) {
-			String header = headerValueResolver.apply(headerName);
-			builder.append("%s=%s".formatted(headerName, header)).append("\n");
-		}
-		return builder.toString();
 	}
 
 	private ContentCachingRequestWrapper requestWrapper(ServletRequest request) {

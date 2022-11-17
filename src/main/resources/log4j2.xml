@@ -30,7 +30,7 @@
             <AppenderRef ref="RollingFile" />
         </Root>
 
-        <!-- LOG "net.safety.alert.*" at info level -->
+        <!-- LOG "net.safety.alert.config.*" at info level -->
         <Logger name="net.safety.alert" level="info"></Logger>
     </Loggers>
 

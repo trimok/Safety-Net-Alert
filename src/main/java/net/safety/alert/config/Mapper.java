@@ -1,4 +1,4 @@
-package net.safety.alert;
+package net.safety.alert.config;
 
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;

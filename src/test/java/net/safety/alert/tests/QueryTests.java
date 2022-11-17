@@ -20,7 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import net.safety.alert.Mapper;
+import net.safety.alert.config.Mapper;
 import net.safety.alert.database.Database;
 import net.safety.alert.dto.AdultByAddressDTO;
 import net.safety.alert.dto.ChildrenByAddressDTO;
@@ -37,7 +37,7 @@ import net.safety.alert.dto.PersonsGroupByAddressByListStationDTO;
 import net.safety.alert.dto.PhonesByStationDTO;
 import net.safety.alert.tests.util.JsonUtil;
 
-@SpringBootTest
+@SpringBootTest(classes = net.safety.alert.config.SafetyNetAlertApplication.class)
 @AutoConfigureMockMvc
 @TestInstance(Lifecycle.PER_CLASS)
 class QueryTests {
@@ -57,8 +57,7 @@ class QueryTests {
 
 	@BeforeAll
 	public void razDatabase() {
-		database.raz();
-		database.init();
+		database.reset();
 	}
 
 	private static final int FIRESTATION_3_PHONE_COUNT = 11;

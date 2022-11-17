@@ -12,8 +12,10 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
-import lombok.Data;
-import net.safety.alert.Mapper;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+import net.safety.alert.config.Mapper;
 import net.safety.alert.constants.FilenameConstants;
 import net.safety.alert.dto.JsonDTO;
 import net.safety.alert.model.Address;
@@ -23,7 +25,9 @@ import net.safety.alert.model.PersonId;
 import net.safety.alert.util.FileUtil;
 import net.safety.alert.util.StringsUtil;
 
-@Data
+@Slf4j
+@Getter
+@Setter
 @Component
 @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class Database {
@@ -51,37 +55,44 @@ public class Database {
 
 		} catch (IOException e) {
 			e.printStackTrace();
+			log.error(e.getMessage());
 		}
 
-		// Building the map fireStationsMap
-		jsonDTO.getFirestations().forEach(f -> fireStationsMap.put(f.getStation(), new FireStation(f.getStation())));
+		try {
+			// Building the map fireStationsMap
+			jsonDTO.getFirestations()
+					.forEach(f -> fireStationsMap.put(f.getStation(), new FireStation(f.getStation())));
 
-		// Building the map addressesMap
-		// The FireStation objects must be retrieving from the fireStationsMap
-		jsonDTO.getFirestations().forEach(f -> addressesMap.put(f.getAddress(),
-				new Address(f.getAddress(), fireStationsMap.get(f.getStation()))));
+			// Building the map addressesMap
+			// The FireStation objects must be retrieving from the fireStationsMap
+			jsonDTO.getFirestations().forEach(f -> addressesMap.put(f.getAddress(),
+					new Address(f.getAddress(), fireStationsMap.get(f.getStation()))));
 
-		// Building the persons Map
-		jsonDTO.getPersons().forEach(p -> personsMap.put(p.getPersonId(), p.toPerson()));
+			// Building the persons Map
+			jsonDTO.getPersons().forEach(p -> personsMap.put(p.getPersonId(), p.toPerson()));
 
-		// Completing the personsMap with medical records if medicalRecord does not match to an existing person
-		jsonDTO.getMedicalrecords().stream().forEach(m -> personsMap.putIfAbsent(m.getPersonId(), m.toPerson()));
+			// Completing the personsMap with medical records if medicalRecord does not match to an existing person
+			jsonDTO.getMedicalrecords().stream().forEach(m -> personsMap.putIfAbsent(m.getPersonId(), m.toPerson()));
 
-		// Update the persons map with the (global structure) address
-		triggerAddressDatabaseForAllPerson();
+			// Update the persons map with the (global structure) address
+			triggerAddressDatabaseForAllPerson();
 
-		// Update the persons map with allergies and medications
-		final JsonDTO finalJsonDTO = jsonDTO;
-		personsMap.values()
-				.forEach(p -> finalJsonDTO.getMedicalrecords().stream().filter(
-						m -> m.getFirstName().equals(p.getFirstName()) && m.getLastName().equals(p.getLastName()))
-						.forEach(m -> {
-							p.setAllergies(m.getMapAllergies());
-							p.setMedications(m.getMapMedications());
-							p.setBirthdate(m.getBirthdate());
-						}));
+			// Update the persons map with allergies and medications
+			final JsonDTO finalJsonDTO = jsonDTO;
+			personsMap.values()
+					.forEach(p -> finalJsonDTO.getMedicalrecords().stream().filter(
+							m -> m.getFirstName().equals(p.getFirstName()) && m.getLastName().equals(p.getLastName()))
+							.forEach(m -> {
+								p.setAllergies(m.getMapAllergies());
+								p.setMedications(m.getMapMedications());
+								p.setBirthdate(m.getBirthdate());
+							}));
 
-		System.out.println("stop");
+			log.info("Database loaded.");
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e.getMessage());
+		}
 	}
 
 	public void triggerAddressForPerson(Person person) {
@@ -108,5 +119,11 @@ public class Database {
 		personsMap = new HashMap<>();
 		addressesMap = new HashMap<>();
 		fireStationsMap = new HashMap<>();
+	}
+
+	public void reset() {
+		raz();
+		init();
+		log.info("Database reset.");
 	}
 }
