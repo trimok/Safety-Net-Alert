@@ -15,7 +15,8 @@ import net.safety.alert.dto.AddressDTO;
 import net.safety.alert.dto.FireStationDTO;
 import net.safety.alert.dto.MappingAddressStationDTO;
 import net.safety.alert.exception.AddressStationAlreadyCreatedException;
-import net.safety.alert.exception.PersonNotValidException;
+import net.safety.alert.exception.AddressStationNotFoundException;
+import net.safety.alert.exception.AddressStationNotValidException;
 import net.safety.alert.model.Address;
 import net.safety.alert.repository.IAddressStationRepository;
 
@@ -29,7 +30,7 @@ public class AddressStationService implements IAddressStationService {
 	public MappingAddressStationDTO createMappingAddressStation(MappingAddressStationDTO mappingAddressStationDTO) {
 		Address address = mappingAddressStationDTO.toAddress();
 		if (!address.isValid()) {
-			throw new PersonNotValidException(CREATE_MAPPING_ADDRESS_STATION_OPERATION,
+			throw new AddressStationNotValidException(CREATE_MAPPING_ADDRESS_STATION_OPERATION,
 					MAPPING_ADDRESS_STATION_NOT_VALID, address);
 		}
 
@@ -47,7 +48,7 @@ public class AddressStationService implements IAddressStationService {
 	public MappingAddressStationDTO updateMappingAddressStation(MappingAddressStationDTO mappingAddressStationDTO) {
 		Address address = mappingAddressStationDTO.toAddress();
 		if (!address.isValid()) {
-			throw new PersonNotValidException(UPDATE_MAPPING_ADDRESS_STATION_OPERATION,
+			throw new AddressStationNotValidException(UPDATE_MAPPING_ADDRESS_STATION_OPERATION,
 					MAPPING_ADDRESS_STATION_NOT_VALID, address);
 		}
 
@@ -56,7 +57,7 @@ public class AddressStationService implements IAddressStationService {
 		if (addressDatabase != null) {
 			return MappingAddressStationDTO.toFireStationDTO(addressStationRepository.save(address));
 		} else {
-			throw new AddressStationAlreadyCreatedException(UPDATE_MAPPING_ADDRESS_STATION_OPERATION,
+			throw new AddressStationNotFoundException(UPDATE_MAPPING_ADDRESS_STATION_OPERATION,
 					MAPPING_ADDRESS_STATION_NOT_FOUND, address);
 		}
 	}
@@ -65,7 +66,7 @@ public class AddressStationService implements IAddressStationService {
 	public void deleteMappingAddressStationByFireStation(FireStationDTO fireStationDTO) {
 		Address address = fireStationDTO.toAddress();
 		if (!fireStationDTO.isValid()) {
-			throw new PersonNotValidException(DELETE_MAPPING_ADDRESS_STATION_BY_FIRESTATION_OPERATION,
+			throw new AddressStationNotValidException(DELETE_MAPPING_ADDRESS_STATION_BY_FIRESTATION_OPERATION,
 					MAPPING_ADDRESS_STATION_NOT_VALID, address);
 		}
 
@@ -76,7 +77,7 @@ public class AddressStationService implements IAddressStationService {
 	public void deleteMappingAddressStationByAddress(AddressDTO addressDTO) {
 		Address address = addressDTO.toAddress();
 		if (!addressDTO.isValid()) {
-			throw new PersonNotValidException(DELETE_MAPPING_ADDRESS_STATION_BY_ADDRESS_OPERATION,
+			throw new AddressStationNotValidException(DELETE_MAPPING_ADDRESS_STATION_BY_ADDRESS_OPERATION,
 					MAPPING_ADDRESS_STATION_NOT_VALID, address);
 		}
 

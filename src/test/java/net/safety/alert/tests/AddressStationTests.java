@@ -3,6 +3,8 @@ package net.safety.alert.tests;
 import static net.safety.alert.constants.HttpMessageConstants.CREATE_MAPPING_ADDRESS_STATION_OPERATION;
 import static net.safety.alert.constants.HttpMessageConstants.DELETE_MAPPING_ADDRESS_STATION_BY_ADDRESS_OPERATION;
 import static net.safety.alert.constants.HttpMessageConstants.DELETE_MAPPING_ADDRESS_STATION_BY_FIRESTATION_OPERATION;
+import static net.safety.alert.constants.HttpMessageConstants.MAPPING_ADDRESS_STATION_ALREADY_CREATED;
+import static net.safety.alert.constants.HttpMessageConstants.MAPPING_ADDRESS_STATION_NOT_FOUND;
 import static net.safety.alert.constants.HttpMessageConstants.MAPPING_ADDRESS_STATION_NOT_VALID;
 import static net.safety.alert.constants.HttpMessageConstants.UPDATE_MAPPING_ADDRESS_STATION_OPERATION;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -67,19 +69,38 @@ public class AddressStationTests {
 		database.reset();
 	}
 
+	/******************************** CREATE *****************************************************/
+
 	private final static MappingAddressStationDTO CREATE_MAPPING = new MappingAddressStationDTO("947 Rivoli Steet",
 			"5");
+	private final static MappingAddressStationDTO CREATE_MAPPING_ADDRESS_NON_EXISTING = new MappingAddressStationDTO(
+			"9479 Rivoli Steet", "33");
+
 	private final static MappingAddressStationDTO CREATE_MAPPING_ADDRESS_STATION_NOT_VALID = new MappingAddressStationDTO(
 			"", "");
 	private final static ApiError ERROR_CREATE_MAPPING_ADDRESS_STATION_NOT_VALID = new ApiError(URL_FIRESTATION,
 			MAPPING_ADDRESS_STATION_NOT_VALID, CREATE_MAPPING_ADDRESS_STATION_OPERATION, null);
 
+	private final static MappingAddressStationDTO CREATE_MAPPING_ADDRESS_STATION_ALREADY_CREATED = new MappingAddressStationDTO(
+			"1509 Culver St", "3");
+	private final static ApiError ERROR_CREATE_MAPPING_ADDRESS_STATION_ALREADY_CREATED = new ApiError(URL_FIRESTATION,
+			MAPPING_ADDRESS_STATION_ALREADY_CREATED, CREATE_MAPPING_ADDRESS_STATION_OPERATION, null);
+
+	/******************************** UPDATE *****************************************************/
+
 	private final static MappingAddressStationDTO UPDATE_MAPPING = new MappingAddressStationDTO("489 Manchester St",
-			"6");
+			"33");
 	private final static MappingAddressStationDTO UPDATE_MAPPING_ADDRESS_STATION_NOT_VALID = new MappingAddressStationDTO(
 			"", "");
 	private final static ApiError ERROR_UPDATE_MAPPING_ADDRESS_STATION_NOT_VALID = new ApiError(URL_FIRESTATION,
 			MAPPING_ADDRESS_STATION_NOT_VALID, UPDATE_MAPPING_ADDRESS_STATION_OPERATION, null);
+
+	private final static MappingAddressStationDTO UPDATE_MAPPING_ADDRESS_STATION_NOT_FOUND = new MappingAddressStationDTO(
+			"Unknown", "Unknown");
+	private final static ApiError ERROR_UPDATE_MAPPING_ADDRESS_STATION_NOT_FOUND = new ApiError(URL_FIRESTATION,
+			MAPPING_ADDRESS_STATION_NOT_FOUND, UPDATE_MAPPING_ADDRESS_STATION_OPERATION, null);
+
+	/******************************** DELETE BY FIRESTATION *****************************************************/
 
 	private final static FireStationDTO DELETE_MAPPING_BY_FIRESTATION = new FireStationDTO("8");
 	private final static List<String> LIST_ADDRESS_DELETE_MAPPING_BY_FIRESTATION = Arrays.asList("959 LoneTree Rd",
@@ -90,14 +111,19 @@ public class AddressStationTests {
 			URL_FIRESTATION_DELETE_BY_FIRESTATION, MAPPING_ADDRESS_STATION_NOT_VALID,
 			DELETE_MAPPING_ADDRESS_STATION_BY_FIRESTATION_OPERATION, null);
 
+	/******************************** DELETE BY ADDRESS *****************************************************/
+
 	private final static AddressDTO DELETE_MAPPING_BY_ADDRESS = new AddressDTO("961 LoneTree Rd");
 	private final static FireStationDTO DELETE_MAPPING_BY_ADDRESS_FIRESTATION = new FireStationDTO("9");
+
 	private final static AddressDTO DELETE_MAPPING_ADDRESS_STATION_BY_ADDRESS_NOT_VALID = new AddressDTO("");
 	private final static ApiError ERROR_DELETE_MAPPING_ADDRESS_STATION_BY_ADDRESS_NOT_VALID = new ApiError(
 			URL_FIRESTATION_DELETE_BY_ADDRESS, MAPPING_ADDRESS_STATION_NOT_VALID,
 			DELETE_MAPPING_ADDRESS_STATION_BY_ADDRESS_OPERATION, null);
 
-	/********************** TEST ERROR PERSON NOT VALID /person **********/
+	/************************************************************************************************************/
+
+	/********************** TEST ERROR MAPPING ADDRESS STATION NOT VALID /firestation **********/
 
 	public static Stream<Arguments> whenNotValidMappingAddressStationIsGiven_ShouldRaiseExceptionProvider() {
 		// GIVEN
@@ -123,6 +149,34 @@ public class AddressStationTests {
 			HttpStatus status, Function<String, MockHttpServletRequestBuilder> operation, String operationName,
 			String url) throws Exception {
 
+		// WHEN
+		ApiError error = TestsUtil.errorFromUrl(objectMapper, operation, mockMvc, url, ApiError.class, dto, status);
+
+		// THEN
+		assert (error.equalsMetadata(apiError));
+	}
+
+	/********************** TEST NOT FOUND in MAPPING_ADDRESS_STATION /firestation **********/
+
+	public static Stream<Arguments> whenFunctionalErrorMappingAddressStation_ShouldRaiseExceptionProvider() {
+		// GIVEN
+		return Stream.of(
+				Arguments.arguments(CREATE_MAPPING_ADDRESS_STATION_ALREADY_CREATED,
+						ERROR_CREATE_MAPPING_ADDRESS_STATION_ALREADY_CREATED, HttpStatus.FOUND, TestsUtil.HTTP_POST,
+						"POST", "FOUND", URL_FIRESTATION),
+				Arguments.arguments(UPDATE_MAPPING_ADDRESS_STATION_NOT_FOUND,
+						ERROR_UPDATE_MAPPING_ADDRESS_STATION_NOT_FOUND, HttpStatus.NOT_FOUND, TestsUtil.HTTP_PUT, "PUT",
+						"NOT FOUND", URL_FIRESTATION));
+	}
+
+	@DisplayName("ERROR MAPPING_ADDRESS_STATION FOUND / NOT FOUND, CRUD  /mappingAddressStation : ")
+	@ParameterizedTest(name = "{4} : when mapping Address-Station {5}, should raise an exception {1}, with status {2}")
+	@MethodSource("whenFunctionalErrorMappingAddressStation_ShouldRaiseExceptionProvider")
+	public void whenFunctionalErrorMappingAddressStation_ShouldRaiseException(Object dto, ApiError apiError,
+			HttpStatus status, Function<String, MockHttpServletRequestBuilder> operation, String operationName,
+			String errorName, String url) throws Exception {
+
+		// WHEN
 		ApiError error = TestsUtil.errorFromUrl(objectMapper, operation, mockMvc, url, ApiError.class, dto, status);
 
 		// THEN
@@ -133,7 +187,7 @@ public class AddressStationTests {
 
 	public static Stream<Arguments> whenMappingAddressStationIsGiven_ShouldCreateMappingProvider() {
 		// GIVEN
-		return Stream.of(Arguments.arguments(CREATE_MAPPING));
+		return Stream.of(Arguments.arguments(CREATE_MAPPING), Arguments.arguments(CREATE_MAPPING_ADDRESS_NON_EXISTING));
 	}
 
 	@DisplayName("POST /firestation : ")
@@ -143,12 +197,14 @@ public class AddressStationTests {
 			throws Exception {
 
 		Address address = database.getAddressesMap().get(mappingAddressStationDTO.getAddress());
-		assertNotNull(address);
-		assertNull(address.getFireStation());
+		if (address != null) {
+			assertNull(address.getFireStation());
+		}
 
 		// WHEN
 		MappingAddressStationDTO mappingAddressStationDTOResult = TestsUtil.dtoFromUrl(objectMapper, false,
-				TestsUtil.HTTP_POST, mockMvc, URL_FIRESTATION, MappingAddressStationDTO.class, mappingAddressStationDTO);
+				TestsUtil.HTTP_POST, mockMvc, URL_FIRESTATION, MappingAddressStationDTO.class,
+				mappingAddressStationDTO);
 
 		// THEN
 		Address addressAfterMapping = database.getAddressesMap().get(mappingAddressStationDTO.getAddress());

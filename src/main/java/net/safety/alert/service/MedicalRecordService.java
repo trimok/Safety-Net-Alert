@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import net.safety.alert.dto.MedicalRecordDTO;
 import net.safety.alert.exception.MedicalRecordAlreadyCreatedException;
 import net.safety.alert.exception.MedicalRecordNotFoundException;
-import net.safety.alert.exception.PersonNotValidException;
+import net.safety.alert.exception.MedicalRecordNotValidException;
 import net.safety.alert.model.Person;
 import net.safety.alert.repository.IMedicalRecordRepository;
 
@@ -28,7 +28,7 @@ public class MedicalRecordService implements IMedicalRecordService {
 	public MedicalRecordDTO createMedicalRecord(MedicalRecordDTO medicalRecordDTO) {
 		Person person = medicalRecordDTO.toPerson();
 		if (!person.isValid()) {
-			throw new PersonNotValidException(CREATE_MEDICAL_RECORD_OPERATION, MEDICAL_RECORD_NOT_VALID, person);
+			throw new MedicalRecordNotValidException(CREATE_MEDICAL_RECORD_OPERATION, MEDICAL_RECORD_NOT_VALID, person);
 		}
 
 		Person personDatabase = getPersistent(person);
@@ -38,8 +38,8 @@ public class MedicalRecordService implements IMedicalRecordService {
 		} else if (personDatabase.isMedicalRecordEmpty()) {
 			return updateMedicalRecord(medicalRecordDTO);
 		} else {
-			throw new MedicalRecordAlreadyCreatedException(CREATE_MEDICAL_RECORD_OPERATION, MEDICAL_RECORD_ALREADY_CREATED,
-					personDatabase);
+			throw new MedicalRecordAlreadyCreatedException(CREATE_MEDICAL_RECORD_OPERATION,
+					MEDICAL_RECORD_ALREADY_CREATED, personDatabase);
 		}
 	}
 
@@ -47,7 +47,7 @@ public class MedicalRecordService implements IMedicalRecordService {
 	public MedicalRecordDTO updateMedicalRecord(MedicalRecordDTO medicalRecordDTO) {
 		Person person = medicalRecordDTO.toPerson();
 		if (!person.isValid()) {
-			throw new PersonNotValidException(UPDATE_MEDICAL_RECORD_OPERATION, MEDICAL_RECORD_NOT_VALID, person);
+			throw new MedicalRecordNotValidException(UPDATE_MEDICAL_RECORD_OPERATION, MEDICAL_RECORD_NOT_VALID, person);
 		}
 
 		Person personDatabase = getPersistent(person);
@@ -65,7 +65,7 @@ public class MedicalRecordService implements IMedicalRecordService {
 	public MedicalRecordDTO patchMedicalRecord(MedicalRecordDTO medicalRecordDTO) {
 		Person person = medicalRecordDTO.toPerson();
 		if (!person.isValid()) {
-			throw new PersonNotValidException(PATCH_MEDICAL_RECORD_OPERATION, MEDICAL_RECORD_NOT_VALID, person);
+			throw new MedicalRecordNotValidException(PATCH_MEDICAL_RECORD_OPERATION, MEDICAL_RECORD_NOT_VALID, person);
 		}
 
 		Person personDatabase = getPersistent(person);
@@ -82,7 +82,7 @@ public class MedicalRecordService implements IMedicalRecordService {
 	public void deleteMedicalRecord(MedicalRecordDTO medicalRecordDTO) {
 		Person person = medicalRecordDTO.toPerson();
 		if (!person.isValid()) {
-			throw new PersonNotValidException(DELETE_MEDICAL_RECORD_OPERATION, MEDICAL_RECORD_NOT_VALID, person);
+			throw new MedicalRecordNotValidException(DELETE_MEDICAL_RECORD_OPERATION, MEDICAL_RECORD_NOT_VALID, person);
 		}
 
 		Person personDatabase = getPersistent(person);

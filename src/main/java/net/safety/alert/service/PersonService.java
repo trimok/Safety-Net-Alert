@@ -16,13 +16,13 @@ import net.safety.alert.exception.PersonAlreadyCreatedException;
 import net.safety.alert.exception.PersonNotFoundException;
 import net.safety.alert.exception.PersonNotValidException;
 import net.safety.alert.model.Person;
-import net.safety.alert.repository.PersonRepository;
+import net.safety.alert.repository.IPersonRepository;
 
 @Service
 public class PersonService implements IPersonService {
 
 	@Autowired
-	PersonRepository personRepository;
+	IPersonRepository personRepository;
 
 	@Override
 	public PersonDTO createPerson(PersonDTO personDTO) {
@@ -54,7 +54,7 @@ public class PersonService implements IPersonService {
 		if (personDatabase != null) {
 			return PersonDTO.toPersonDTO(personRepository.save(personDatabase.updatePerson(person)));
 		} else {
-			throw new PersonAlreadyCreatedException(UPDATE_PERSON_OPERATION, PERSON_NOT_FOUND, PersonDTO.toPersonDTO(person));
+			throw new PersonNotFoundException(UPDATE_PERSON_OPERATION, PERSON_NOT_FOUND, PersonDTO.toPersonDTO(person));
 		}
 	}
 
@@ -70,7 +70,7 @@ public class PersonService implements IPersonService {
 		if (personDatabase != null) {
 			return PersonDTO.toPersonDTO(personRepository.save(personDatabase.patchPerson(person)));
 		} else {
-			throw new PersonAlreadyCreatedException(PATCH_PERSON_OPERATION, PERSON_NOT_FOUND, PersonDTO.toPersonDTO(person));
+			throw new PersonNotFoundException(PATCH_PERSON_OPERATION, PERSON_NOT_FOUND, PersonDTO.toPersonDTO(person));
 		}
 	}
 

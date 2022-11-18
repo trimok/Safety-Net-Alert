@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -17,7 +18,9 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import net.safety.alert.config.Mapper;
 import net.safety.alert.database.Database;
@@ -34,12 +37,31 @@ import net.safety.alert.dto.PersonsByFirstNameLastNameDTO;
 import net.safety.alert.dto.PersonsByStationDTO;
 import net.safety.alert.dto.PersonsGroupByAddressByListStationDTO;
 import net.safety.alert.dto.PhonesByStationDTO;
+import net.safety.alert.exception.ApiError;
 import net.safety.alert.tests.util.TestsUtil;
 
 @SpringBootTest(classes = net.safety.alert.config.SafetyNetAlertApplication.class)
 @AutoConfigureMockMvc
 @TestInstance(Lifecycle.PER_CLASS)
 class QueryTests {
+
+	private static final String URL_COMMUNITY_EMAIL = "/communityEmail";
+	private static final String URL_COMMUNITY_EMAIL_CITY = "/communityEmail?city=";
+	private static final String URL_COMMUNITY_EMAIL_CITY_BAD_PARAMETER = "/communityEmail?citi=";
+	private final static ApiError ERROR_URL_COMMUNITY_EMAIL_BAD_PARAMETER = new ApiError(URL_COMMUNITY_EMAIL,
+			"....Required request parameter....", null, null);
+
+	private static final String URL_PERSON_INFO_FIRST_NAME = "/personInfo?firstName=";
+
+	private static final String URL_FLOOD_STATIONS_STATIONS = "/flood/stations?stations=";
+
+	private static final String URL_FIRE_ADDRESS = "/fire?address=";
+
+	private static final String URL_PHONE_ALERT_FIRESTATION = "/phoneAlert?firestation=";
+
+	private static final String URL_CHILD_ALERT_ADDRESS = "/childAlert?address=";
+
+	private static final String URL_FIRESTATION_STATION_NUMBER = "/firestation?stationNumber=";
 
 	private static Mapper objectMapper;
 
@@ -102,7 +124,7 @@ class QueryTests {
 
 		// WHEN
 		PersonsByStationDTO personsByStationDTO = TestsUtil.dtoFromUrl(objectMapper, true, TestsUtil.HTTP_GET, mockMvc,
-				"/firestation?stationNumber=" + station, PersonsByStationDTO.class);
+				URL_FIRESTATION_STATION_NUMBER + station, PersonsByStationDTO.class);
 
 		// THEN
 		List<PersonByStationDTO> persons = personsByStationDTO.getPersons();
@@ -130,7 +152,7 @@ class QueryTests {
 
 		// WHEN
 		ChildrensByAddressDTO childrens = TestsUtil.dtoFromUrl(objectMapper, true, TestsUtil.HTTP_GET, mockMvc,
-				"/childAlert?address=" + address, ChildrensByAddressDTO.class);
+				URL_CHILD_ALERT_ADDRESS + address, ChildrensByAddressDTO.class);
 
 		// THEN
 		List<ChildrenByAddressDTO> children = childrens.getChildren();
@@ -161,7 +183,7 @@ class QueryTests {
 
 		// WHEN
 		PhonesByStationDTO phonesDTO = TestsUtil.dtoFromUrl(objectMapper, true, TestsUtil.HTTP_GET, mockMvc,
-				"/phoneAlert?firestation=" + fireStation, PhonesByStationDTO.class);
+				URL_PHONE_ALERT_FIRESTATION + fireStation, PhonesByStationDTO.class);
 
 		// THEN
 		List<String> phones = phonesDTO.getPhones();
@@ -182,7 +204,7 @@ class QueryTests {
 
 		// WHEN
 		PersonsByAddressDTO personsDTO = TestsUtil.dtoFromUrl(objectMapper, true, TestsUtil.HTTP_GET, mockMvc,
-				"/fire?address=" + address, PersonsByAddressDTO.class);
+				URL_FIRE_ADDRESS + address, PersonsByAddressDTO.class);
 
 		// THEN
 		List<PersonByAddressDTO> persons = personsDTO.getPersons();
@@ -215,7 +237,7 @@ class QueryTests {
 
 		// WHEN
 		PersonsGroupByAddressByListStationDTO mapPersonsDTO = TestsUtil.dtoFromUrl(objectMapper, true,
-				TestsUtil.HTTP_GET, mockMvc, "/flood/stations?stations=" + addressList,
+				TestsUtil.HTTP_GET, mockMvc, URL_FLOOD_STATIONS_STATIONS + addressList,
 				PersonsGroupByAddressByListStationDTO.class);
 
 		// THEN
@@ -251,7 +273,7 @@ class QueryTests {
 
 		// WHEN
 		PersonsByFirstNameLastNameDTO personsDTO = TestsUtil.dtoFromUrl(objectMapper, true, TestsUtil.HTTP_GET, mockMvc,
-				"/personInfo?firstName=" + firstName + "&lastName=" + lastName, PersonsByFirstNameLastNameDTO.class);
+				URL_PERSON_INFO_FIRST_NAME + firstName + "&lastName=" + lastName, PersonsByFirstNameLastNameDTO.class);
 
 		// THEN
 		List<PersonByFirstNameLastNameDTO> persons = personsDTO.getPersons();
@@ -285,11 +307,36 @@ class QueryTests {
 
 		// WHEN
 		EmailsByCityDTO emailsDTO = TestsUtil.dtoFromUrl(objectMapper, true, TestsUtil.HTTP_GET, mockMvc,
-				"/communityEmail?city=" + city, EmailsByCityDTO.class);
+				URL_COMMUNITY_EMAIL_CITY + city, EmailsByCityDTO.class);
 
 		// THEN
 		List<String> emails = emailsDTO.getEmails();
 		assertThat(emails.size()).isEqualTo(personCount);
 	}
+
+	/********************** TEST ERROR PARAMETER NOT VALID **********/
+
+	public static Stream<Arguments> whenNotValidPersonIsGiven_ShouldRaiseExceptionProvider() {
+		// GIVEN
+		return Stream.of(Arguments.arguments(CULVER_CITY, ERROR_URL_COMMUNITY_EMAIL_BAD_PARAMETER,
+				HttpStatus.BAD_REQUEST, TestsUtil.HTTP_GET, "GET", URL_COMMUNITY_EMAIL_CITY_BAD_PARAMETER));
+	}
+
+	@DisplayName("ERROR PARAMETER NOT VALID : ")
+	@ParameterizedTest(name = "In {4} {5},  parameter is not valid, should raise an exception {1}, with status {2}")
+	@MethodSource("whenNotValidPersonIsGiven_ShouldRaiseExceptionProvider")
+	public void whenNotValidPersonIsGiven_ShouldRaiseException(String dto, ApiError apiError, HttpStatus status,
+			Function<String, MockHttpServletRequestBuilder> operation, String operationName, String url)
+			throws Exception {
+
+		// WHEN
+		ApiError error = TestsUtil.errorFromUrl(objectMapper, operation, mockMvc, url, ApiError.class, dto, status);
+
+		// THEN
+		assert (error.getUrl().equals(apiError.getUrl()));
+		assert (!error.getErrorMessage().isEmpty());
+		assert (error.getErrorMessage().contains("Required request parameter"));
+	}
+
 	/**************************************************************************************************************************/
 }

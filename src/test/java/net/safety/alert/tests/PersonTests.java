@@ -3,6 +3,8 @@ package net.safety.alert.tests;
 import static net.safety.alert.constants.HttpMessageConstants.CREATE_PERSON_OPERATION;
 import static net.safety.alert.constants.HttpMessageConstants.DELETE_PERSON_OPERATION;
 import static net.safety.alert.constants.HttpMessageConstants.PATCH_PERSON_OPERATION;
+import static net.safety.alert.constants.HttpMessageConstants.PERSON_ALREADY_CREATED;
+import static net.safety.alert.constants.HttpMessageConstants.PERSON_NOT_FOUND;
 import static net.safety.alert.constants.HttpMessageConstants.PERSON_NOT_VALID;
 import static net.safety.alert.constants.HttpMessageConstants.UPDATE_PERSON_OPERATION;
 import static org.junit.Assert.assertNull;
@@ -56,11 +58,19 @@ public class PersonTests {
 		database.reset();
 	}
 
-	private final static PersonDTO CREATE_PERSON = new PersonDTO("Tristan", "Mokobodzki", "Paris", "75001", "0600000000",
-			"tristan@paris.com", "rue de Rivoli");
+	/******************************** CREATE *****************************************************/
+
+	private final static PersonDTO CREATE_PERSON = new PersonDTO("Tristan", "Mokobodzki", "Paris", "75001",
+			"0600000000", "tristan@paris.com", "rue de Rivoli");
 	private final static PersonDTO CREATE_PERSON_NOT_VALID = new PersonDTO("", "");
 	private final static ApiError ERROR_CREATE_PERSON_NOT_VALID = new ApiError(URL_PERSON, PERSON_NOT_VALID,
 			CREATE_PERSON_OPERATION, null);
+
+	private final static PersonDTO CREATE_PERSON_ALREADY_CREATED = new PersonDTO("Roger", "Boyd");
+	private final static ApiError ERROR_CREATE_PERSON_ALREADY_CREATED = new ApiError(URL_PERSON, PERSON_ALREADY_CREATED,
+			CREATE_PERSON_OPERATION, null);
+
+	/******************************** UPDATE *****************************************************/
 
 	private final static PersonDTO UPDATE_PERSON = new PersonDTO("Roger", "Boyd", "Paris", "75001", "0600000000",
 			"tristan@paris.com", "rue de Rivoli");
@@ -68,14 +78,30 @@ public class PersonTests {
 	private final static ApiError ERROR_UPDATE_PERSON_NOT_VALID = new ApiError(URL_PERSON, PERSON_NOT_VALID,
 			UPDATE_PERSON_OPERATION, null);
 
+	private final static PersonDTO UPDATE_PERSON_NOT_FOUND = new PersonDTO("Unknown", "Unknown");
+	private final static ApiError ERROR_UPDATE_PERSON_NOT_FOUND = new ApiError(URL_PERSON, PERSON_NOT_FOUND,
+			UPDATE_PERSON_OPERATION, null);
+
+	/******************************** PATCH *****************************************************/
+
 	private final static PersonDTO PATCH_PERSON = new PersonDTO("Jacob", "Boyd", "Paris", "", "", "", "");
 	private final static PersonDTO PATCH_PERSON_NOT_VALID = new PersonDTO("", "");
 	private final static ApiError ERROR_PATCH_PERSON_NOT_VALID = new ApiError(URL_PERSON, PERSON_NOT_VALID,
 			PATCH_PERSON_OPERATION, null);
 
+	private final static PersonDTO PATCH_PERSON_NOT_FOUND = new PersonDTO("Unknown", "Unknown");
+	private final static ApiError ERROR_PATCH_PERSON_NOT_FOUND = new ApiError(URL_PERSON, PERSON_NOT_FOUND,
+			PATCH_PERSON_OPERATION, null);
+
+	/******************************** DELETE *****************************************************/
+
 	private final static PersonDTO DELETE_PERSON = new PersonDTO("Sophia", "Zemicks", "", "", "", "", "");
 	private final static PersonDTO DELETE_PERSON_NOT_VALID = new PersonDTO("", "");
 	private final static ApiError ERROR_DELETE_PERSON_NOT_VALID = new ApiError(URL_PERSON, PERSON_NOT_VALID,
+			DELETE_PERSON_OPERATION, null);
+
+	private final static PersonDTO DELETE_PERSON_NOT_FOUND = new PersonDTO("Unknown", "Unknown");
+	private final static ApiError ERROR_DELETE_PERSON_NOT_FOUND = new ApiError(URL_PERSON, PERSON_NOT_FOUND,
 			DELETE_PERSON_OPERATION, null);
 
 	/********************** TEST ERROR PERSON NOT VALID /person **********/
@@ -96,9 +122,41 @@ public class PersonTests {
 	@DisplayName("ERROR PERSON NOT VALID, CRUD  /person : ")
 	@ParameterizedTest(name = "{4} : when person {0} is not valid, should raise an exception {1}, with status {2}")
 	@MethodSource("whenNotValidPersonIsGiven_ShouldRaiseExceptionProvider")
-	public void whenNotValidPersonIsGiven_ShouldRaiseException(PersonDTO personDTO, ApiError apiError, HttpStatus status,
-			Function<String, MockHttpServletRequestBuilder> operation, String operationName) throws Exception {
+	public void whenNotValidPersonIsGiven_ShouldRaiseException(PersonDTO personDTO, ApiError apiError,
+			HttpStatus status, Function<String, MockHttpServletRequestBuilder> operation, String operationName)
+			throws Exception {
 
+		// WHEN
+		ApiError error = TestsUtil.errorFromUrl(objectMapper, operation, mockMvc, URL_PERSON, ApiError.class, personDTO,
+				status);
+
+		// THEN
+		assert (error.equalsMetadata(apiError));
+	}
+
+	/********************** TEST ERROR FOUND / NOT FOUND in PERSON /person **********/
+
+	public static Stream<Arguments> whenFunctionalErrorPerson_ShouldRaiseExceptionProvider() {
+		// GIVEN
+		return Stream.of(
+				Arguments.arguments(CREATE_PERSON_ALREADY_CREATED, ERROR_CREATE_PERSON_ALREADY_CREATED,
+						HttpStatus.FOUND, TestsUtil.HTTP_POST, "POST", "FOUND"),
+				Arguments.arguments(UPDATE_PERSON_NOT_FOUND, ERROR_UPDATE_PERSON_NOT_FOUND, HttpStatus.NOT_FOUND,
+						TestsUtil.HTTP_PUT, "PUT", "NOT FOUND"),
+				Arguments.arguments(PATCH_PERSON_NOT_FOUND, ERROR_PATCH_PERSON_NOT_FOUND, HttpStatus.NOT_FOUND,
+						TestsUtil.HTTP_PATCH, "PATCH", "NOT FOUND"),
+				Arguments.arguments(DELETE_PERSON_NOT_FOUND, ERROR_DELETE_PERSON_NOT_FOUND, HttpStatus.NOT_FOUND,
+						TestsUtil.HTTP_DELETE, "DELETE", "NOT FOUND"));
+	}
+
+	@DisplayName("ERROR PERSON FOUND / NOT FOUND, CRUD  /person : ")
+	@ParameterizedTest(name = "{4} : when person {5}, should raise an exception {1}, with status {2}")
+	@MethodSource("whenFunctionalErrorPerson_ShouldRaiseExceptionProvider")
+	public void whenFunctionalErrorPerson_ShouldRaiseException(PersonDTO personDTO, ApiError apiError,
+			HttpStatus status, Function<String, MockHttpServletRequestBuilder> operation, String operationName,
+			String errorName) throws Exception {
+
+		// WHEN
 		ApiError error = TestsUtil.errorFromUrl(objectMapper, operation, mockMvc, URL_PERSON, ApiError.class, personDTO,
 				status);
 

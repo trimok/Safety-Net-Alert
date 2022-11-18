@@ -71,7 +71,6 @@
 				<artifactId>maven-project-info-reports-plugin</artifactId>
 				<version>${maven-project-info-reports-plugin-version}</version>
 			</plugin>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-report-plugin</artifactId>
@@ -167,26 +166,23 @@
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>${jacoco-maven-plugin-version}</version>
+				<configuration>
+					<excludes>
+						<exclude>**/net/safety/alert/config/*</exclude>
+						<exclude>**/net/safety/alert/constants/*</exclude>
+						<exclude>**/net/safety/alert/dto/*</exclude>
+						<exclude>**/net/safety/alert/exception/*</exclude>
+						<exclude>**/net/safety/alert/model/*</exclude>
+						<exclude>**/net/safety/alert/util/*</exclude>
+					</excludes>
+				</configuration>
 				<executions>
 					<execution>
-						<configuration>
-							<excludes>
-								<!-- 
-								<exclude>com/parkit/parkingsystem/model.*</exclude>
-								<exclude>com/parkit/parkingsystem/config.*</exclude>
-								<exclude>com/parkit/parkingsystem/util.*</exclude>
-								<exclude>com/parkit/parkingsystem/constants.*</exclude>
-								<exclude>com/parkit/parkingsystem/App.class</exclude>
-								-->
-							</excludes>
-						</configuration>
 						<goals>
 							<goal>prepare-agent</goal>
 						</goals>
 					</execution>
 					<execution>
-						<configuration>
-						</configuration>
 						<id>report</id>
 						<phase>test</phase>
 						<goals>
