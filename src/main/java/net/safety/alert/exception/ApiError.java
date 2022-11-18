@@ -10,15 +10,36 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * @author trimok
+ *
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class ApiError {
+	/**
+	 * 
+	 */
 	private String url;
+	/**
+	 * 
+	 */
 	private String errorMessage;
+	/**
+	 * 
+	 */
 	private String operation;
+	/**
+	 * 
+	 */
 	private Object payload;
 
+	/**
+	 * @param apiError
+	 *            : the error to be compared
+	 * @return : indicates if the error are equals (modulo the payload)
+	 */
 	public boolean equalsMetadata(ApiError apiError) {
 		boolean ret = true;
 
@@ -43,6 +64,12 @@ public class ApiError {
 		return ret;
 	}
 
+	/**
+	 * @param request
+	 *            : the WebRequest Object
+	 * @param exception
+	 *            : the SafetyNetException exception
+	 */
 	public ApiError(WebRequest request, SafetyNetException exception) {
 		this.url = uriFromWebRequest(request);
 		this.operation = exception.getOperation();
@@ -50,6 +77,12 @@ public class ApiError {
 		this.errorMessage = exception.getErrorMessage();
 	}
 
+	/**
+	 * @param request
+	 *            : the WebRequest Object
+	 * @param exception
+	 *            : the Exception object
+	 */
 	public ApiError(WebRequest request, Exception exception) {
 		this.url = uriFromWebRequest(request);
 		StringWriter sw = new StringWriter();
@@ -64,6 +97,11 @@ public class ApiError {
 		}
 	}
 
+	/**
+	 * @param request
+	 *            : the WebRequest
+	 * @return : the request url
+	 */
 	public String uriFromWebRequest(WebRequest request) {
 		return ((ServletWebRequest) request).getRequest().getRequestURI().toString();
 	}

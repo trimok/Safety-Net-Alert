@@ -7,13 +7,26 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.safety.alert.util.StringsUtil;
 
+/**
+ * @author trimok
+ *
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Address {
+	/**
+	 * 
+	 */
 	private String name;
+	/**
+	 * 
+	 */
 	private FireStation fireStation;
 
+	/**
+	 * @return true if fireStation is not empty
+	 */
 	@JsonIgnore
 	public boolean isValid() {
 		if (fireStation == null || !StringsUtil.isValid(fireStation.getId())) {

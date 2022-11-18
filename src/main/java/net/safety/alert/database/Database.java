@@ -25,6 +25,10 @@ import net.safety.alert.model.PersonId;
 import net.safety.alert.util.FileUtil;
 import net.safety.alert.util.StringsUtil;
 
+/**
+ * @author trimok
+ *
+ */
 @Slf4j
 @Getter
 @Setter
@@ -32,16 +36,31 @@ import net.safety.alert.util.StringsUtil;
 @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class Database {
 
+	/**
+	 * 
+	 */
 	@Autowired
 	private Mapper objectMapper;
 
 	// Global structure for persons
+	/**
+	 * 
+	 */
 	private Map<PersonId, Person> personsMap = new HashMap<>();
 	// Global structure for addresses
+	/**
+	 * 
+	 */
 	private Map<String, Address> addressesMap = new HashMap<>();
 	// Global structure for firestations
+	/**
+	 * 
+	 */
 	private Map<String, FireStation> fireStationsMap = new HashMap<>();
 
+	/**
+	 * 
+	 */
 	public void init() {
 
 		// Step 1 : reading the data and putting this into a temporatyJsonData structure
@@ -94,6 +113,9 @@ public class Database {
 		}
 	}
 
+	/**
+	 * @param person
+	 */
 	public void triggerAddressForPerson(Person person) {
 		// Is the adress already existing
 		Address address = person.getAddress();
@@ -110,16 +132,25 @@ public class Database {
 		}
 	}
 
+	/**
+	 * 
+	 */
 	public void triggerAddressDatabaseForAllPerson() {
 		personsMap.values().forEach(p -> triggerAddressForPerson(p));
 	}
 
+	/**
+	 * 
+	 */
 	public void raz() {
 		personsMap = new HashMap<>();
 		addressesMap = new HashMap<>();
 		fireStationsMap = new HashMap<>();
 	}
 
+	/**
+	 * 
+	 */
 	public void reset() {
 		raz();
 		init();

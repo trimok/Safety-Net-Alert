@@ -12,17 +12,43 @@ import net.safety.alert.model.Address;
 import net.safety.alert.model.Person;
 import net.safety.alert.util.DateUtil;
 
+/**
+ * @author trimok
+ *
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class PersonByFirstNameLastNameDTO {
+	/**
+	 * 
+	 */
 	private String lastName;
+	/**
+	 * 
+	 */
 	private String address;
+	/**
+	 * 
+	 */
 	private Long age;
+	/**
+	 * 
+	 */
 	private String email;
+	/**
+	 * 
+	 */
 	List<String> allergies = new ArrayList<>();
+	/**
+	 * 
+	 */
 	Map<String, String> medications = new HashMap<>();
 
+	/**
+	 * @param person
+	 * @return
+	 */
 	public static PersonByFirstNameLastNameDTO toPersonByFirstNameLastNameDTO(Person person) {
 		PersonByFirstNameLastNameDTO personByFirstNameLastNameDTO = new PersonByFirstNameLastNameDTO();
 

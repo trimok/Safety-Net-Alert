@@ -20,12 +20,22 @@ import net.safety.alert.exception.AddressStationNotValidException;
 import net.safety.alert.model.Address;
 import net.safety.alert.repository.IAddressStationRepository;
 
+/**
+ * @author trimok
+ *
+ */
 @Service
 public class AddressStationService implements IAddressStationService {
 
+	/**
+	 * 
+	 */
 	@Autowired
 	IAddressStationRepository addressStationRepository;
 
+	/**
+	 *
+	 */
 	@Override
 	public MappingAddressStationDTO createMappingAddressStation(MappingAddressStationDTO mappingAddressStationDTO) {
 		Address address = mappingAddressStationDTO.toAddress();
@@ -44,6 +54,9 @@ public class AddressStationService implements IAddressStationService {
 		}
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public MappingAddressStationDTO updateMappingAddressStation(MappingAddressStationDTO mappingAddressStationDTO) {
 		Address address = mappingAddressStationDTO.toAddress();
@@ -62,6 +75,9 @@ public class AddressStationService implements IAddressStationService {
 		}
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public void deleteMappingAddressStationByFireStation(FireStationDTO fireStationDTO) {
 		Address address = fireStationDTO.toAddress();
@@ -73,6 +89,9 @@ public class AddressStationService implements IAddressStationService {
 		addressStationRepository.deleteByFireStation(address);
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public void deleteMappingAddressStationByAddress(AddressDTO addressDTO) {
 		Address address = addressDTO.toAddress();
@@ -84,6 +103,9 @@ public class AddressStationService implements IAddressStationService {
 		addressStationRepository.deleteByAddress(address);
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public Address getPersistent(Address address) {
 		return addressStationRepository.getPersistent(address);

@@ -6,12 +6,23 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * @author trimok
+ *
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class EmailsByCityDTO {
+	/**
+	 * 
+	 */
 	private List<String> emails;
 
+	/**
+	 * @param emails
+	 * @return
+	 */
 	public static EmailsByCityDTO toEmailsByCityDTO(List<String> emails) {
 		return new EmailsByCityDTO(emails);
 	}

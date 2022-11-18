@@ -11,27 +11,68 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.safety.alert.util.StringsUtil;
 
+/**
+ * @author trimok
+ *
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Person {
 
+	/**
+	 * 
+	 */
 	private String firstName;
+	/**
+	 * 
+	 */
 	private String lastName;
+	/**
+	 * 
+	 */
 	private String city;
+	/**
+	 * 
+	 */
 	private String zip;
+	/**
+	 * 
+	 */
 	private String phone;
+	/**
+	 * 
+	 */
 	private String email;
+	/**
+	 * 
+	 */
 	private LocalDate birthdate;
+	/**
+	 * 
+	 */
 	private Address address;
+	/**
+	 * 
+	 */
 	private Map<String, Medication> medications = new HashMap<>();
+	/**
+	 * 
+	 */
 	private Map<String, Allergie> allergies = new HashMap<>();
 
+	/**
+	 * @return
+	 */
 	@JsonIgnore
 	public boolean isValid() {
 		return firstName != null && !firstName.isEmpty() && lastName != null && !lastName.isEmpty();
 	}
 
+	/**
+	 * @param person
+	 * @return
+	 */
 	public Person updatePerson(Person person) {
 		this.setCity(person.getCity());
 		this.setZip(person.getZip());
@@ -42,6 +83,13 @@ public class Person {
 		return this;
 	}
 
+	/**
+	 * @param firstName
+	 * @param lastName
+	 * @param birthdate
+	 * @param medications
+	 * @param allergies
+	 */
 	public Person(String firstName, String lastName, LocalDate birthdate, Map<String, Medication> medications,
 			Map<String, Allergie> allergies) {
 		this.firstName = firstName;
@@ -51,6 +99,10 @@ public class Person {
 		this.allergies = allergies;
 	}
 
+	/**
+	 * @param person
+	 * @return
+	 */
 	public Person patchPerson(Person person) {
 		String city = person.getCity();
 		if (StringsUtil.isValid(city)) {
@@ -75,6 +127,10 @@ public class Person {
 		return this;
 	}
 
+	/**
+	 * @param person
+	 * @return
+	 */
 	public Person updateMedicalRecords(Person person) {
 		this.setBirthdate(person.getBirthdate());
 		this.setAllergies(person.getAllergies());
@@ -82,6 +138,10 @@ public class Person {
 		return this;
 	}
 
+	/**
+	 * @param person
+	 * @return
+	 */
 	public Person patchMedicalRecordBy(Person person) {
 		Map<String, Allergie> allergies = person.getAllergies();
 		Map<String, Medication> medications = person.getMedications();
@@ -100,11 +160,17 @@ public class Person {
 		return this;
 	}
 
+	/**
+	 * @return
+	 */
 	public boolean isMedicalRecordEmpty() {
 		return birthdate == null && (allergies == null || allergies.isEmpty())
 				&& (medications == null || medications.isEmpty());
 	}
 
+	/**
+	 * @return
+	 */
 	public Person emptyMedicalRecord() {
 		this.allergies = new HashMap<>();
 		this.medications = new HashMap<>();
@@ -113,6 +179,9 @@ public class Person {
 		return this;
 	}
 
+	/**
+	 * @return
+	 */
 	@JsonIgnore
 	public PersonId getPersonId() {
 		return new PersonId(firstName, lastName);

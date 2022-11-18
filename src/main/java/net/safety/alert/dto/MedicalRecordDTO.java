@@ -19,17 +19,40 @@ import net.safety.alert.model.Medication;
 import net.safety.alert.model.Person;
 import net.safety.alert.model.PersonId;
 import net.safety.alert.util.StringsUtil;
+/**
+ * @author trimok
+ *
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class MedicalRecordDTO {
+	/**
+	 * 
+	 */
 	private String firstName;
+	/**
+	 * 
+	 */
 	private String lastName;
+	/**
+	 * 
+	 */
 	@JsonFormat(pattern = "MM/dd/yyyy")
 	private LocalDate birthdate;
+	/**
+	 * 
+	 */
 	private List<String> medications = new ArrayList<>();
+	/**
+	 * 
+	 */
 	private List<String> allergies = new ArrayList<>();
 
+	/**
+	 * @param firstName
+	 * @param lastName
+	 */
 	public MedicalRecordDTO(String firstName, String lastName) {
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -37,6 +60,9 @@ public class MedicalRecordDTO {
 		this.allergies = new ArrayList<>();
 	}
 
+	/**
+	 * @return
+	 */
 	@JsonIgnore
 	public Map<String, Medication> getMapMedications() {
 		Map<String, Medication> mapMedications = new HashMap<>();
@@ -47,6 +73,9 @@ public class MedicalRecordDTO {
 		return mapMedications;
 	}
 
+	/**
+	 * @return
+	 */
 	@JsonIgnore
 	public Map<String, Allergie> getMapAllergies() {
 		Map<String, Allergie> mapAllergies = new HashMap<>();
@@ -56,6 +85,9 @@ public class MedicalRecordDTO {
 		return mapAllergies;
 	}
 
+	/**
+	 * @param person
+	 */
 	public MedicalRecordDTO(Person person) {
 		this.firstName = person.getFirstName();
 		this.lastName = person.getLastName();
@@ -64,10 +96,17 @@ public class MedicalRecordDTO {
 		person.getMedications().values().forEach(a -> this.medications.add(a.getName() + ":" + a.getQuantity()));
 	}
 
+	/**
+	 * @param person
+	 * @return
+	 */
 	public static MedicalRecordDTO toMedicalRecordDTO(Person person) {
 		return new MedicalRecordDTO(person);
 	}
 
+	/**
+	 * @return
+	 */
 	public Person toPerson() {
 		Person person = new Person(this.getFirstName(), this.getLastName(), this.getBirthdate(),
 				this.getMapMedications(), this.getMapAllergies());
@@ -75,11 +114,17 @@ public class MedicalRecordDTO {
 		return person;
 	}
 
+	/**
+	 * @return
+	 */
 	@JsonIgnore
 	public boolean isValid() {
 		return StringsUtil.isValid(firstName) && StringsUtil.isValid(lastName);
 	}
 
+	/**
+	 * @return
+	 */
 	@JsonIgnore
 	public PersonId getPersonId() {
 		return new PersonId(firstName, lastName);

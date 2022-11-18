@@ -18,12 +18,22 @@ import net.safety.alert.exception.MedicalRecordNotValidException;
 import net.safety.alert.model.Person;
 import net.safety.alert.repository.IMedicalRecordRepository;
 
+/**
+ * @author trimok
+ *
+ */
 @Service
 public class MedicalRecordService implements IMedicalRecordService {
 
+	/**
+	 * 
+	 */
 	@Autowired
 	IMedicalRecordRepository medicalRecordRepository;
 
+	/**
+	 *
+	 */
 	@Override
 	public MedicalRecordDTO createMedicalRecord(MedicalRecordDTO medicalRecordDTO) {
 		Person person = medicalRecordDTO.toPerson();
@@ -43,6 +53,9 @@ public class MedicalRecordService implements IMedicalRecordService {
 		}
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public MedicalRecordDTO updateMedicalRecord(MedicalRecordDTO medicalRecordDTO) {
 		Person person = medicalRecordDTO.toPerson();
@@ -61,6 +74,9 @@ public class MedicalRecordService implements IMedicalRecordService {
 		}
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public MedicalRecordDTO patchMedicalRecord(MedicalRecordDTO medicalRecordDTO) {
 		Person person = medicalRecordDTO.toPerson();
@@ -78,6 +94,9 @@ public class MedicalRecordService implements IMedicalRecordService {
 		}
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public void deleteMedicalRecord(MedicalRecordDTO medicalRecordDTO) {
 		Person person = medicalRecordDTO.toPerson();
@@ -94,6 +113,9 @@ public class MedicalRecordService implements IMedicalRecordService {
 		}
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public Person getPersistent(Person medicalRecord) {
 		return medicalRecordRepository.getPersistent(medicalRecord);

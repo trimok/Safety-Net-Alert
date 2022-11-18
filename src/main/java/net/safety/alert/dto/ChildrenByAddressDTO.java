@@ -6,14 +6,31 @@ import lombok.NoArgsConstructor;
 import net.safety.alert.model.Person;
 import net.safety.alert.util.DateUtil;
 
+/**
+ * @author trimok
+ *
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChildrenByAddressDTO {
+	/**
+	 * 
+	 */
 	private String firstName;
+	/**
+	 * 
+	 */
 	private String lastName;
+	/**
+	 * 
+	 */
 	private Long age;
 
+	/**
+	 * @param person
+	 * @return
+	 */
 	public static ChildrenByAddressDTO toChildrenByAddressDTO(Person person) {
 
 		ChildrenByAddressDTO childrenByAddressDTO = new ChildrenByAddressDTO();

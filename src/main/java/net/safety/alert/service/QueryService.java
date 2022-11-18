@@ -23,12 +23,22 @@ import net.safety.alert.dto.PersonsGroupByAddressByListStationDTO;
 import net.safety.alert.dto.PhonesByStationDTO;
 import net.safety.alert.repository.IQueryRepository;
 
+/**
+ * @author trimok
+ *
+ */
 @Service
 public class QueryService implements IQueryService {
 
+	/**
+	 * 
+	 */
 	@Autowired
 	IQueryRepository queryRepository;
 
+	/**
+	 *
+	 */
 	@Override
 	public PersonsByStationDTO findPersonsByStationDTO(String station) {
 		// Persons
@@ -45,6 +55,9 @@ public class QueryService implements IQueryService {
 		return PersonsByStationDTO.toPersonsByStationDTO(persons, childrenCount, adultCount);
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public ChildrensByAddressDTO findChildrensByAddressDTO(String address) {
 
@@ -54,18 +67,27 @@ public class QueryService implements IQueryService {
 		return ChildrensByAddressDTO.toChildrensByAddressDTO(children, adults);
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public PhonesByStationDTO findPhonesByStationDTO(String station) {
 		List<String> phones = queryRepository.findPhonesByStationDTO(station);
 		return PhonesByStationDTO.toPhonesByStationDTO(phones);
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public PersonsByAddressDTO findPersonsByAddressDTO(String address) { // Iterable<IPersonsByAddress>
 		List<PersonByAddressDTO> personsDTO = queryRepository.findPersonsByAddressDTO(address);
 		return PersonsByAddressDTO.toPersonsByAddressDTO(personsDTO);
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public PersonsGroupByAddressByListStationDTO findPersonsGroupByAddressByListStationDTO(List<String> stations) {
 		Map<String, List<PersonGroupByAddressByListStationDTO>> personsMap = queryRepository
@@ -73,6 +95,9 @@ public class QueryService implements IQueryService {
 		return PersonsGroupByAddressByListStationDTO.toPersonsGroupByAddressByListStationDTO(personsMap);
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public PersonsByFirstNameLastNameDTO findPersonsByFirstNameLastNameDTO(String firstName, String lastName) {
 		List<PersonByFirstNameLastNameDTO> persons = queryRepository.findPersonsByFirstNameLastNameDTO(firstName,
@@ -80,6 +105,9 @@ public class QueryService implements IQueryService {
 		return PersonsByFirstNameLastNameDTO.toPersonsByFirstNameLastNameDTO(persons);
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public EmailsByCityDTO findEmailsByCityDTO(String city) {
 		List<String> emails = queryRepository.findEmailsByCityDTO(city);

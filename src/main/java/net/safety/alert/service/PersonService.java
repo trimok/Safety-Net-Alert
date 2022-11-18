@@ -18,12 +18,22 @@ import net.safety.alert.exception.PersonNotValidException;
 import net.safety.alert.model.Person;
 import net.safety.alert.repository.IPersonRepository;
 
+/**
+ * @author trimok
+ *
+ */
 @Service
 public class PersonService implements IPersonService {
 
+	/**
+	 * 
+	 */
 	@Autowired
 	IPersonRepository personRepository;
 
+	/**
+	 *
+	 */
 	@Override
 	public PersonDTO createPerson(PersonDTO personDTO) {
 
@@ -42,6 +52,9 @@ public class PersonService implements IPersonService {
 		}
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public PersonDTO updatePerson(PersonDTO personDTO) {
 		Person person = personDTO.toPerson();
@@ -58,6 +71,9 @@ public class PersonService implements IPersonService {
 		}
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public PersonDTO patchPerson(PersonDTO personDTO) {
 		Person person = personDTO.toPerson();
@@ -74,6 +90,9 @@ public class PersonService implements IPersonService {
 		}
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public void deletePerson(PersonDTO personDTO) {
 		Person person = personDTO.toPerson();
@@ -90,6 +109,9 @@ public class PersonService implements IPersonService {
 		}
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public Person getPersistent(Person person) {
 		return personRepository.getPersistent(person);

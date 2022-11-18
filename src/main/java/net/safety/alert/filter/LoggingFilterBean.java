@@ -17,10 +17,20 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * @author trimok
+ *
+ */
+/**
+ * 
+ */
 @Slf4j
 @Component
 public class LoggingFilterBean extends GenericFilterBean {
 
+	/**
+	 *
+	 */
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
@@ -33,6 +43,9 @@ public class LoggingFilterBean extends GenericFilterBean {
 		logResponse(responseWrapper);
 	}
 
+	/**
+	 * @param request
+	 */
 	private void logRequest(ContentCachingRequestWrapper request) {
 		StringBuilder builder = new StringBuilder();
 		builder.append(request.getMethod() + " ");
@@ -60,6 +73,10 @@ public class LoggingFilterBean extends GenericFilterBean {
 		log.info("Request: {}", builder);
 	}
 
+	/**
+	 * @param response
+	 * @throws IOException
+	 */
 	private void logResponse(ContentCachingResponseWrapper response) throws IOException {
 		StringBuilder builder = new StringBuilder();
 		builder.append(new String(response.getContentAsByteArray()));
@@ -72,6 +89,10 @@ public class LoggingFilterBean extends GenericFilterBean {
 		response.copyBodyToResponse();
 	}
 
+	/**
+	 * @param request
+	 * @return
+	 */
 	private ContentCachingRequestWrapper requestWrapper(ServletRequest request) {
 		if (request instanceof ContentCachingRequestWrapper requestWrapper) {
 			return requestWrapper;
@@ -79,6 +100,10 @@ public class LoggingFilterBean extends GenericFilterBean {
 		return new ContentCachingRequestWrapper((HttpServletRequest) request);
 	}
 
+	/**
+	 * @param response
+	 * @return
+	 */
 	private ContentCachingResponseWrapper responseWrapper(ServletResponse response) {
 		if (response instanceof ContentCachingResponseWrapper responseWrapper) {
 			return responseWrapper;

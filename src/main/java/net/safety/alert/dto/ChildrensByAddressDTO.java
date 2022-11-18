@@ -6,13 +6,28 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * @author trimok
+ *
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChildrensByAddressDTO {
+	/**
+	 * 
+	 */
 	private List<ChildrenByAddressDTO> children;
+	/**
+	 * 
+	 */
 	private List<AdultByAddressDTO> adults;
 
+	/**
+	 * @param children
+	 * @param adults
+	 * @return
+	 */
 	public static ChildrensByAddressDTO toChildrensByAddressDTO(List<ChildrenByAddressDTO> children,
 			List<AdultByAddressDTO> adults) {
 		ChildrensByAddressDTO childrensByAddressDTO = new ChildrensByAddressDTO();

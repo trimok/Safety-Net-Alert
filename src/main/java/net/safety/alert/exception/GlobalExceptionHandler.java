@@ -7,9 +7,18 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
+/**
+ * @author trimok
+ *
+ */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+	/**
+	 * @param exception
+	 * @param request
+	 * @return
+	 */
 	@Order(-1)
 	@ExceptionHandler({PersonNotFoundException.class, MedicalRecordNotFoundException.class,
 			AddressStationNotFoundException.class, PersonAlreadyCreatedException.class,
@@ -35,6 +44,11 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<ApiError>(new ApiError(request, exception), status);
 	}
 
+	/**
+	 * @param exception
+	 * @param request
+	 * @return
+	 */
 	@Order(0)
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ApiError> handlePersonNotFound(Exception exception, WebRequest request) {

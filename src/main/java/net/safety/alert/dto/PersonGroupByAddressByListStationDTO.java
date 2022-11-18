@@ -15,19 +15,48 @@ import net.safety.alert.model.FireStation;
 import net.safety.alert.model.Person;
 import net.safety.alert.util.DateUtil;
 
+/**
+ * @author trimok
+ *
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class PersonGroupByAddressByListStationDTO {
+	/**
+	 * 
+	 */
 	private String fireStation;
+	/**
+	 * 
+	 */
 	private String lastName;
+	/**
+	 * 
+	 */
 	private String phone;
+	/**
+	 * 
+	 */
 	private Long age;
+	/**
+	 * 
+	 */
 	@JsonIgnore
 	private String address;
+	/**
+	 * 
+	 */
 	List<String> allergies = new ArrayList<>();
+	/**
+	 * 
+	 */
 	Map<String, String> medications = new HashMap<>();
 
+	/**
+	 * @param person
+	 * @return
+	 */
 	public static PersonGroupByAddressByListStationDTO toPersonGroupByAddressByListStationDTO(Person person) {
 		PersonGroupByAddressByListStationDTO personGroupByAddressByListStationDTO = new PersonGroupByAddressByListStationDTO();
 

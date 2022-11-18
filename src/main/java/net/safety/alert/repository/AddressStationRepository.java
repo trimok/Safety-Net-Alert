@@ -7,11 +7,21 @@ import net.safety.alert.database.Database;
 import net.safety.alert.model.Address;
 import net.safety.alert.model.FireStation;
 
+/**
+ * @author trimok
+ *
+ */
 @Repository
 public class AddressStationRepository implements IAddressStationRepository {
+	/**
+	 * The database
+	 */
 	@Autowired
 	private Database database;
 
+	/*
+	 * Saving the address
+	 */
 	@Override
 	public Address save(Address address) {
 		FireStation fireStationDatabase = database.getFireStationsMap().get(address.getFireStation().getId());
@@ -35,6 +45,9 @@ public class AddressStationRepository implements IAddressStationRepository {
 		return addressDatabase;
 	}
 
+	/**
+	 * Deleting the map address- station by address
+	 */
 	@Override
 	public void deleteByFireStation(Address address) {
 		database.getAddressesMap().values().forEach(a -> {
@@ -44,6 +57,9 @@ public class AddressStationRepository implements IAddressStationRepository {
 		});
 	}
 
+	/**
+	 * Deleting the map address- station by firestation
+	 */
 	@Override
 	public void deleteByAddress(Address address) {
 		database.getAddressesMap().values().forEach(a -> {
@@ -53,6 +69,9 @@ public class AddressStationRepository implements IAddressStationRepository {
 		});
 	}
 
+	/**
+	 * Retrieving persistent address
+	 */
 	@Override
 	public Address getPersistent(Address address) {
 		Address addressDatabase = database.getAddressesMap().get(address.getName());
