@@ -22,6 +22,8 @@ import net.safety.alert.service.IQueryService;
 /**
  * @author trimok
  *
+ *         Controller which is responsible for all the queries (GET /xxx)
+ *
  */
 @RestController
 public class QueryController {
@@ -33,6 +35,8 @@ public class QueryController {
 	IQueryService queryService;
 
 	/**
+	 * Getting the persons by station, with a count of adults and children
+	 * 
 	 * @param station
 	 *            : the station
 	 * @return : a PersonsByStationDTO object
@@ -43,6 +47,8 @@ public class QueryController {
 	}
 
 	/**
+	 * Getting the list of children (with age) (and adults) by address
+	 * 
 	 * @param address
 	 *            : the address
 	 * @return : a ChildrensByAddressDTO Object
@@ -53,6 +59,8 @@ public class QueryController {
 	}
 
 	/**
+	 * Getting the phones by station
+	 * 
 	 * @param station
 	 *            : a station
 	 * @return : a PhonesByStationDTO Object
@@ -63,6 +71,8 @@ public class QueryController {
 	}
 
 	/**
+	 * Getting the list of persons (and firestation) by address
+	 * 
 	 * @param address
 	 *            : an address
 	 * @return : a PersonsByAddressDTO Object
@@ -73,6 +83,8 @@ public class QueryController {
 	}
 
 	/**
+	 * Getting the persons, group by address, from a list of stations
+	 * 
 	 * @param stationListAsString
 	 *            : the list of stations
 	 * @return : a PersonsGroupByAddressByListStationDTO Object
@@ -85,6 +97,8 @@ public class QueryController {
 	}
 
 	/**
+	 * Getting information of a Person from its first name and last name
+	 * 
 	 * @param firstName
 	 *            : the first name
 	 * @param lastName
@@ -98,6 +112,8 @@ public class QueryController {
 	}
 
 	/**
+	 * Getting the list of emails by city
+	 * 
 	 * @param city
 	 *            : the city
 	 * @return : a EmailsByCityDTO Object

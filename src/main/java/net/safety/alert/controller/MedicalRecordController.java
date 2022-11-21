@@ -14,6 +14,11 @@ import net.safety.alert.service.IMedicalRecordService;
 /**
  * @author trimok
  *
+ *         Controller for the Medical Record CRUD operations (/medicalRecord)
+ * 
+ *         Strictly speaking, the final created/modified/deleted objects are the medical record data of Person objects,
+ *         so this can be considered as a logical interface.
+ *
  */
 @RestController
 public class MedicalRecordController {

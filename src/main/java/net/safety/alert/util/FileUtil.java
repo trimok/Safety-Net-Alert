@@ -7,6 +7,8 @@ import lombok.Getter;
 /**
  * @author trimok
  *
+ *         File utilities
+ *
  */
 @Getter
 public class FileUtil {

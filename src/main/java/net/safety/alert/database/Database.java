@@ -42,28 +42,25 @@ public class Database {
 	@Autowired
 	private Mapper objectMapper;
 
-	// Global structure for persons
 	/**
-	 * 
+	 * Global structure for persons
 	 */
 	private Map<PersonId, Person> personsMap = new HashMap<>();
-	// Global structure for addresses
 	/**
-	 * 
+	 * Global structure for addresses
 	 */
 	private Map<String, Address> addressesMap = new HashMap<>();
-	// Global structure for firestations
-	/**
-	 * 
+	/*
+	 * Global structure for firestations
 	 */
 	private Map<String, FireStation> fireStationsMap = new HashMap<>();
 
 	/**
-	 * 
+	 * The initialisation of the database
 	 */
 	public void init() {
 
-		// Step 1 : reading the data and putting this into a temporatyJsonData structure
+		// Step 1 : basic reading the data and putting this into a temporaty JsonData structure
 		InputStream is = null;
 		JsonDTO jsonDTO = null;
 
@@ -77,6 +74,7 @@ public class Database {
 			log.error(e.getMessage());
 		}
 
+		// Step 2 : Operations to build a coherent database
 		try {
 			// Building the map fireStationsMap
 			jsonDTO.getFirestations()
@@ -114,6 +112,9 @@ public class Database {
 	}
 
 	/**
+	 * At each operation on an object Person which is impacting the address field, we must synchronize with the global
+	 * address structure
+	 * 
 	 * @param person
 	 *            : a Person object
 	 */
@@ -134,26 +135,26 @@ public class Database {
 	}
 
 	/**
-	 * 
+	 * Global synchronization between the Persons and the Addresses
 	 */
 	public void triggerAddressDatabaseForAllPerson() {
 		personsMap.values().forEach(p -> triggerAddressForPerson(p));
 	}
 
 	/**
-	 * 
+	 * Emptying the database
 	 */
-	public void raz() {
+	public void empty() {
 		personsMap = new HashMap<>();
 		addressesMap = new HashMap<>();
 		fireStationsMap = new HashMap<>();
 	}
 
 	/**
-	 * 
+	 * Reset of the database
 	 */
 	public void reset() {
-		raz();
+		empty();
 		init();
 		log.info("Database reset.");
 	}

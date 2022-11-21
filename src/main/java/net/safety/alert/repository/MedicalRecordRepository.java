@@ -19,7 +19,7 @@ public class MedicalRecordRepository implements IMedicalRecordRepository {
 	private Database database;
 
 	/**
-	 * Saving a person
+	 * Saving (or updating) the medical record data of a Person
 	 */
 	@Override
 	public Person save(Person medicalRecord) {
@@ -28,7 +28,7 @@ public class MedicalRecordRepository implements IMedicalRecordRepository {
 	}
 
 	/**
-	 * Deleting a person
+	 * Deleting the medical record data of a Person
 	 */
 	@Override
 	public void delete(Person medicalRecord) {

@@ -3,6 +3,8 @@ package net.safety.alert.util;
 /**
  * @author trimok
  *
+ *         Strings utilities
+ *
  */
 public class StringsUtil {
 	/**

@@ -2,7 +2,8 @@ package net.safety.alert.constants;
 
 /**
  * @author trimok
- *
+ * 
+ *         List of the HTTP functional operations names, and error messages *
  */
 public class HttpMessageConstants {
 	/**

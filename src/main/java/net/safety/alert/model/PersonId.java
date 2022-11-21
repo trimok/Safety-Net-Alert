@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 /**
  * @author trimok
  *
+ *         This class is representing the key of the Person class
+ *
  */
 @Data
 @AllArgsConstructor

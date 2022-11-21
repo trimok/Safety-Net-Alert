@@ -22,14 +22,14 @@ import lombok.extern.slf4j.Slf4j;
  *
  */
 /**
- * 
+ * A filter class for logging requests and responses
  */
 @Slf4j
 @Component
 public class LoggingFilterBean extends GenericFilterBean {
 
 	/**
-	 *
+	 * The filtering
 	 */
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -44,6 +44,8 @@ public class LoggingFilterBean extends GenericFilterBean {
 	}
 
 	/**
+	 * Logging the request
+	 * 
 	 * @param request
 	 *            : the ContentCachingRequestWrapper request
 	 */
@@ -75,6 +77,8 @@ public class LoggingFilterBean extends GenericFilterBean {
 	}
 
 	/**
+	 * Logging the response
+	 * 
 	 * @param response
 	 *            : the ContentCachingResponseWrapper response
 	 * @throws IOException
@@ -93,6 +97,8 @@ public class LoggingFilterBean extends GenericFilterBean {
 	}
 
 	/**
+	 * Building a new ContentCachingRequestWrapper if necessary
+	 * 
 	 * @param request
 	 *            : a Servlet request
 	 * @return : the ContentCachingRequestWrapper object
@@ -105,6 +111,8 @@ public class LoggingFilterBean extends GenericFilterBean {
 	}
 
 	/**
+	 * * Building a new ContentCachingResponseWrapper if necessary
+	 * 
 	 * @param response
 	 *            : a ServletResponse object
 	 * @return : a ContentCachingResponseWrapper object

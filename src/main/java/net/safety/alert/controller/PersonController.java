@@ -14,6 +14,8 @@ import net.safety.alert.service.IPersonService;
 /**
  * @author trimok
  *
+ *         Controller for the Person CRUD operations (/person)
+ *
  */
 @RestController
 public class PersonController {

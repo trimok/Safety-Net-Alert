@@ -63,6 +63,8 @@ public class MedicalRecordDTO {
 	}
 
 	/**
+	 * Deserialization of a String with format "name :quantity" into a map entry (string, Medication)
+	 * 
 	 * @return : a Map (String, Medication) representing medications
 	 */
 	@JsonIgnore
@@ -76,6 +78,8 @@ public class MedicalRecordDTO {
 	}
 
 	/**
+	 * Deserialization of a String with format "name" into a map entry (string, Allervie)
+	 * 
 	 * @return : a Map (String, Allergie) representing allergies
 	 */
 	@JsonIgnore

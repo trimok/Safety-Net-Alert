@@ -3,6 +3,8 @@ package net.safety.alert.constants;
 /**
  * @author trimok
  *
+ *         Separator constants
+ *
  */
 public class SeparatorConstants {
 

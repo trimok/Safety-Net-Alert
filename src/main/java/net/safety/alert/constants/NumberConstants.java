@@ -3,6 +3,8 @@ package net.safety.alert.constants;
 /**
  * @author trimok
  *
+ *         Number constants
+ *
  */
 public class NumberConstants {
 	/**

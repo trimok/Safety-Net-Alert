@@ -37,7 +37,7 @@ public class QueryService implements IQueryService {
 	IQueryRepository queryRepository;
 
 	/**
-	 *
+	 * Getting the persons by station, with a count of adults and children
 	 */
 	@Override
 	public PersonsByStationDTO findPersonsByStationDTO(String station) {
@@ -56,7 +56,7 @@ public class QueryService implements IQueryService {
 	}
 
 	/**
-	 *
+	 * Getting the list of children (with age) (and adults) by address
 	 */
 	@Override
 	public ChildrensByAddressDTO findChildrensByAddressDTO(String address) {
@@ -68,7 +68,7 @@ public class QueryService implements IQueryService {
 	}
 
 	/**
-	 *
+	 * Getting the phones by station
 	 */
 	@Override
 	public PhonesByStationDTO findPhonesByStationDTO(String station) {
@@ -77,7 +77,7 @@ public class QueryService implements IQueryService {
 	}
 
 	/**
-	 *
+	 * Getting the list of persons (and firestation) by address
 	 */
 	@Override
 	public PersonsByAddressDTO findPersonsByAddressDTO(String address) { // Iterable<IPersonsByAddress>
@@ -86,7 +86,7 @@ public class QueryService implements IQueryService {
 	}
 
 	/**
-	 *
+	 * Getting the persons, group by address, from a list of stations
 	 */
 	@Override
 	public PersonsGroupByAddressByListStationDTO findPersonsGroupByAddressByListStationDTO(List<String> stations) {
@@ -96,7 +96,7 @@ public class QueryService implements IQueryService {
 	}
 
 	/**
-	 *
+	 * Getting information of a Person from its first name and last name
 	 */
 	@Override
 	public PersonsByFirstNameLastNameDTO findPersonsByFirstNameLastNameDTO(String firstName, String lastName) {
@@ -106,7 +106,7 @@ public class QueryService implements IQueryService {
 	}
 
 	/**
-	 *
+	 * Getting the list of emails by city
 	 */
 	@Override
 	public EmailsByCityDTO findEmailsByCityDTO(String city) {

@@ -29,7 +29,7 @@ public class PersonRepository implements IPersonRepository {
 	}
 
 	/**
-	 * Saving a person
+	 * Saving (or updating) a person
 	 */
 	@Override
 	public Person save(Person person) {

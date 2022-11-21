@@ -14,6 +14,8 @@ import net.safety.alert.service.IAddressStationService;
 
 /**
  * @author trimok
+ * 
+ *         Controller for the mapping address-station CRUD operations (/firestation)
  *
  */
 @RestController

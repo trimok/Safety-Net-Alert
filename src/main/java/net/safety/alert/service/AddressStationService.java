@@ -34,7 +34,6 @@ public class AddressStationService implements IAddressStationService {
 	IAddressStationRepository addressStationRepository;
 
 	/**
-	 *
 	 */
 	@Override
 	public MappingAddressStationDTO createMappingAddressStation(MappingAddressStationDTO mappingAddressStationDTO) {

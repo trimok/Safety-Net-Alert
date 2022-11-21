@@ -5,6 +5,8 @@ import java.time.temporal.ChronoUnit;
 
 /**
  * @author trimok
+ * 
+ *         Date utilities
  *
  */
 public class DateUtil {

@@ -33,7 +33,7 @@ public class QueryRepository implements IQueryRepository {
 	private Database database;
 
 	/**
-	 *
+	 * Getting the persons by station, with a count of adults and children
 	 */
 	@Override
 	public List<PersonByStationDTO> findPersonsByStationDTO(String station) {
@@ -44,7 +44,7 @@ public class QueryRepository implements IQueryRepository {
 	}
 
 	/**
-	 *
+	 * Getting the list of children (with age) by address
 	 */
 	@Override
 	public List<ChildrenByAddressDTO> findChildrenByAddressDTO(String address) {
@@ -56,7 +56,7 @@ public class QueryRepository implements IQueryRepository {
 	}
 
 	/**
-	 *
+	 * Getting the list of adults by address
 	 */
 	@Override
 	public List<AdultByAddressDTO> findAdultsByAddressDTO(String address) {
@@ -68,7 +68,7 @@ public class QueryRepository implements IQueryRepository {
 	}
 
 	/**
-	 *
+	 * Getting the phones by station
 	 */
 	@Override
 	public List<String> findPhonesByStationDTO(String station) {
@@ -78,7 +78,7 @@ public class QueryRepository implements IQueryRepository {
 	}
 
 	/**
-	 *
+	 * Getting the list of persons (and firestation) by address
 	 */
 	@Override
 	public List<PersonByAddressDTO> findPersonsByAddressDTO(String address) {
@@ -88,7 +88,7 @@ public class QueryRepository implements IQueryRepository {
 	}
 
 	/**
-	 *
+	 * Getting the persons, group by address, from a list of stations
 	 */
 	@Override
 	public Map<String, List<PersonGroupByAddressByListStationDTO>> findPersonsGroupByAddressByListStationDTO(
@@ -103,7 +103,7 @@ public class QueryRepository implements IQueryRepository {
 	}
 
 	/**
-	 *
+	 * Getting information of a Person from its first name and last name
 	 */
 	@Override
 	public List<PersonByFirstNameLastNameDTO> findPersonsByFirstNameLastNameDTO(String firstName, String lastName) {
@@ -114,7 +114,7 @@ public class QueryRepository implements IQueryRepository {
 	}
 
 	/**
-	 *
+	 * Getting the list of emails by city
 	 */
 	@Override
 	public List<String> findEmailsByCityDTO(String city) {

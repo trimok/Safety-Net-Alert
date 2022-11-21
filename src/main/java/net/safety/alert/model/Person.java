@@ -70,6 +70,8 @@ public class Person {
 	}
 
 	/**
+	 * Updating a (database) Person with a (new) Person object
+	 * 
 	 * @param person
 	 *            : the Person object which is updating
 	 * @return : the Person object which is updated
@@ -85,6 +87,8 @@ public class Person {
 	}
 
 	/**
+	 * Constructor
+	 * 
 	 * @param firstName
 	 *            : the first name
 	 * @param lastName
@@ -106,6 +110,8 @@ public class Person {
 	}
 
 	/**
+	 * Patching a database Person with a new Person
+	 * 
 	 * @param person
 	 *            : the Person object which is patching
 	 * @return : the Person object which is patched
@@ -135,6 +141,8 @@ public class Person {
 	}
 
 	/**
+	 * Updating of the medical record data of a Person
+	 * 
 	 * @param person
 	 *            : the Person object which is updating
 	 * @return : the Person object which is updated
@@ -147,6 +155,8 @@ public class Person {
 	}
 
 	/**
+	 * Patching of the medical record data of a Person
+	 * 
 	 * @param person
 	 *            : the Person object which is patching the Medical Record Data
 	 * @return : the Person object which is patched with the Medical Record Data

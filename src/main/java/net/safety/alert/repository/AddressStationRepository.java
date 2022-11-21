@@ -20,7 +20,7 @@ public class AddressStationRepository implements IAddressStationRepository {
 	private Database database;
 
 	/*
-	 * Saving the address
+	 * Saving (or updating) the address
 	 */
 	@Override
 	public Address save(Address address) {
@@ -46,7 +46,7 @@ public class AddressStationRepository implements IAddressStationRepository {
 	}
 
 	/**
-	 * Deleting the map address- station by address
+	 * Deleting the map address-station by address
 	 */
 	@Override
 	public void deleteByFireStation(Address address) {

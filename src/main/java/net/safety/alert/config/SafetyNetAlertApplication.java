@@ -16,7 +16,7 @@ import net.safety.alert.database.Database;
 public class SafetyNetAlertApplication {
 
 	/**
-	 * 
+	 * The (singleton) memory Database used in the program
 	 */
 	@Autowired
 	private Database database;
