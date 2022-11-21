@@ -24,7 +24,7 @@ public class PersonRepository implements IPersonRepository {
 	@Override
 	public Person getPersistent(Person person) {
 
-		Person personDatabase = database.getPersonsMap().get(person.getPersonId());
+		Person personDatabase = database.getPerson(person.getPersonId());
 		return personDatabase;
 	}
 
@@ -33,8 +33,7 @@ public class PersonRepository implements IPersonRepository {
 	 */
 	@Override
 	public Person save(Person person) {
-		database.getPersonsMap().put(person.getPersonId(), person);
-		database.triggerAddressForPerson(person);
+		database.savePerson(person.getPersonId(), person);
 		return person;
 	}
 
@@ -43,6 +42,6 @@ public class PersonRepository implements IPersonRepository {
 	 */
 	@Override
 	public void delete(Person person) {
-		database.getPersonsMap().remove(person.getPersonId());
+		database.deletePerson(person.getPersonId());
 	}
 }

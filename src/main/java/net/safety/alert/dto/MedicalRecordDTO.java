@@ -5,8 +5,10 @@ import static net.safety.alert.constants.SeparatorConstants.COLONS_SEPARATOR;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -68,13 +70,13 @@ public class MedicalRecordDTO {
 	 * @return : a Map (String, Medication) representing medications
 	 */
 	@JsonIgnore
-	public Map<String, Medication> getMapMedications() {
-		Map<String, Medication> mapMedications = new HashMap<>();
+	public Map<String, Medication> getMedicationsMap() {
+		Map<String, Medication> medicationsMap = new HashMap<>();
 		medications.forEach(m -> {
 			String[] infos = m.split(COLONS_SEPARATOR);
-			mapMedications.put(infos[0], new Medication(infos[0], infos[1]));
+			medicationsMap.put(infos[0], new Medication(infos[0], infos[1]));
 		});
-		return mapMedications;
+		return medicationsMap;
 	}
 
 	/**
@@ -83,12 +85,12 @@ public class MedicalRecordDTO {
 	 * @return : a Map (String, Allergie) representing allergies
 	 */
 	@JsonIgnore
-	public Map<String, Allergie> getMapAllergies() {
-		Map<String, Allergie> mapAllergies = new HashMap<>();
+	public Set<Allergie> getAllergiesSet() {
+		Set<Allergie> allergiesSet = new HashSet<>();
 		allergies.forEach(m -> {
-			mapAllergies.put(m, new Allergie(m));
+			allergiesSet.add(new Allergie(m));
 		});
-		return mapAllergies;
+		return allergiesSet;
 	}
 
 	/**
@@ -99,7 +101,7 @@ public class MedicalRecordDTO {
 		this.firstName = person.getFirstName();
 		this.lastName = person.getLastName();
 		this.birthdate = person.getBirthdate();
-		person.getAllergies().values().forEach(a -> this.allergies.add(a.getName()));
+		person.getAllergies().forEach(a -> this.allergies.add(a.getName()));
 		person.getMedications().values().forEach(a -> this.medications.add(a.getName() + ":" + a.getQuantity()));
 	}
 
@@ -117,7 +119,7 @@ public class MedicalRecordDTO {
 	 */
 	public Person toPerson() {
 		Person person = new Person(this.getFirstName(), this.getLastName(), this.getBirthdate(),
-				this.getMapMedications(), this.getMapAllergies());
+				this.getMedicationsMap(), this.getAllergiesSet());
 
 		return person;
 	}

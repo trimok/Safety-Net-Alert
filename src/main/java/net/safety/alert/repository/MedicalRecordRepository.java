@@ -23,16 +23,16 @@ public class MedicalRecordRepository implements IMedicalRecordRepository {
 	 */
 	@Override
 	public Person save(Person medicalRecord) {
-		database.getPersonsMap().put(medicalRecord.getPersonId(), medicalRecord);
+		database.savePerson(medicalRecord.getPersonId(), medicalRecord);
 		return medicalRecord;
 	}
 
 	/**
-	 * Deleting the medical record data of a Person
+	 * 'Deleting' the medical record data of a Person
 	 */
 	@Override
 	public void delete(Person medicalRecord) {
-		database.getPersonsMap().put(medicalRecord.getPersonId(), medicalRecord);
+		database.savePerson(medicalRecord.getPersonId(), medicalRecord);
 	}
 
 	/**
@@ -40,7 +40,7 @@ public class MedicalRecordRepository implements IMedicalRecordRepository {
 	 */
 	@Override
 	public Person getPersistent(Person medicalRecord) {
-		Person personDatabase = database.getPersonsMap().get(medicalRecord.getPersonId());
+		Person personDatabase = database.getPerson(medicalRecord.getPersonId());
 
 		return personDatabase;
 	}

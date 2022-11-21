@@ -65,8 +65,7 @@ public class PersonByAddressDTO {
 		personByAddressDTO.setLastName(person.getLastName());
 		personByAddressDTO.setPhone(person.getPhone());
 		personByAddressDTO.setAge(DateUtil.getAge(person.getBirthdate()));
-		person.getAllergies().values()
-				.forEach(a -> personByAddressDTO.getAllergies().add(a == null ? "" : a.getName()));
+		person.getAllergies().forEach(a -> personByAddressDTO.getAllergies().add(a == null ? "" : a.getName()));
 		person.getMedications().values()
 				.forEach(m -> personByAddressDTO.getMedications().put(m.getName(), m.getQuantity()));
 

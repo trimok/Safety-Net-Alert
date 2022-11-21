@@ -2,7 +2,9 @@ package net.safety.alert.model;
 
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -59,7 +61,7 @@ public class Person {
 	/**
 	 * 
 	 */
-	private Map<String, Allergie> allergies = new HashMap<>();
+	private Set<Allergie> allergies = new HashSet<>();
 
 	/**
 	 * @return : the validity of the Person (valid key)
@@ -101,7 +103,7 @@ public class Person {
 	 *            : the allergies
 	 */
 	public Person(String firstName, String lastName, LocalDate birthdate, Map<String, Medication> medications,
-			Map<String, Allergie> allergies) {
+			Set<Allergie> allergies) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.birthdate = birthdate;
@@ -162,11 +164,11 @@ public class Person {
 	 * @return : the Person object which is patched with the Medical Record Data
 	 */
 	public Person patchMedicalRecordBy(Person person) {
-		Map<String, Allergie> allergies = person.getAllergies();
+		Set<Allergie> allergies = person.getAllergies();
 		Map<String, Medication> medications = person.getMedications();
 
 		if (allergies != null) {
-			this.allergies.putAll(allergies);
+			this.allergies.addAll(allergies);
 		}
 		if (medications != null) {
 			this.medications.putAll(medications);
@@ -191,7 +193,7 @@ public class Person {
 	 * @return : a Person object
 	 */
 	public Person emptyMedicalRecord() {
-		this.allergies = new HashMap<>();
+		this.allergies = new HashSet<>();
 		this.medications = new HashMap<>();
 		this.birthdate = null;
 

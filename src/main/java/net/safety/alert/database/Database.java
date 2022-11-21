@@ -2,6 +2,7 @@ package net.safety.alert.database;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -100,8 +101,8 @@ public class Database {
 					.forEach(p -> finalJsonDTO.getMedicalrecords().stream().filter(
 							m -> m.getFirstName().equals(p.getFirstName()) && m.getLastName().equals(p.getLastName()))
 							.forEach(m -> {
-								p.setAllergies(m.getMapAllergies());
-								p.setMedications(m.getMapMedications());
+								p.setAllergies(m.getAllergiesSet());
+								p.setMedications(m.getMedicationsMap());
 								p.setBirthdate(m.getBirthdate());
 							}));
 
@@ -139,6 +140,104 @@ public class Database {
 	 */
 	public void triggerAddressDatabaseForAllPerson() {
 		personsMap.values().forEach(p -> triggerAddressForPerson(p));
+	}
+
+	/**
+	 * 
+	 * @return : the collection of the addresses
+	 */
+	public Collection<Address> getAddresses() {
+		return addressesMap.values();
+	}
+
+	/**
+	 * 
+	 * @param key
+	 *            : the (String) key/name of the address
+	 * @param address
+	 *            : the Address object
+	 */
+	public void saveAddress(String key, Address address) {
+		addressesMap.put(key, address);
+	}
+
+	/**
+	 * 
+	 * @param key
+	 *            : the key (name) of the address
+	 * @return : the Address object
+	 */
+	public Address getAddress(String key) {
+		return addressesMap.get(key);
+	}
+
+	/**
+	 * 
+	 * @return : the collection of the firestations
+	 */
+	public Collection<FireStation> getFireStations() {
+		return fireStationsMap.values();
+	}
+
+	/**
+	 * 
+	 * @param key
+	 *            : the key (name) of the firestation
+	 * @return : the FireStation object
+	 */
+	public FireStation getFireStation(String key) {
+		return fireStationsMap.get(key);
+	}
+
+	/**
+	 * 
+	 * @param key
+	 *            : the (String) key/name of the firestation
+	 * @param fireStation
+	 *            : the FireStation object
+	 */
+	public void saveFireStation(String key, FireStation fireStation) {
+		fireStationsMap.put(key, fireStation);
+	}
+
+	/**
+	 * 
+	 * @return : the collection of the persons
+	 */
+	public Collection<Person> getPersons() {
+		return personsMap.values();
+	}
+
+	/**
+	 * 
+	 * @param personId
+	 *            : the key (PersonId) of the Person
+	 * @return : the Person object
+	 */
+	public Person getPerson(PersonId personId) {
+		return personsMap.get(personId);
+	}
+
+	/**
+	 * 
+	 * @param personId
+	 *            : the PersonId key (first Name + last Name) of the person
+	 */
+	public void savePerson(PersonId personId, Person person) {
+		personsMap.put(personId, person);
+
+		// Sychronisation with the address list
+		triggerAddressForPerson(person);
+	}
+
+	/**
+	 * 
+	 * @param personId
+	 *            : the key of the Person to be deleted
+	 */
+	public void deletePerson(PersonId personId) {
+
+		personsMap.remove(personId);
 	}
 
 	/**

@@ -37,7 +37,7 @@ public class QueryRepository implements IQueryRepository {
 	 */
 	@Override
 	public List<PersonByStationDTO> findPersonsByStationDTO(String station) {
-		return database.getPersonsMap().values().stream()
+		return database.getPersons().stream()
 				.filter(p -> p.getAddress() != null && p.getAddress().getFireStation() != null
 						&& station.equals(p.getAddress().getFireStation().getId()))
 				.map(p -> PersonByStationDTO.toPersonByStationDTO(p)).toList();
@@ -49,7 +49,7 @@ public class QueryRepository implements IQueryRepository {
 	@Override
 	public List<ChildrenByAddressDTO> findChildrenByAddressDTO(String address) {
 		LocalDate now = LocalDate.now();
-		return database.getPersonsMap().values().stream().filter(
+		return database.getPersons().stream().filter(
 				p -> ((p.getBirthdate() != null) && (ChronoUnit.YEARS.between(p.getBirthdate(), now) < ADULT_LIMIT))
 						&& p.getAddress() != null && address.equals(p.getAddress().getName()))
 				.map(p -> ChildrenByAddressDTO.toChildrenByAddressDTO(p)).toList();
@@ -61,7 +61,7 @@ public class QueryRepository implements IQueryRepository {
 	@Override
 	public List<AdultByAddressDTO> findAdultsByAddressDTO(String address) {
 		LocalDate now = LocalDate.now();
-		return database.getPersonsMap().values().stream().filter(
+		return database.getPersons().stream().filter(
 				p -> ((p.getBirthdate() == null) || (ChronoUnit.YEARS.between(p.getBirthdate(), now) >= ADULT_LIMIT))
 						&& p.getAddress() != null && address.equals(p.getAddress().getName()))
 				.map(p -> AdultByAddressDTO.toAdultDTO(p)).toList();
@@ -72,7 +72,7 @@ public class QueryRepository implements IQueryRepository {
 	 */
 	@Override
 	public List<String> findPhonesByStationDTO(String station) {
-		return database.getPersonsMap().values().stream().filter(p -> p.getAddress() != null
+		return database.getPersons().stream().filter(p -> p.getAddress() != null
 				&& p.getAddress().getFireStation() != null && station.equals(p.getAddress().getFireStation().getId()))
 				.map(p -> p.getPhone()).toList();
 	}
@@ -82,7 +82,7 @@ public class QueryRepository implements IQueryRepository {
 	 */
 	@Override
 	public List<PersonByAddressDTO> findPersonsByAddressDTO(String address) {
-		return database.getPersonsMap().values().stream()
+		return database.getPersons().stream()
 				.filter(p -> p.getAddress() != null && address.equals(p.getAddress().getName()))
 				.map(p -> PersonByAddressDTO.toPersonByAddressDTO(p)).toList();
 	}
@@ -94,7 +94,7 @@ public class QueryRepository implements IQueryRepository {
 	public Map<String, List<PersonGroupByAddressByListStationDTO>> findPersonsGroupByAddressByListStationDTO(
 			List<String> stations) {
 
-		return database.getPersonsMap().values().stream()
+		return database.getPersons().stream()
 				.filter(p -> stations.stream()
 						.anyMatch(station -> p.getAddress() != null && p.getAddress().getFireStation() != null
 								&& station.equals(p.getAddress().getFireStation().getId())))
@@ -107,7 +107,7 @@ public class QueryRepository implements IQueryRepository {
 	 */
 	@Override
 	public List<PersonByFirstNameLastNameDTO> findPersonsByFirstNameLastNameDTO(String firstName, String lastName) {
-		return database.getPersonsMap().values().stream()
+		return database.getPersons().stream()
 				.filter(p -> (!StringsUtil.isValid(firstName) || firstName.equals(p.getFirstName()))
 						&& (!StringsUtil.isValid(lastName) || lastName.equals(p.getLastName())))
 				.map(p -> PersonByFirstNameLastNameDTO.toPersonByFirstNameLastNameDTO(p)).toList();
@@ -118,7 +118,6 @@ public class QueryRepository implements IQueryRepository {
 	 */
 	@Override
 	public List<String> findEmailsByCityDTO(String city) {
-		return database.getPersonsMap().values().stream().filter(p -> city.equals(p.getCity())).map(p -> p.getEmail())
-				.toList();
+		return database.getPersons().stream().filter(p -> city.equals(p.getCity())).map(p -> p.getEmail()).toList();
 	}
 }
