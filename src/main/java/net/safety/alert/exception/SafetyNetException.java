@@ -14,6 +14,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SafetyNetException extends RuntimeException {
+	/**
+	 * 
+	 */
 	protected static final long serialVersionUID = 7L;
 	/**
 	 * 

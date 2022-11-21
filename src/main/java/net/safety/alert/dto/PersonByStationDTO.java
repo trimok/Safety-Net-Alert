@@ -41,7 +41,8 @@ public class PersonByStationDTO {
 
 	/**
 	 * @param person
-	 * @return
+	 *            : a Person object
+	 * @return :a PersonByStationDTO object
 	 */
 	public static PersonByStationDTO toPersonByStationDTO(Person person) {
 		return new PersonByStationDTO(person.getFirstName(), person.getLastName(), person.getPhone(),

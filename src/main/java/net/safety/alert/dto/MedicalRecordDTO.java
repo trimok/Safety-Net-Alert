@@ -51,7 +51,9 @@ public class MedicalRecordDTO {
 
 	/**
 	 * @param firstName
+	 *            : the first name
 	 * @param lastName
+	 *            : the last name
 	 */
 	public MedicalRecordDTO(String firstName, String lastName) {
 		this.firstName = firstName;
@@ -61,7 +63,7 @@ public class MedicalRecordDTO {
 	}
 
 	/**
-	 * @return
+	 * @return : a Map (String, Medication) representing medications
 	 */
 	@JsonIgnore
 	public Map<String, Medication> getMapMedications() {
@@ -74,7 +76,7 @@ public class MedicalRecordDTO {
 	}
 
 	/**
-	 * @return
+	 * @return : a Map (String, Allergie) representing allergies
 	 */
 	@JsonIgnore
 	public Map<String, Allergie> getMapAllergies() {
@@ -87,6 +89,7 @@ public class MedicalRecordDTO {
 
 	/**
 	 * @param person
+	 *            : the person
 	 */
 	public MedicalRecordDTO(Person person) {
 		this.firstName = person.getFirstName();
@@ -98,14 +101,15 @@ public class MedicalRecordDTO {
 
 	/**
 	 * @param person
-	 * @return
+	 *            : a Person object
+	 * @return :a MedicalRecordDTO object
 	 */
 	public static MedicalRecordDTO toMedicalRecordDTO(Person person) {
 		return new MedicalRecordDTO(person);
 	}
 
 	/**
-	 * @return
+	 * @return : a Person object
 	 */
 	public Person toPerson() {
 		Person person = new Person(this.getFirstName(), this.getLastName(), this.getBirthdate(),
@@ -115,7 +119,7 @@ public class MedicalRecordDTO {
 	}
 
 	/**
-	 * @return
+	 * @return : the validity of the MedicalRecordDTO object
 	 */
 	@JsonIgnore
 	public boolean isValid() {
@@ -123,7 +127,7 @@ public class MedicalRecordDTO {
 	}
 
 	/**
-	 * @return
+	 * @return : the key of the Person (a PersonID object)
 	 */
 	@JsonIgnore
 	public PersonId getPersonId() {

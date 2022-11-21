@@ -11,30 +11,35 @@ public interface IMedicalRecordService {
 
 	/**
 	 * @param medicalRecord
-	 * @return
+	 *            : a MedicalRecordDTO object
+	 * @return : a MedicalRecordDTO object
 	 */
 	MedicalRecordDTO createMedicalRecord(MedicalRecordDTO medicalRecord);
 
 	/**
 	 * @param medicalRecord
-	 * @return
+	 *            : a MedicalRecordDTO object
+	 * @return : a MedicalRecordDTO object
 	 */
 	MedicalRecordDTO updateMedicalRecord(MedicalRecordDTO medicalRecord);
 
 	/**
 	 * @param medicalRecord
+	 *            : a MedicalRecordDTO object
 	 */
 	void deleteMedicalRecord(MedicalRecordDTO medicalRecord);
 
 	/**
 	 * @param medicalRecord
-	 * @return
+	 *            : a Person object (with the PersonId key) representing medical record data
+	 * @return : the Person object in the database
 	 */
 	Person getPersistent(Person medicalRecord);
 
 	/**
 	 * @param medicalRecord
-	 * @return
+	 *            : a MedicalRecordDTO object
+	 * @return : a MedicalRecordDTO object
 	 */
 	MedicalRecordDTO patchMedicalRecord(MedicalRecordDTO medicalRecord);
 

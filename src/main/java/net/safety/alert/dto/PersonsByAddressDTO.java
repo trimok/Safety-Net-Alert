@@ -21,7 +21,8 @@ public class PersonsByAddressDTO {
 
 	/**
 	 * @param persons
-	 * @return
+	 *            : a list of PersonByAddressDTO objects
+	 * @return a PersonsByAddressDTO object
 	 */
 	public static PersonsByAddressDTO toPersonsByAddressDTO(List<PersonByAddressDTO> persons) {
 		return new PersonsByAddressDTO(persons);

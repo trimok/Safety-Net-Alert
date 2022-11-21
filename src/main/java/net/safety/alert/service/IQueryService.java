@@ -17,44 +17,52 @@ import net.safety.alert.dto.PhonesByStationDTO;
 public interface IQueryService {
 	/**
 	 * @param station
-	 * @return
+	 *            : the station
+	 * @return a PersonsByStationDTO object
 	 */
 	PersonsByStationDTO findPersonsByStationDTO(String station);
 
 	/**
 	 * @param address
-	 * @return
+	 *            : the address
+	 * @return : a ChildrensByAddressDTO object
 	 */
 	ChildrensByAddressDTO findChildrensByAddressDTO(String address);
 
 	/**
 	 * @param station
-	 * @return
+	 *            : the station
+	 * @return : a PhonesByStationDTO object
 	 */
 	PhonesByStationDTO findPhonesByStationDTO(String station);
 
 	/**
 	 * @param address
-	 * @return
+	 *            : the address
+	 * @return : a PersonsByAddressDTO object
 	 */
 	PersonsByAddressDTO findPersonsByAddressDTO(String address);
 
 	/**
 	 * @param stations
-	 * @return
+	 *            : the list of stations
+	 * @return : a PersonsGroupByAddressByListStationDTO object
 	 */
 	PersonsGroupByAddressByListStationDTO findPersonsGroupByAddressByListStationDTO(List<String> stations);
 
 	/**
 	 * @param firstName
+	 *            : the first name
 	 * @param lastName
-	 * @return
+	 *            : the last name
+	 * @return : a PersonsByFirstNameLastNameDTO object
 	 */
 	PersonsByFirstNameLastNameDTO findPersonsByFirstNameLastNameDTO(String firstName, String lastName);
 
 	/**
 	 * @param city
-	 * @return
+	 *            : the city
+	 * @return : a EmailsByCityDTO object
 	 */
 	EmailsByCityDTO findEmailsByCityDTO(String city);
 }

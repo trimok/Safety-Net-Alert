@@ -55,7 +55,8 @@ public class PersonGroupByAddressByListStationDTO {
 
 	/**
 	 * @param person
-	 * @return
+	 *            a Person object
+	 * @return : a PersonGroupByAddressByListStationDTO object
 	 */
 	public static PersonGroupByAddressByListStationDTO toPersonGroupByAddressByListStationDTO(Person person) {
 		PersonGroupByAddressByListStationDTO personGroupByAddressByListStationDTO = new PersonGroupByAddressByListStationDTO();

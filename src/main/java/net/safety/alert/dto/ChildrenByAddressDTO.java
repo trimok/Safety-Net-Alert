@@ -29,7 +29,8 @@ public class ChildrenByAddressDTO {
 
 	/**
 	 * @param person
-	 * @return
+	 *            : a Person object
+	 * @return : the ChildrenByAddressDTO object
 	 */
 	public static ChildrenByAddressDTO toChildrenByAddressDTO(Person person) {
 

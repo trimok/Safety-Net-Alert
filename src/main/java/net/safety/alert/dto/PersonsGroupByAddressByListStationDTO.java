@@ -23,7 +23,8 @@ public class PersonsGroupByAddressByListStationDTO {
 
 	/**
 	 * @param personsMap
-	 * @return
+	 *            : a Map (String List(PersonGroupByAddressByListStationDTO))
+	 * @return a PersonsGroupByAddressByListStationDTO object
 	 */
 	public static PersonsGroupByAddressByListStationDTO toPersonsGroupByAddressByListStationDTO(
 			Map<String, List<PersonGroupByAddressByListStationDTO>> personsMap) {

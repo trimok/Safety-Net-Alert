@@ -16,8 +16,10 @@ public class GlobalExceptionHandler {
 
 	/**
 	 * @param exception
+	 *            : the exception which is raised by the program
 	 * @param request
-	 * @return
+	 *            : the WebRequest object
+	 * @return a ResponseEntity (ApiError) object
 	 */
 	@Order(-1)
 	@ExceptionHandler({PersonNotFoundException.class, MedicalRecordNotFoundException.class,
@@ -46,8 +48,10 @@ public class GlobalExceptionHandler {
 
 	/**
 	 * @param exception
+	 *            : the exception which is raised by the program
 	 * @param request
-	 * @return
+	 *            : the WebRequest object
+	 * @return a ResponseEntity (ApiError) object
 	 */
 	@Order(0)
 	@ExceptionHandler(Exception.class)

@@ -22,7 +22,8 @@ public class PhonesByStationDTO {
 
 	/**
 	 * @param phones
-	 * @return
+	 *            : a list of phones
+	 * @return a PhonesByStationDTO object
 	 */
 	public static PhonesByStationDTO toPhonesByStationDTO(List<String> phones) {
 		PhonesByStationDTO phonesByStationDTO = new PhonesByStationDTO();

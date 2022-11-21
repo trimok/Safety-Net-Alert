@@ -47,7 +47,8 @@ public class PersonByFirstNameLastNameDTO {
 
 	/**
 	 * @param person
-	 * @return
+	 *            : a Person object
+	 * @return : a PersonByFirstNameLastNameDTO object
 	 */
 	public static PersonByFirstNameLastNameDTO toPersonByFirstNameLastNameDTO(Person person) {
 		PersonByFirstNameLastNameDTO personByFirstNameLastNameDTO = new PersonByFirstNameLastNameDTO();

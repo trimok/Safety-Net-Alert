@@ -14,30 +14,35 @@ public interface IPersonService {
 
 	/**
 	 * @param person
-	 * @return
+	 *            : a Person object (with a PersonId key)
+	 * @return : the Person object in the database
 	 */
 	Person getPersistent(Person person);
 
 	/**
 	 * @param person
+	 *            : the PersonDTO object to be deleted
 	 */
 	void deletePerson(PersonDTO person);
 
 	/**
 	 * @param person
-	 * @return
+	 *            : the PersonDTO object to be updated
+	 * @return : the PersonDTO object
 	 */
 	PersonDTO updatePerson(PersonDTO person);
 
 	/**
 	 * @param person
-	 * @return
+	 *            : the PersonDTO to be created
+	 * @return : the PersonDTO object
 	 */
 	PersonDTO createPerson(PersonDTO person);
 
 	/**
 	 * @param person
-	 * @return
+	 *            : the PersonDTO object to be updated
+	 * @return : the PersonDTO object
 	 */
 	PersonDTO patchPerson(PersonDTO person);
 }

@@ -21,7 +21,8 @@ public class PersonsByFirstNameLastNameDTO {
 
 	/**
 	 * @param persons
-	 * @return
+	 *            : a list of PersonByFirstNameLastNameDTO object
+	 * @return : a PersonsByFirstNameLastNameDTO object
 	 */
 	public static PersonsByFirstNameLastNameDTO toPersonsByFirstNameLastNameDTO(
 			List<PersonByFirstNameLastNameDTO> persons) {

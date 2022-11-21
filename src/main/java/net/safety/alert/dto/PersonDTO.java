@@ -49,7 +49,9 @@ public class PersonDTO {
 
 	/**
 	 * @param firstName
+	 *            : the first name
 	 * @param lastName
+	 *            : the last name
 	 */
 	public PersonDTO(String firstName, String lastName) {
 		this.firstName = firstName;
@@ -57,7 +59,7 @@ public class PersonDTO {
 	}
 
 	/**
-	 * @return
+	 * @return : a PersonId object (the key of the Person Object)
 	 */
 	@JsonIgnore
 	public PersonId getPersonId() {
@@ -65,7 +67,7 @@ public class PersonDTO {
 	}
 
 	/**
-	 * @return
+	 * @return : a Person object
 	 */
 	public Person toPerson() {
 		Person person = new Person(firstName, lastName, city, zip, phone, email, null, new Address(address, null), null,
@@ -75,7 +77,8 @@ public class PersonDTO {
 
 	/**
 	 * @param person
-	 * @return
+	 *            a Person object
+	 * @return : a PersonDTO object
 	 */
 	public static PersonDTO toPersonDTO(Person person) {
 		return new PersonDTO(person.getFirstName(), person.getLastName(), person.getCity(), person.getZip(),

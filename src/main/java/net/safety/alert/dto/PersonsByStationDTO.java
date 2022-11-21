@@ -30,9 +30,12 @@ public class PersonsByStationDTO {
 
 	/**
 	 * @param persons
+	 *            : a list of PersonByStationDTO object
 	 * @param childrenCount
+	 *            : the children count
 	 * @param adultCount
-	 * @return
+	 *            : the adults count
+	 * @return : a PersonsByStationDTO object
 	 */
 	public static PersonsByStationDTO toPersonsByStationDTO(List<PersonByStationDTO> persons, long childrenCount,
 			long adultCount) {

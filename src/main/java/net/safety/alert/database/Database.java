@@ -115,6 +115,7 @@ public class Database {
 
 	/**
 	 * @param person
+	 *            : a Person object
 	 */
 	public void triggerAddressForPerson(Person person) {
 		// Is the adress already existing

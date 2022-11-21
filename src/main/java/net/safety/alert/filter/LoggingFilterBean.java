@@ -45,6 +45,7 @@ public class LoggingFilterBean extends GenericFilterBean {
 
 	/**
 	 * @param request
+	 *            : the ContentCachingRequestWrapper request
 	 */
 	private void logRequest(ContentCachingRequestWrapper request) {
 		StringBuilder builder = new StringBuilder();
@@ -75,7 +76,9 @@ public class LoggingFilterBean extends GenericFilterBean {
 
 	/**
 	 * @param response
+	 *            : the ContentCachingResponseWrapper response
 	 * @throws IOException
+	 *             : a possible IOException
 	 */
 	private void logResponse(ContentCachingResponseWrapper response) throws IOException {
 		StringBuilder builder = new StringBuilder();
@@ -91,7 +94,8 @@ public class LoggingFilterBean extends GenericFilterBean {
 
 	/**
 	 * @param request
-	 * @return
+	 *            : a Servlet request
+	 * @return : the ContentCachingRequestWrapper object
 	 */
 	private ContentCachingRequestWrapper requestWrapper(ServletRequest request) {
 		if (request instanceof ContentCachingRequestWrapper requestWrapper) {
@@ -102,7 +106,8 @@ public class LoggingFilterBean extends GenericFilterBean {
 
 	/**
 	 * @param response
-	 * @return
+	 *            : a ServletResponse object
+	 * @return : a ContentCachingResponseWrapper object
 	 */
 	private ContentCachingResponseWrapper responseWrapper(ServletResponse response) {
 		if (response instanceof ContentCachingResponseWrapper responseWrapper) {

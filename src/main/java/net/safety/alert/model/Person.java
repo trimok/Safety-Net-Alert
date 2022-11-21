@@ -62,7 +62,7 @@ public class Person {
 	private Map<String, Allergie> allergies = new HashMap<>();
 
 	/**
-	 * @return
+	 * @return : the validity of the Person (valid key)
 	 */
 	@JsonIgnore
 	public boolean isValid() {
@@ -71,7 +71,8 @@ public class Person {
 
 	/**
 	 * @param person
-	 * @return
+	 *            : the Person object which is updating
+	 * @return : the Person object which is updated
 	 */
 	public Person updatePerson(Person person) {
 		this.setCity(person.getCity());
@@ -85,10 +86,15 @@ public class Person {
 
 	/**
 	 * @param firstName
+	 *            : the first name
 	 * @param lastName
+	 *            : the last name
 	 * @param birthdate
+	 *            : the birthdate
 	 * @param medications
+	 *            : the medications
 	 * @param allergies
+	 *            : the allergies
 	 */
 	public Person(String firstName, String lastName, LocalDate birthdate, Map<String, Medication> medications,
 			Map<String, Allergie> allergies) {
@@ -101,7 +107,8 @@ public class Person {
 
 	/**
 	 * @param person
-	 * @return
+	 *            : the Person object which is patching
+	 * @return : the Person object which is patched
 	 */
 	public Person patchPerson(Person person) {
 		String city = person.getCity();
@@ -129,7 +136,8 @@ public class Person {
 
 	/**
 	 * @param person
-	 * @return
+	 *            : the Person object which is updating
+	 * @return : the Person object which is updated
 	 */
 	public Person updateMedicalRecords(Person person) {
 		this.setBirthdate(person.getBirthdate());
@@ -140,7 +148,8 @@ public class Person {
 
 	/**
 	 * @param person
-	 * @return
+	 *            : the Person object which is patching the Medical Record Data
+	 * @return : the Person object which is patched with the Medical Record Data
 	 */
 	public Person patchMedicalRecordBy(Person person) {
 		Map<String, Allergie> allergies = person.getAllergies();
@@ -161,7 +170,7 @@ public class Person {
 	}
 
 	/**
-	 * @return
+	 * @return : true if the medical record data do not exis, false elsewhere
 	 */
 	public boolean isMedicalRecordEmpty() {
 		return birthdate == null && (allergies == null || allergies.isEmpty())
@@ -169,7 +178,7 @@ public class Person {
 	}
 
 	/**
-	 * @return
+	 * @return : a Person object
 	 */
 	public Person emptyMedicalRecord() {
 		this.allergies = new HashMap<>();
@@ -180,7 +189,7 @@ public class Person {
 	}
 
 	/**
-	 * @return
+	 * @return : a PersonId object (the key of the Person object)
 	 */
 	@JsonIgnore
 	public PersonId getPersonId() {

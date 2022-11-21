@@ -13,8 +13,10 @@ public class FileUtil {
 
 	/**
 	 * @param context
+	 *            : the context (the current object)
 	 * @param fileName
-	 * @return
+	 *            : the filename of the ressource
+	 * @return : the resource stream
 	 */
 	public static InputStream getStreamFromFilename(Object context, String fileName) {
 		return context.getClass().getClassLoader().getResourceAsStream(fileName);

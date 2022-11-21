@@ -21,7 +21,8 @@ public class EmailsByCityDTO {
 
 	/**
 	 * @param emails
-	 * @return
+	 *            : the list of emails
+	 * @return : a EmailsByCityDTO object
 	 */
 	public static EmailsByCityDTO toEmailsByCityDTO(List<String> emails) {
 		return new EmailsByCityDTO(emails);

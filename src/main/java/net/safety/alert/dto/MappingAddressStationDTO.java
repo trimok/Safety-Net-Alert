@@ -28,7 +28,7 @@ public class MappingAddressStationDTO {
 	private String station;
 
 	/**
-	 * @return
+	 * @return : the validity of the station
 	 */
 	@JsonIgnore
 	public boolean isValid() {
@@ -36,14 +36,14 @@ public class MappingAddressStationDTO {
 	}
 
 	/**
-	 * @return
+	 * @return : a FireStation object
 	 */
 	public FireStation toFireStation() {
 		return new FireStation(station);
 	}
 
 	/**
-	 * @return
+	 * @return : a Address object
 	 */
 	public Address toAddress() {
 		return new Address(address, new FireStation(station));
@@ -51,7 +51,8 @@ public class MappingAddressStationDTO {
 
 	/**
 	 * @param address
-	 * @return
+	 *            : a Address object
+	 * @return : a MappingAddressStationDTO object
 	 */
 	public static MappingAddressStationDTO toFireStationDTO(Address address) {
 		String id = null;
@@ -63,7 +64,8 @@ public class MappingAddressStationDTO {
 
 	/**
 	 * @param address
-	 * @return
+	 *            : an Address object
+	 * @return : a MappingAddressStationDTO object
 	 */
 	public static MappingAddressStationDTO toMappingAddressStationDTO(Address address) {
 		MappingAddressStationDTO mappingAddressStationDTO = new MappingAddressStationDTO();

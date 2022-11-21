@@ -23,7 +23,7 @@ public class FireStationDTO {
 	private String fireStation;
 
 	/**
-	 * @return
+	 * @return : the validity of the firestation field
 	 */
 	@JsonIgnore
 	public boolean isValid() {
@@ -31,7 +31,7 @@ public class FireStationDTO {
 	}
 
 	/**
-	 * @return
+	 * @return : an address object from the firestation field
 	 */
 	public Address toAddress() {
 		return new Address("", new FireStation(fireStation));
@@ -39,7 +39,8 @@ public class FireStationDTO {
 
 	/**
 	 * @param address
-	 * @return
+	 *            : a Address object
+	 * @return : a FireStationDTO object
 	 */
 	public static FireStationDTO toFireStationDTO(Address address) {
 		FireStationDTO fireStationDTO = new FireStationDTO();

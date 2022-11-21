@@ -23,6 +23,7 @@ public class SafetyNetAlertApplication {
 
 	/**
 	 * @param args
+	 *            : the command line parameters for the program
 	 */
 	public static void main(String[] args) {
 		SpringApplication.run(SafetyNetAlertApplication.class, args);

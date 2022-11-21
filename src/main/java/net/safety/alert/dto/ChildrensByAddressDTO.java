@@ -25,8 +25,10 @@ public class ChildrensByAddressDTO {
 
 	/**
 	 * @param children
+	 *            : the list of children
 	 * @param adults
-	 * @return
+	 *            ; the list of adults
+	 * @return : a ChildrensByAddressDTO object
 	 */
 	public static ChildrensByAddressDTO toChildrensByAddressDTO(List<ChildrenByAddressDTO> children,
 			List<AdultByAddressDTO> adults) {

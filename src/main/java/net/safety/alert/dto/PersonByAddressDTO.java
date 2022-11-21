@@ -41,11 +41,15 @@ public class PersonByAddressDTO {
 	 * 
 	 */
 	List<String> allergies = new ArrayList<>();
+	/**
+	 * 
+	 */
 	Map<String, String> medications = new HashMap<>();
 
 	/**
 	 * @param person
-	 * @return
+	 *            : a Person object
+	 * @return : a PersonByAddressDTO object
 	 */
 	public static PersonByAddressDTO toPersonByAddressDTO(Person person) {
 		PersonByAddressDTO personByAddressDTO = new PersonByAddressDTO();
