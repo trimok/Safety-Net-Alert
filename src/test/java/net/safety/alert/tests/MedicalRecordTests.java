@@ -110,7 +110,9 @@ public class MedicalRecordTests {
 	private static final MedicalRecordDTO PATCH_MEDICAL_RECORD = new MedicalRecordDTO("Reginold", "Walker");
 	static {
 		PATCH_MEDICAL_RECORD.getAllergies().add("xilliathal");
+		PATCH_MEDICAL_RECORD.getAllergies().add("illisoxian");
 		PATCH_MEDICAL_RECORD.getMedications().add("hydrapermazol:300mg");
+		PATCH_MEDICAL_RECORD.getMedications().add("thradox:500mg");
 	}
 	private final static MedicalRecordDTO PATCH_MEDICAL_RECORD_NOT_VALID = new MedicalRecordDTO("", "");
 	private final static ApiError ERROR_PATCH_MEDICAL_RECORD_NOT_VALID = new ApiError(URL_MEDICAL_RECORD,
@@ -206,7 +208,7 @@ public class MedicalRecordTests {
 	@MethodSource("whenMedicalRecordIsGiven_ShouldCreateMedicalRecordProvider")
 	public void whenMedicalRecordIsGiven_ShouldCreateMedicalRecord(MedicalRecordDTO medicalRecordDTO) throws Exception {
 
-		Person person = database.getPersonsMap().get(medicalRecordDTO.getPersonId());
+		Person person = database.getPerson(medicalRecordDTO.getPersonId());
 
 		if (person != null) {
 			assertThat(person.getAllergies().size()).isEqualTo(0);
@@ -219,7 +221,7 @@ public class MedicalRecordTests {
 
 		// THEN
 		MedicalRecordDTO medicalRecordDatabase = MedicalRecordDTO
-				.toMedicalRecordDTO(database.getPersonsMap().get(medicalRecordDTO.getPersonId()));
+				.toMedicalRecordDTO(database.getPerson(medicalRecordDTO.getPersonId()));
 		assert (medicalRecordDatabase.equals(medicalRecordDTO));
 		assert (medicalRecordResultDTO.equals(medicalRecordDTO));
 	}
@@ -236,7 +238,7 @@ public class MedicalRecordTests {
 	@MethodSource("whenMedicalRecordIsGiven_ShouldUpdateMedicalRecordProvider")
 	public void whenMedicalRecordIsGiven_ShouldUpdateMedicalRecord(MedicalRecordDTO medicalRecordDTO) throws Exception {
 
-		Person person = database.getPersonsMap().get(medicalRecordDTO.getPersonId());
+		Person person = database.getPerson(medicalRecordDTO.getPersonId());
 
 		assertThat(person.getAllergies().size()).isEqualTo(1);
 		assertThat(person.getMedications().size()).isEqualTo(1);
@@ -247,7 +249,7 @@ public class MedicalRecordTests {
 
 		// THEN
 		MedicalRecordDTO medicalRecordDatabase = MedicalRecordDTO
-				.toMedicalRecordDTO(database.getPersonsMap().get(medicalRecordDTO.getPersonId()));
+				.toMedicalRecordDTO(database.getPerson(medicalRecordDTO.getPersonId()));
 		assertThat(medicalRecordDatabase.getAllergies().size()).isEqualTo(2);
 		assertThat(medicalRecordDatabase.getMedications().size()).isEqualTo(2);
 		assert (medicalRecordDatabase.equals(medicalRecordDTO));
@@ -266,7 +268,7 @@ public class MedicalRecordTests {
 	@MethodSource("whenMedicalRecordIsGiven_ShouldPatchMedicalRecordProvider")
 	public void whenMedicalRecordIsGiven_ShouldPatchMedicalRecord(MedicalRecordDTO medicalRecordDTO) throws Exception {
 
-		Person person = database.getPersonsMap().get(medicalRecordDTO.getPersonId());
+		Person person = database.getPerson(medicalRecordDTO.getPersonId());
 
 		assertThat(person.getAllergies().size()).isEqualTo(1);
 		assertThat(person.getMedications().size()).isEqualTo(1);
@@ -277,7 +279,7 @@ public class MedicalRecordTests {
 
 		// THEN
 		MedicalRecordDTO medicalRecordDatabase = MedicalRecordDTO
-				.toMedicalRecordDTO(database.getPersonsMap().get(medicalRecordDTO.getPersonId()));
+				.toMedicalRecordDTO(database.getPerson(medicalRecordDTO.getPersonId()));
 		assertThat(medicalRecordDatabase.getAllergies().size()).isEqualTo(2);
 		assertThat(medicalRecordDatabase.getMedications().size()).isEqualTo(2);
 		assert (medicalRecordResultDTO.equals(medicalRecordDatabase));
@@ -295,7 +297,7 @@ public class MedicalRecordTests {
 	@MethodSource("whenMedicalRecordIsGiven_ShouldDeleteMedicalRecordProvider")
 	public void whenMedicalRecordIsGiven_ShouldDeleteMedicalRecord(MedicalRecordDTO medicalRecordDTO) throws Exception {
 
-		Person person = database.getPersonsMap().get(medicalRecordDTO.getPersonId());
+		Person person = database.getPerson(medicalRecordDTO.getPersonId());
 
 		assertThat(person.getAllergies().size()).isEqualTo(3);
 		assertThat(person.getMedications().size()).isEqualTo(4);
@@ -305,7 +307,7 @@ public class MedicalRecordTests {
 		TestsUtil.dtoFromDeleteUrl(objectMapper, mockMvc, URL_MEDICAL_RECORD, medicalRecordDTO);
 
 		// THEN
-		Person personAfterDelete = database.getPersonsMap().get(medicalRecordDTO.getPersonId());
+		Person personAfterDelete = database.getPerson(medicalRecordDTO.getPersonId());
 		assertThat(personAfterDelete.getAllergies().size()).isEqualTo(0);
 		assertThat(personAfterDelete.getMedications().size()).isEqualTo(0);
 		assertNull(personAfterDelete.getBirthdate());

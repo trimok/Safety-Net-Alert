@@ -4,11 +4,7 @@ import static net.safety.alert.constants.SeparatorConstants.COLONS_SEPARATOR;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -65,32 +61,32 @@ public class MedicalRecordDTO {
 	}
 
 	/**
-	 * Deserialization of a String with format "name :quantity" into a map entry (string, Medication)
+	 * Deserialization of a String with format "name :quantity" into a Medication object
 	 * 
-	 * @return : a Map (String, Medication) representing medications
+	 * @return : a List of Medication objects
 	 */
 	@JsonIgnore
-	public Map<String, Medication> getMedicationsMap() {
-		Map<String, Medication> medicationsMap = new HashMap<>();
+	public List<Medication> getMedicationsObjects() {
+		List<Medication> medicationsObjectList = new ArrayList<>();
 		medications.forEach(m -> {
 			String[] infos = m.split(COLONS_SEPARATOR);
-			medicationsMap.put(infos[0], new Medication(infos[0], infos[1]));
+			medicationsObjectList.add(new Medication(infos[0], infos[1]));
 		});
-		return medicationsMap;
+		return medicationsObjectList;
 	}
 
 	/**
-	 * Deserialization of a String with format "name" into a map entry (string, Allervie)
+	 * Deserialization of a String with format "name" into a Allergie object
 	 * 
-	 * @return : a Map (String, Allergie) representing allergies
+	 * @return : a List of Allergie objects
 	 */
 	@JsonIgnore
-	public Set<Allergie> getAllergiesSet() {
-		Set<Allergie> allergiesSet = new HashSet<>();
+	public List<Allergie> getAllergiesObjects() {
+		List<Allergie> allergiesObjectList = new ArrayList<>();
 		allergies.forEach(m -> {
-			allergiesSet.add(new Allergie(m));
+			allergiesObjectList.add(new Allergie(m));
 		});
-		return allergiesSet;
+		return allergiesObjectList;
 	}
 
 	/**
@@ -102,7 +98,7 @@ public class MedicalRecordDTO {
 		this.lastName = person.getLastName();
 		this.birthdate = person.getBirthdate();
 		person.getAllergies().forEach(a -> this.allergies.add(a.getName()));
-		person.getMedications().values().forEach(a -> this.medications.add(a.getName() + ":" + a.getQuantity()));
+		person.getMedications().forEach(a -> this.medications.add(a.getName() + ":" + a.getQuantity()));
 	}
 
 	/**
@@ -119,7 +115,7 @@ public class MedicalRecordDTO {
 	 */
 	public Person toPerson() {
 		Person person = new Person(this.getFirstName(), this.getLastName(), this.getBirthdate(),
-				this.getMedicationsMap(), this.getAllergiesSet());
+				this.getMedicationsObjects(), this.getAllergiesObjects());
 
 		return person;
 	}

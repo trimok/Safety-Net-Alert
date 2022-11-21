@@ -1,10 +1,9 @@
 package net.safety.alert.model;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -57,11 +56,11 @@ public class Person {
 	/**
 	 * 
 	 */
-	private Map<String, Medication> medications = new HashMap<>();
+	private List<Medication> medications = new ArrayList<>();
 	/**
 	 * 
 	 */
-	private Set<Allergie> allergies = new HashSet<>();
+	private List<Allergie> allergies = new ArrayList<>();
 
 	/**
 	 * @return : the validity of the Person (valid key)
@@ -102,8 +101,8 @@ public class Person {
 	 * @param allergies
 	 *            : the allergies
 	 */
-	public Person(String firstName, String lastName, LocalDate birthdate, Map<String, Medication> medications,
-			Set<Allergie> allergies) {
+	public Person(String firstName, String lastName, LocalDate birthdate, List<Medication> medications,
+			List<Allergie> allergies) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.birthdate = birthdate;
@@ -164,14 +163,39 @@ public class Person {
 	 * @return : the Person object which is patched with the Medical Record Data
 	 */
 	public Person patchMedicalRecordBy(Person person) {
-		Set<Allergie> allergies = person.getAllergies();
-		Map<String, Medication> medications = person.getMedications();
+		List<Allergie> allergies = person.getAllergies();
+		List<Medication> medications = person.getMedications();
 
 		if (allergies != null) {
-			this.allergies.addAll(allergies);
+			// If the allergies name is not in the list, the allergie is added
+			List<Allergie> allergiesToAdd = allergies.stream()
+					.filter(a -> this.allergies.stream().noneMatch(b -> b.getName().equals(a.getName()))).toList();
+
+			if (allergiesToAdd != null && !allergiesToAdd.isEmpty()) {
+				this.allergies.addAll(allergiesToAdd);
+			}
 		}
+
 		if (medications != null) {
-			this.medications.putAll(medications);
+			// it the medications name is not in the list, the medication is added
+			List<Medication> medicationsToAdd = medications.stream()
+					.filter(a -> this.medications.stream().noneMatch(b -> b.getName().equals(a.getName()))).toList();
+
+			if (medicationsToAdd != null && !medicationsToAdd.isEmpty()) {
+				this.medications.addAll(medicationsToAdd);
+			}
+
+			// if the medications name is in the list, this.medication is updated medication
+			this.medications = this.medications.stream().map(m -> {
+				Optional<Medication> optional = medications.stream()
+						.filter(n -> n.getName().equals(m.getName()) && !n.getQuantity().equals(m.getQuantity()))
+						.findFirst();
+				if (optional.isPresent()) {
+					return optional.get();
+				} else {
+					return m;
+				}
+			}).toList();
 		}
 
 		if (birthdate != null) {
@@ -193,8 +217,8 @@ public class Person {
 	 * @return : a Person object
 	 */
 	public Person emptyMedicalRecord() {
-		this.allergies = new HashSet<>();
-		this.medications = new HashMap<>();
+		this.allergies = new ArrayList<>();
+		this.medications = new ArrayList<>();
 		this.birthdate = null;
 
 		return this;

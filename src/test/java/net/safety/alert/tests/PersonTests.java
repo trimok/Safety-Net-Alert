@@ -181,7 +181,7 @@ public class PersonTests {
 				PersonDTO.class, personDTO);
 
 		// THEN
-		assert (PersonDTO.toPersonDTO(database.getPersonsMap().get(personDTO.getPersonId())).equals(personDTO));
+		assert (PersonDTO.toPersonDTO(database.getPerson(personDTO.getPersonId())).equals(personDTO));
 		assert (personResultDTO.equals(personDTO));
 	}
 
@@ -202,7 +202,7 @@ public class PersonTests {
 				PersonDTO.class, personDTO);
 
 		// THEN
-		assert (PersonDTO.toPersonDTO(database.getPersonsMap().get(personDTO.getPersonId())).equals(personDTO));
+		assert (PersonDTO.toPersonDTO(database.getPerson(personDTO.getPersonId())).equals(personDTO));
 		assert (personResultDTO.equals(personDTO));
 	}
 
@@ -218,7 +218,7 @@ public class PersonTests {
 	@MethodSource("whenPersonIsGiven_ShouldPatchPersonProvider")
 	public void whenPersonIsGiven_ShouldPatchPerson(PersonDTO personDTO) throws Exception {
 
-		PersonDTO personDTOPatch = PersonDTO.toPersonDTO(database.getPersonsMap().get(personDTO.getPersonId()));
+		PersonDTO personDTOPatch = PersonDTO.toPersonDTO(database.getPerson(personDTO.getPersonId()));
 		personDTOPatch.setCity(personDTO.getCity());
 
 		// WHEN
@@ -226,7 +226,7 @@ public class PersonTests {
 				PersonDTO.class, personDTO);
 
 		// THEN
-		assert (PersonDTO.toPersonDTO(database.getPersonsMap().get(personDTO.getPersonId())).equals(personDTOPatch));
+		assert (PersonDTO.toPersonDTO(database.getPerson(personDTO.getPersonId())).equals(personDTOPatch));
 		assert (personResultDTO.equals(personDTOPatch));
 	}
 
@@ -245,7 +245,7 @@ public class PersonTests {
 		TestsUtil.dtoFromDeleteUrl(objectMapper, mockMvc, URL_PERSON, personDTO);
 
 		// THEN
-		Person personDatabase = database.getPersonsMap().get(personDTO.getPersonId());
+		Person personDatabase = database.getPerson(personDTO.getPersonId());
 		assertNull(personDatabase);
 	}
 }

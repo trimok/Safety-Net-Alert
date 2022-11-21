@@ -101,8 +101,8 @@ public class Database {
 					.forEach(p -> finalJsonDTO.getMedicalrecords().stream().filter(
 							m -> m.getFirstName().equals(p.getFirstName()) && m.getLastName().equals(p.getLastName()))
 							.forEach(m -> {
-								p.setAllergies(m.getAllergiesSet());
-								p.setMedications(m.getMedicationsMap());
+								p.setAllergies(m.getAllergiesObjects());
+								p.setMedications(m.getMedicationsObjects());
 								p.setBirthdate(m.getBirthdate());
 							}));
 

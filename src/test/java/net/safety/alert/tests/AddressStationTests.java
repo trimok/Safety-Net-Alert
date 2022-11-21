@@ -207,7 +207,7 @@ public class AddressStationTests {
 				mappingAddressStationDTO);
 
 		// THEN
-		Address addressAfterMapping = database.getAddressesMap().get(mappingAddressStationDTO.getAddress());
+		Address addressAfterMapping = database.getAddress(mappingAddressStationDTO.getAddress());
 		assertNotNull(addressAfterMapping);
 		assertNotNull(addressAfterMapping.getFireStation());
 		assert (!addressAfterMapping.getFireStation().getId().isEmpty());
@@ -229,7 +229,7 @@ public class AddressStationTests {
 	public void whenMappingAddressStationIsGiven_ShouldUpdateMapping(MappingAddressStationDTO mappingAddressStationDTO)
 			throws Exception {
 
-		Address address = database.getAddressesMap().get(mappingAddressStationDTO.getAddress());
+		Address address = database.getAddress(mappingAddressStationDTO.getAddress());
 		assertNotNull(address);
 		assertNotNull(address.getFireStation());
 		FireStation oldFireStation = address.getFireStation();
@@ -239,7 +239,7 @@ public class AddressStationTests {
 				TestsUtil.HTTP_PUT, mockMvc, URL_FIRESTATION, MappingAddressStationDTO.class, mappingAddressStationDTO);
 
 		// THEN
-		Address addressAfterMapping = database.getAddressesMap().get(mappingAddressStationDTO.getAddress());
+		Address addressAfterMapping = database.getAddress(mappingAddressStationDTO.getAddress());
 		assertNotNull(addressAfterMapping);
 		FireStation newFireStation = addressAfterMapping.getFireStation();
 		assertNotNull(newFireStation);
@@ -264,7 +264,7 @@ public class AddressStationTests {
 	public void whenMappingAddressStationIsGiven_ShouldDeleteMappingByFireStation(FireStationDTO fireStationDTO,
 			List<String> addresses) throws Exception {
 
-		List<String> addressesOld = database.getAddressesMap().values().stream().filter(
+		List<String> addressesOld = database.getAddresses().stream().filter(
 				a -> a.getFireStation() != null && a.getFireStation().getId().equals(fireStationDTO.getFireStation()))
 				.map(a -> a.getName()).toList();
 		assertThat(addressesOld.size()).isEqualTo(2);
@@ -295,7 +295,7 @@ public class AddressStationTests {
 	public void whenMappingAddressStationIsGiven_ShouldDeleteMappingByAddress(AddressDTO addressDTO,
 			FireStationDTO fireStationDTO) throws Exception {
 
-		Address address = database.getAddressesMap().get(addressDTO.getAddress());
+		Address address = database.getAddress(addressDTO.getAddress());
 		FireStation fireStation = address.getFireStation();
 		assertNotNull(fireStation);
 		assertFalse(fireStation.getId().isEmpty());

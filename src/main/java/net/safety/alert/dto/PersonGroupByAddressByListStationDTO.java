@@ -76,7 +76,7 @@ public class PersonGroupByAddressByListStationDTO {
 		personGroupByAddressByListStationDTO.setAge(DateUtil.getAge(person.getBirthdate()));
 		person.getAllergies()
 				.forEach(a -> personGroupByAddressByListStationDTO.getAllergies().add(a == null ? "" : a.getName()));
-		person.getMedications().values()
+		person.getMedications()
 				.forEach(m -> personGroupByAddressByListStationDTO.getMedications().put(m.getName(), m.getQuantity()));
 
 		return personGroupByAddressByListStationDTO;

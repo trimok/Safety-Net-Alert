@@ -62,7 +62,7 @@ public class PersonByFirstNameLastNameDTO {
 		personByFirstNameLastNameDTO.setEmail(person.getEmail());
 		person.getAllergies()
 				.forEach(a -> personByFirstNameLastNameDTO.getAllergies().add(a == null ? "" : a.getName()));
-		person.getMedications().values()
+		person.getMedications()
 				.forEach(m -> personByFirstNameLastNameDTO.getMedications().put(m.getName(), m.getQuantity()));
 
 		return personByFirstNameLastNameDTO;
