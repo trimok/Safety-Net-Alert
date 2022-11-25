@@ -16,3 +16,4 @@
 ![](md/Diapositive16.PNG)
 ![](md/Diapositive17.PNG)
 ![](md/Diapositive18.PNG)
+![](md/Diapositive19.PNG)
